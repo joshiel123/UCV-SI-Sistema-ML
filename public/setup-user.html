@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración Inicial - Cable Latín</title>
+    <meta name="description" content="Herramienta de configuración inicial para crear el primer usuario administrador en el sistema Cable Latín.">
+
+    <!-- Fuentes e Iconos -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Estilos propios -->
+    <link rel="stylesheet" href="css/setup-user.css">
+</head>
+<body>
+
+    <div class="setup-wrapper">
+
+        <!-- Encabezado con logo -->
+        <div class="setup-logo">
+            <i class="fas fa-satellite-dish"></i>
+            <span>Cable Latín</span>
+        </div>
+
+        <!-- Tarjeta principal -->
+        <div class="setup-card">
+
+            <!-- Cabecera -->
+            <div class="setup-card-header">
+                <div class="setup-icon-badge">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <h1 class="setup-title">Configuración Inicial</h1>
+                <p class="setup-subtitle">Crea el primer usuario del sistema directamente en Firebase Authentication y Firestore.</p>
+            </div>
+
+            <!-- Formulario -->
+            <div id="formContainer" class="setup-body">
+                <div class="form-group">
+                    <label for="nombre" class="form-label">
+                        <i class="fas fa-id-card"></i> Nombre Completo
+                    </label>
+                    <input type="text" id="nombre" placeholder="Ej: Josias Alfaro" value="Josias"
+                        class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="usuario" class="form-label">
+                        <i class="fas fa-at"></i> Usuario (Login)
+                    </label>
+                    <input type="text" id="usuario" placeholder="Ej: admin" value="admin"
+                        class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label">
+                        <i class="fas fa-envelope"></i> Correo Electrónico
+                    </label>
+                    <input type="email" id="email" placeholder="correo@ejemplo.com" value="jalfagemene@ucvvirtual.edu.pe"
+                        class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">
+                        <i class="fas fa-lock"></i> Contraseña
+                    </label>
+                    <div class="input-password-wrapper">
+                        <input type="password" id="password" placeholder="Mínimo 6 caracteres" value="admin123"
+                            class="form-input">
+                        <button type="button" id="togglePassword" class="toggle-password" title="Mostrar/Ocultar contraseña">
+                            <i class="fas fa-eye" id="togglePasswordIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="rol" class="form-label">
+                        <i class="fas fa-user-shield"></i> Rol del Usuario
+                    </label>
+                    <select id="rol" class="form-input form-select">
+                        <option value="administrador" selected>Administrador</option>
+                        <option value="supervisor">Supervisor</option>
+                        <option value="vendedor">Vendedor</option>
+                    </select>
+                </div>
+
+                <!-- Mensaje de error inline -->
+                <div id="errorMsg" class="alert-msg alert-error hidden">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="errorText"></span>
+                </div>
+
+                <button id="crearBtn" class="btn-primary" type="button">
+                    <i class="fas fa-user-plus"></i>
+                    <span id="btnText">Crear Usuario</span>
+                    <span id="btnSpinner" class="spinner hidden"></span>
+                </button>
+            </div>
+
+            <!-- Estado de éxito -->
+            <div id="successContainer" class="setup-body success-body hidden">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2 class="success-title">¡Usuario creado exitosamente!</h2>
+                <p class="success-subtitle">Ahora puedes iniciar sesión con las siguientes credenciales:</p>
+
+                <div class="credentials-box">
+                    <div class="credential-item">
+                        <span class="credential-label"><i class="fas fa-at"></i> Usuario</span>
+                        <span id="usuarioFinal" class="credential-value">—</span>
+                    </div>
+                    <div class="credential-item">
+                        <span class="credential-label"><i class="fas fa-lock"></i> Contraseña</span>
+                        <span id="passwordFinal" class="credential-value">—</span>
+                    </div>
+                </div>
+
+                <a href="index.html" class="btn-success">
+                    <i class="fas fa-sign-in-alt"></i> Ir al Login
+                </a>
+            </div>
+
+        </div>
+
+        <p class="setup-footer-note">
+            <i class="fas fa-shield-alt"></i>
+            Esta página es solo para configuración inicial. Elimínala o restringe su acceso en producción.
+        </p>
+
+    </div>
+
+    <!-- Script del módulo (externo) -->
+    <script type="module" src="js/setup-user.js"></script>
+
+</body>
+</html>

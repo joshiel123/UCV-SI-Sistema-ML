@@ -5,548 +5,314 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Cliente - CABLE LATIN</title>
     
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <link rel="stylesheet" href="">
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" href="css/sidebar.css" />
 
-</head>
-<body>
-    <style>
-     :root {
---primary-color: #007bff;
---danger-color: #dc3545;
---secondary-color: #6c757d;
---success-color: #28a745;
---light-bg: #f8f9fa;
---card-bg: #ffffff;
---text-color: #333333;
---light-text-color: #666666;
---border-color: #e9ecef;
---sidebar-width: 250px;
-}
-
-/* === SIDEBAR === */
-.sidebar {
-width: var(--sidebar-width);
-background-color: var(--card-bg);
-box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-padding: 20px 0;
-display: flex;
-flex-direction: column;
-border-right: 1px solid var(--border-color);
-flex-shrink: 0;
-transition: width 0.3s ease;
-z-index: 100;
-height: 100vh;
-}
-
-.sidebar-header {
-display: flex;
-align-items: center;
-justify-content: space-between;
-padding: 0 20px 20px;
-border-bottom: 1px solid var(--border-color);
-margin-bottom: 20px;
-}
-
-.sidebar-header .logo {
-display: flex;
-align-items: center;
-gap: 10px;
-font-weight: 700;
-font-size: 1.2em;
-color: var(--primary-color);
-white-space: nowrap;
-}
-
-.sidebar-header .logo i {
-font-size: 1.5em;
-}
-
-.sidebar-header .sidebar-toggle-btn {
-color: var(--secondary-color);
-cursor: pointer;
-font-size: 1.2em;
-}
-
-.sidebar-nav ul {
-list-style: none;
-padding: 0;
-margin: 0;
-width: 100%;
-}
-
-.sidebar-nav .nav-item {
-display: flex;
-align-items: center;
-flex-wrap: wrap;
-padding: 14px 20px;
-color: var(--light-text-color);
-cursor: pointer;
-position: relative;
-transition: all 0.3s ease;
-white-space: nowrap;
-overflow: hidden;
-font-size: 0.95em;
-}
-
-.sidebar-nav .nav-item a {
-color: inherit;
-text-decoration: none;
-display: flex;
-align-items: center;
-width: 100%;
-}
-
-.sidebar-nav .nav-item.active {
-background-color: rgba(0, 123, 255, 0.1);
-color: var(--primary-color);
-border-left: 3px solid var(--primary-color);
-padding-left: 17px;
-font-weight: 500;
-}
-
-.sidebar-nav .nav-item:not(.active):hover {
-background-color: rgba(0, 0, 0, 0.03);
-}
-
-.sidebar-nav .nav-item > i:first-child {
-margin-right: 12px;
-width: 20px;
-font-size: 1.1em;
-}
-
-.sidebar-nav .nav-item > span {
-flex-grow: 1;
-}
-
-.sidebar-nav .nav-item.has-submenu .arrow-icon {
-margin-left: auto;
-transition: transform 0.3s ease;
-font-size: 0.8em;
-}
-
-.sidebar-nav .submenu {
-list-style: none;
-padding: 5px 0 5px 0;
-margin: 0;
-display: none;
-width: 100%;
-background-color: #fdfdfd;
-}
-
-.sidebar-nav .submenu li {
-padding: 10px 20px 10px 52px;
-color: var(--light-text-color);
-font-size: 0.9em;
-transition: all 0.2s ease;
-}
-
-.sidebar-nav .submenu li:hover {
-color: var(--primary-color);
-background-color: rgba(0, 123, 255, 0.05);
-}
-
-.sidebar-nav .nav-item.open > .submenu {
-display: block;
-}
-
-.sidebar-nav .nav-item.open > .submenu-header .arrow-icon {
-transform: rotate(90deg);
-}
-
-/* === MODO COLAPSABLE === */
-.sidebar.collapsed {
-width: 70px;
-}
-
-.sidebar.collapsed .sidebar-header .logo span,
-.sidebar.collapsed .sidebar-nav span,
-.sidebar.collapsed .submenu {
-display: none;
-}
-
-.sidebar.collapsed .nav-item {
-justify-content: center;
-padding: 14px 0;
-}
-
-.sidebar.collapsed .nav-item i:first-child {
-margin: 0;
-}
-
-/* === RESPONSIVE === */
-@media (max-width: 768px) {
-.sidebar {
-    position: fixed;
-    left: -250px;
-    top: 0;
-    height: 100vh;
-    transition: left 0.3s ease;
-}
-.sidebar.active {
-    left: 0;
-}
-}
-
-
-    </style>
-
-    
     <style>
         :root {
-    --primary-color: #007bff; /* Azul primario */
-    --secondary-color: #6c757d; /* Gris secundario */
-    --success-color: #28a745; /* Verde éxito */
-    --danger-color: #dc3545; /* Rojo peligro */
-    --bg-light: #f8f9fa; /* Fondo claro */
-    --bg-white: #ffffff; /* Fondo blanco */
-    --text-dark: #343a40; /* Texto oscuro */
-    --text-light: #6c757d; /* Texto claro */
-    --border-color: #dee2e6; /* Color de borde */
-}
+            --primary-color: #007bff;
+            --danger-color: #dc3545;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --light-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --light-text-color: #666666;
+            --border-color: #e9ecef;
+            --sidebar-width: 250px;
+            --text-dark: #343a40;
+            --text-light: #6c757d;
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+        }
 
-body { 
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    background: var(--bg-light); 
-    margin: 0; 
-    color: var(--text-dark);
-    display: flex; /* Para layout con sidebar */
-}
+        body { 
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-light); 
+            margin: 0; 
+            color: var(--text-dark);
+            display: flex; 
+        }
 
-/* Utilidades */
-.hidden { display: none !important; } /* Usar !important para asegurar ocultación */
-.flex { display: flex; }
-.items-center { align-items: center; }
-.justify-center { justify-content: center; }
-.justify-end { justify-content: flex-end; }
-.justify-between { justify-content: space-between; }
-.mt-4 { margin-top: 1rem; }
-.ml-2 { margin-left: 0.5rem; }
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .justify-end { justify-content: flex-end; }
+        .justify-between { justify-content: space-between; }
+        .mt-4 { margin-top: 1rem; }
+        .ml-2 { margin-left: 0.5rem; }
 
-/* Layout */
-#sidebar-container { 
-    width: 250px; 
-    background: var(--bg-white); 
-    height: 100vh; /* Alto completo */
-    position: fixed; /* Fijo */
-    top: 0; left: 0; 
-    box-shadow: 2px 0 5px rgba(0,0,0,0.05); 
-    z-index: 100;
-    transform: translateX(-100%); /* Oculto por defecto */
-    transition: transform 0.3s ease;
-    overflow-y: auto; /* Scroll si el contenido es largo */
-}
-#sidebar-container.open {
-     transform: translateX(0);
-}
-#main-content { 
-    padding: 20px; 
-    flex-grow: 1; /* Ocupa el espacio restante */
-    transition: margin-left 0.3s ease;
-     margin-left: 0; /* Por defecto sin margen */
-}
-.header-main { 
-    background: var(--bg-white); 
-    padding: 10px 20px; 
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
-    margin-bottom: 20px; 
-    display: flex;
-    align-items: center;
-    border-radius: 8px; /* Bordes redondeados */
-}
-.sidebar-toggle-btn {
-    background: none; border: none; cursor: pointer;
-    padding: 8px; margin-right: 15px; display: block; /* Siempre visible */
-    color: var(--text-dark);
-}
-.sidebar-toggle-btn:hover { background-color: #f1f1f1; border-radius: 50%; }
+        #main-content { 
+            padding: 20px; 
+            flex-grow: 1; 
+            transition: margin-left 0.3s ease;
+            margin-left: 0; 
+        }
+        
+        .header-main { 
+            background: var(--bg-white); 
+            padding: 10px 20px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+            margin-bottom: 20px; 
+            display: flex;
+            align-items: center;
+            border-radius: 8px; 
+        }
 
-/* Formulario */
-.form-wrapper-center { max-width: 900px; margin: auto; }
-.panel-form { 
-    background: var(--bg-white); 
-    border-radius: 12px; /* Más redondeado */
-    box-shadow: 0 6px 16px rgba(0,0,0,0.08); 
-    overflow: hidden; 
-}
-.form-title { 
-    font-size: 1.4rem; /* Ligeramente más pequeño */
-    padding: 18px 25px; 
-    background: #fdfdfd; 
-    border-bottom: 1px solid var(--border-color); 
-    margin: 0; 
-    font-weight: 600;
-}
-.tab-navigation { 
-    display: flex; 
-    border-bottom: 1px solid var(--border-color); 
-    background: #fcfcfc;
-}
-.tab-item { 
-    flex: 1; /* Ocupa espacio equitativo */
-    text-align: center; /* Centrado */
-    padding: 15px 10px; 
-    cursor: pointer; 
-    color: var(--text-light); 
-    border-bottom: 3px solid transparent; 
-    font-weight: 500;
-    transition: color 0.2s, border-color 0.2s;
-}
- .tab-item:hover { color: var(--primary-color); }
-.tab-item.active { 
-    color: var(--primary-color); 
-    border-bottom-color: var(--primary-color); 
-    font-weight: 600; 
-}
+        .sidebar-toggle-btn {
+            background: none; border: none; cursor: pointer;
+            padding: 8px; margin-right: 15px;
+            color: var(--text-dark);
+        }
+        .sidebar-toggle-btn:hover { background-color: #f1f1f1; border-radius: 50%; }
 
-form { padding: 30px; } /* Más padding */
-.form-step { display: none; }
-.form-step.active { display: block; animation: fadeIn 0.4s ease-out; }
+        .form-wrapper-center { max-width: 900px; margin: auto; }
+        .panel-form { 
+            background: var(--bg-white); 
+            border-radius: 12px; 
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08); 
+            overflow: hidden; 
+        }
+        .form-title { 
+            font-size: 1.4rem; 
+            padding: 18px 25px; 
+            background: #fdfdfd; 
+            border-bottom: 1px solid var(--border-color); 
+            margin: 0; 
+            font-weight: 600;
+        }
+        .tab-navigation { 
+            display: flex; 
+            border-bottom: 1px solid var(--border-color); 
+            background: #fcfcfc;
+        }
+        .tab-item { 
+            flex: 1; 
+            text-align: center; 
+            padding: 15px 10px; 
+            cursor: pointer; 
+            color: var(--text-light); 
+            border-bottom: 3px solid transparent; 
+            font-weight: 500;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .tab-item:hover { color: var(--primary-color); }
+        .tab-item.active { 
+            color: var(--primary-color); 
+            border-bottom-color: var(--primary-color); 
+            font-weight: 600; 
+        }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+        form { padding: 30px; } 
+        .form-step { display: none; }
+        .form-step.active { display: block; animation: fadeIn 0.4s ease-out; }
 
-.form-content-grid { 
-    display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    gap: 22px 28px; /* Más separación */
-}
-.form-content-grid > .client-type-group { grid-column: 1 / -1; margin-bottom: 10px; }
-.form-content-grid > .form-group-grid[style*="grid-column"] { grid-column: 1 / -1; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-.form-group-grid { display: flex; flex-direction: column; }
-.form-group-grid label { 
-    margin-bottom: 8px; /* Más espacio */
-    font-weight: 500; /* Ligeramente menos grueso */
-    font-size: 0.88rem; 
-    color: #495057; /* Gris más oscuro */
-}
-.form-group-grid input, .form-group-grid select, .form-group-grid textarea {
-    width: 100%; 
-    padding: 11px 14px; /* Ligeramente más alto */
-    border: 1px solid #ced4da; /* Borde más suave */
-    border-radius: 6px; 
-    box-sizing: border-box;
-    font-size: 0.95rem; /* Tamaño de fuente consistente */
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
- .form-group-grid input[disabled], .form-group-grid select[disabled],
- .form-group-grid input[readonly] { /* Estilo para readonly */
-    background-color: #e9ecef;
-    cursor: not-allowed;
-    opacity: 0.7;
-}
-.form-group-grid input:focus, .form-group-grid select:focus, .form-group-grid textarea:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(0,123,255,0.15);
-    outline: none;
-}
-.form-group-grid textarea { resize: vertical; min-height: 85px; }
+        .form-content-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 22px 28px; 
+        }
+        .form-content-grid > .client-type-group { grid-column: 1 / -1; margin-bottom: 10px; }
 
-.client-type-options { display: flex; flex-wrap: wrap; gap: 15px 25px; margin-top: 8px; }
-.client-type-options label { 
-    display: flex; align-items: center; 
-    font-weight: 400; font-size: 0.95rem; cursor: pointer;
-}
-.client-type-options input[type="radio"] { margin-right: 8px; }
+        .form-group-grid { display: flex; flex-direction: column; margin-bottom: 12px; }
+        .form-group-grid label { 
+            margin-bottom: 8px; 
+            font-weight: 500; 
+            font-size: 0.88rem; 
+            color: #495057; 
+        }
+        .form-group-grid input, .form-group-grid select, .form-group-grid textarea {
+            width: 100%; 
+            padding: 11px 14px; 
+            border: 1px solid #ced4da; 
+            border-radius: 6px; 
+            box-sizing: border-box;
+            font-size: 0.95rem; 
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-group-grid input[disabled], .form-group-grid select[disabled], .form-group-grid input[readonly] { 
+            background-color: #e9ecef;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .form-group-grid input:focus, .form-group-grid select:focus, .form-group-grid textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.15);
+            outline: none;
+        }
+        .form-group-grid textarea { resize: vertical; min-height: 85px; }
 
-/* Botones */
-.btn-action {
-    padding: 10px 20px; /* Ligeramente más pequeño */
-    border: none; 
-    border-radius: 6px; 
-    cursor: pointer; 
-    font-weight: 500; /* Normal */
-    font-size: 0.9rem; /* Consistente */
-    transition: background-color 0.2s, opacity 0.2s, transform 0.1s;
-}
- .btn-action:active { transform: scale(0.98); } /* Efecto click */
-.btn-next, .btn-save { 
-    background-color: var(--primary-color); color: white; 
-}
-.btn-next:hover, .btn-save:hover { background-color: #0069d9; }
-.btn-prev { background-color: var(--secondary-color); color: white; }
-.btn-prev:hover { background-color: #5a6268; }
-.btn-save.btn-loading { opacity: 0.7; cursor: not-allowed; }
+        .client-type-options { display: flex; flex-wrap: wrap; gap: 15px 25px; margin-top: 8px; }
+        .client-type-options label { 
+            display: flex; align-items: center; 
+            font-weight: 400; font-size: 0.95rem; cursor: pointer;
+        }
+        .client-type-options input[type="radio"] { margin-right: 8px; }
 
-.servicio-info {
-    font-size: 1rem; /* Más legible */
-    padding: 12px 15px; /* Más padding */
-    background: #e7f3ff; /* Azul muy claro */
-    border: 1px solid #cfe2ff; /* Borde azul claro */
-    border-left: 4px solid var(--primary-color); /* Indicador izquierdo */
-    border-radius: 6px;
-    margin-bottom: 25px; /* Más espacio */
-    color: #0d6efd; /* Texto azul */
-}
-.servicio-info strong { font-weight: 600; }
+        .btn-action {
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: 500; 
+            font-size: 0.9rem; 
+            transition: background-color 0.2s, opacity 0.2s, transform 0.1s;
+        }
+        .btn-action:active { transform: scale(0.98); } 
+        .btn-next, .btn-save { 
+            background-color: var(--primary-color); color: white; 
+        }
+        .btn-next:hover, .btn-save:hover { background-color: #0069d9; }
+        .btn-prev { background-color: var(--secondary-color); color: white; }
+        .btn-prev:hover { background-color: #5a6268; }
+        .btn-save.btn-loading { opacity: 0.7; cursor: not-allowed; }
 
-/* Modales */
-.modal-backdrop {
-    position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.6); 
-    opacity: 0; visibility: hidden; transition: opacity 0.3s ease;
-    z-index: 200; display: flex; align-items: center; justify-content: center;
-}
-.modal-backdrop.open { opacity: 1; visibility: visible; }
-.modal-content { 
-    background: white; padding: 25px 30px; border-radius: 10px; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
-    text-align: center; max-width: 420px; width: 90%;
-    transform: scale(0.95); opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-.modal-backdrop.open .modal-content { opacity: 1; transform: scale(1); }
-.modal-icon-wrapper { 
-    width: 55px; height: 55px; border-radius: 50%; 
-    display: flex; align-items: center; justify-content: center; 
-    margin: 0 auto 18px auto; background: #e6f7ec; 
-}
-.modal-icon { width: 28px; height: 28px; color: var(--success-color); }
-.modal-content h3 { margin: 0 0 8px 0; font-size: 1.2rem; font-weight: 600; }
-.modal-content p { margin: 0 0 25px 0; color: #555; line-height: 1.5; }
-.btn-modal-close { 
-    background-color: var(--primary-color); color: white; 
-    padding: 9px 22px; border: none; border-radius: 6px; 
-    cursor: pointer; font-weight: 500; font-size: 0.9rem;
-}
-.modal-error .modal-icon-wrapper { background: #fdebee; }
-.modal-error .modal-icon { color: var(--danger-color); }
-.modal-error .btn-modal-close { background-color: var(--danger-color); }
+        .servicio-info {
+            font-size: 1rem; 
+            padding: 12px 15px; 
+            background: #e7f3ff; 
+            border: 1px solid #cfe2ff; 
+            border-left: 4px solid var(--primary-color); 
+            border-radius: 6px;
+            margin-bottom: 25px; 
+            color: #0d6efd; 
+        }
+        .servicio-info strong { font-weight: 600; }
 
-/* Responsive */
-@media (min-width: 1024px) { /* Desktop */
-    #main-content { margin-left: 250px; }
-    #sidebar-container { transform: translateX(0); } 
-    .sidebar-toggle-btn { display: none; } 
-}
-@media (max-width: 767px) {
-    .form-content-grid { grid-template-columns: 1fr; gap: 18px; }
-    form { padding: 20px; }
-    .form-title { padding: 15px 20px; font-size: 1.2rem; }
-    .tab-item { padding: 12px 10px; font-size: 0.85rem; }
-    .header-main h1 { font-size: 1rem; }
-    .btn-action { padding: 10px 18px; font-size: 0.85rem; }
-}
+        .modal-backdrop {
+            position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.6); 
+            opacity: 0; visibility: hidden; transition: opacity 0.3s ease;
+            z-index: 200; display: flex; align-items: center; justify-content: center;
+        }
+        .modal-backdrop.open { opacity: 1; visibility: visible; }
+        .modal-content { 
+            background: white; padding: 25px 30px; border-radius: 10px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+            text-align: center; max-width: 420px; width: 90%;
+            transform: scale(0.95); opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .modal-backdrop.open .modal-content { opacity: 1; transform: scale(1); }
+        .modal-icon-wrapper { 
+            width: 55px; height: 55px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            margin: 0 auto 18px auto; background: #e6f7ec; 
+        }
+        .modal-icon { width: 28px; height: 28px; color: var(--success-color); }
+        .modal-content h3 { margin: 0 0 8px 0; font-size: 1.2rem; font-weight: 600; }
+        .modal-content p { margin: 0 0 25px 0; color: #555; line-height: 1.5; }
+        .btn-modal-close { 
+            background-color: var(--primary-color); color: white; 
+            padding: 9px 22px; border: none; border-radius: 6px; 
+            cursor: pointer; font-weight: 500; font-size: 0.9rem;
+        }
+        .modal-error .modal-icon-wrapper { background: #fdebee; }
+        .modal-error .modal-icon { color: var(--danger-color); }
+        .modal-error .btn-modal-close { background-color: var(--danger-color); }
+
+        @media (min-width: 1024px) { 
+            #main-content { margin-left: 250px; }
+            #sidebar { transform: translateX(0); } 
+            .sidebar-toggle-btn { display: none; } 
+        }
+        @media (max-width: 767px) {
+            .form-content-grid { grid-template-columns: 1fr; gap: 18px; }
+            form { padding: 20px; }
+            .form-title { padding: 15px 20px; font-size: 1.2rem; }
+            .tab-item { padding: 12px 10px; font-size: 0.85rem; }
+        }
     </style>
+</head>
+<body>
 
-
-  <!-- Sidebar (Menú Lateral) -->
-    <!-- SIDEBAR UNIFICADO -->
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-/>
-<link rel="stylesheet" href="/public/css/sidebar.css" />
-
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-header">
-    <div class="logo">
-      <i class="fas fa-desktop"></i>
-      <span>CABLE LATIN</span>
-    </div>
-    <i class="fas fa-bars sidebar-toggle-btn" id="sidebar-toggle-internal"></i>
-  </div>
-
-  <nav class="sidebar-nav">
-    <ul>
-      <!-- DASHBOARD -->
-      <li class="nav-item">
-        <a href="tablero.html">
-          <i class="fas fa-grip"></i>
-          <span>Dashboard</span>
-        </a>
-      </li>
-
-      <!-- ADMINISTRACIÓN -->
-      <li class="nav-item has-submenu">
-        <div class="submenu-header">
-          <i class="fas fa-gear"></i>
-          <span>Administración</span>
-          <i class="fas fa-chevron-right arrow-icon"></i>
+    <!-- Sidebar unificado -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-desktop"></i>
+                <span>CABLE LATIN</span>
+            </div>
+            <i class="fas fa-bars sidebar-toggle-btn" id="sidebar-toggle-internal"></i>
         </div>
-        <ul class="submenu">
-          <li><a href="usuario.html">Usuarios</a></li>
-          <li><a href="planes.html">Planes y servicios</a></li>
-        </ul>
-      </li>
-
-      <!-- CLIENTES -->
-      <li class="nav-item has-submenu">
-        <div class="submenu-header">
-          <i class="fas fa-users"></i>
-          <span>Clientes</span>
-          <i class="fas fa-chevron-right arrow-icon"></i>
-        </div>
-        <ul class="submenu">
-          <li><a href="clientes.html">Clientes</a></li>
-          <li><a href="facturas.html">Facturas</a></li>
-          <li><a href="pagos.html">Pagos</a></li>
-        </ul>
-      </li>
-
-      <!-- REPORTES -->
-      <li class="nav-item has-submenu">
-        <div class="submenu-header">
-          <i class="fas fa-list-check"></i>
-          <span>Reportes</span>
-          <i class="fas fa-chevron-right arrow-icon"></i>
-        </div>
-        <ul class="submenu">
-          <li><a href="reportes.html">Reportes</a></li>
-        </ul>
-      </li>
-
-      <!-- PERFIL -->
-      <li class="nav-item">
-        <a href="perfil.html">
-          <i class="fas fa-user-circle"></i>
-          <span>Mi Perfil</span>
-        </a>
-      </li>
-
-      <!-- CERRAR SESIÓN -->
-      <li class="nav-item">
-        <a href="login.html">
-          <i class="fa-solid fa-door-open"></i>
-          <span>Cerrar Sesión</span>
-        </a>
-      </li>
-    </ul>
-  </nav>
-</aside>
-
-<script src="/Cablelatin/public/js/sidebar.js"></script>
-
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="nav-item">
+                    <a href="tablero.html">
+                        <i class="fas fa-grip"></i><span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item has-submenu">
+                    <div class="submenu-header">
+                        <i class="fas fa-gear"></i><span>Administración</span>
+                        <i class="fas fa-chevron-right arrow-icon"></i>
+                    </div>
+                    <ul class="submenu">
+                        <li><a href="usuario.html">Usuarios</a></li>
+                        <li><a href="planes.html">Planes y servicios</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item has-submenu active open">
+                    <div class="submenu-header">
+                        <i class="fas fa-users"></i><span>Clientes</span>
+                        <i class="fas fa-chevron-right arrow-icon" style="transform: rotate(90deg);"></i>
+                    </div>
+                    <ul class="submenu" style="display:block;">
+                        <li class="active"><a href="clientes.html">Clientes</a></li>
+                        <li><a href="facturas.html">Facturas</a></li>
+                        <li><a href="pagos.html">Pagos</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item has-submenu">
+                    <div class="submenu-header">
+                        <i class="fas fa-list-check"></i><span>Reportes</span>
+                        <i class="fas fa-chevron-right arrow-icon"></i>
+                    </div>
+                    <ul class="submenu">
+                        <li><a href="reportes.html">Reportes</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="perfil.html">
+                        <i class="fas fa-user-circle"></i><span>Mi Perfil</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" onclick="event.preventDefault(); AuthAPI.logout();">
+                        <i class="fa-solid fa-door-open"></i><span>Cerrar Sesión</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
 
     <main id="main-content">
-        
         <header class="header-main">
             <button id="sidebar-toggle-mobile-main" class="sidebar-toggle-btn">
-                <i data-lucide="menu"></i>
+                <i class="fas fa-bars"></i>
             </button>
             <h1 style="font-size: 1.1rem; margin: 0; font-weight: 500; color: #495057;">Registro de Cliente</h1>
         </header>
 
         <div class="form-wrapper-center">
             <div class="panel-form">
-                
                 <h2 class="form-title">Nuevo Cliente y Servicio</h2>
             
                 <div class="tab-navigation">
-                    <div class="tab-item active" data-step="1" id="tab-step-1">
-                        Paso 1: Datos del Cliente
-                    </div>
-                    <div class="tab-item" data-step="2" id="tab-step-2">
-                        Paso 2: Asignación de Servicio
-                    </div>
+                    <div class="tab-item active" data-step="1" id="tab-step-1">Paso 1: Datos del Cliente</div>
+                    <div class="tab-item" data-step="2" id="tab-step-2">Paso 2: Asignación de Servicio</div>
                 </div>
 
                 <form id="multiStepForm">
                     <div class="form-carousel" id="formCarousel">
                     
+                        <!-- Paso 1 -->
                         <div class="form-step active" data-step="1">
                             <div class="form-content-grid">
                                 <div class="client-type-group">
@@ -612,7 +378,7 @@ form { padding: 30px; } /* Más padding */
                                     </div>
                                     <div class="form-group-grid" style="grid-row: span 2;">
                                         <label for="referencia">Referencia / Notas Adicionales:</label>
-                                        <textarea id="referencia" name="referencia" rows="4" placeholder="Ej: Casa de dos pisos con portón azul, preguntar por Sr. Pérez..."></textarea>
+                                        <textarea id="referencia" name="referencia" rows="4" placeholder="Ej: Casa de dos pisos con portón azul..."></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -623,36 +389,37 @@ form { padding: 30px; } /* Más padding */
                             </div>
                         </div>
 
+                        <!-- Paso 2 -->
                         <div class="form-step" data-step="2">
                             <p class="servicio-info">Asignando servicio para: <strong id="customerNameDisplay">(Nombre del Cliente)</strong></p>
                             <div class="form-content-grid">
-                                
                                 <div>
                                     <div class="form-group-grid">
                                         <label for="tipoPlan">Seleccione el Plan:</label>
                                         <select id="tipoPlan" name="tipoPlan" required>
-                                            <option value="">Cargando planes...</option> 
+                                            <option value="">-- Seleccione un Plan --</option>
+                                            <option value="plan_basico" data-price="50.00">Plan Básico Cable (S/ 50.00)</option>
+                                            <option value="plan_estandar" data-price="80.00">Plan Estándar Dúo (S/ 80.00)</option>
+                                            <option value="plan_premium" data-price="120.00">Plan Premium Ultra (S/ 120.00)</option>
                                         </select>
                                     </div>
                                      <div class="form-group-grid">
                                         <label for="precioPlan">Precio del Plan (S/):</label>
-                                        <input type="number" id="precioPlan" name="precioPlan" step="0.01" placeholder="0.00" required readonly >
+                                        <input type="number" id="precioPlan" name="precioPlan" step="0.01" value="0.00" required readonly>
                                     </div>
                                     <div class="form-group-grid">
                                         <label for="serviciosAdicionales">Servicios Adicionales (Opcional):</label>
                                         <select id="serviciosAdicionales" name="serviciosAdicionales">
                                             <option value="Ninguno">Ninguno</option>
                                             <option value="3era TV">3era TV</option>
-                                            <option value="4ta TV">4ta TV</option>
                                             <option value="HBO">HBO Premium</option>
                                             <option value="FOX">FOX Sports Pack</option>
                                         </select>
                                     </div>
                                     <div class="form-group-grid">
-                                        <label for="costoAdicional">Costo Adicional (S/) (Si aplica):</label>
+                                        <label for="costoAdicional">Costo Adicional (S/):</label>
                                         <input type="number" id="costoAdicional" name="costoAdicional" value="0.00" step="0.01" min="0">
                                     </div>
-                                   
                                 </div>
                                 
                                 <div>
@@ -674,7 +441,7 @@ form { padding: 30px; } /* Más padding */
                                     </div>
                                      <div class="form-group-grid" style="grid-row: span 2;">
                                         <label for="observaciones">Notas Técnicas / Instalación:</label>
-                                        <textarea id="observaciones" name="observaciones" rows="4" placeholder="Ej: Se requiere cableado adicional, poste cercano #123..."></textarea>
+                                        <textarea id="observaciones" name="observaciones" rows="4" placeholder="Ej: Se requiere cableado adicional..."></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -689,394 +456,31 @@ form { padding: 30px; } /* Más padding */
                         </div>
                     </div> 
                 </form>
-
             </div> 
         </div> 
     </main>
 
+    <!-- Modales de Feedback -->
     <div id="successModal" class="modal-backdrop hidden">
         <div class="modal-content">
-            <div class="modal-icon-wrapper"> <i data-lucide="check-circle-2" class="modal-icon"></i> </div>
-            <div class="mt-4">
-                <h3>¡Registro Exitoso!</h3>
-                <p>El cliente y su servicio asociado han sido guardados correctamente.</p>
-            </div>
-            <div> <button id="closeModalSuccess" type="button" class="btn-modal-close">Aceptar</button> </div>
+            <div class="modal-icon-wrapper"><i class="fas fa-check-circle modal-icon"></i></div>
+            <h3>¡Registro Exitoso!</h3>
+            <p>El cliente y su servicio asociado han sido guardados correctamente en el sistema.</p>
+            <button id="closeModalSuccess" type="button" class="btn-modal-close">Aceptar</button>
         </div>
     </div>
 
     <div id="errorModal" class="modal-backdrop hidden">
         <div class="modal-content modal-error">
-            <div class="modal-icon-wrapper"> <i data-lucide="alert-triangle" class="modal-icon"></i> </div>
-            <div class="mt-4">
-                <h3>¡Error!</h3>
-                <p id="errorModalMessage">Ha ocurrido un error inesperado.</p>
-            </div>
-            <div> <button id="closeModalError" type="button" class="btn-modal-close">Cerrar</button> </div>
+            <div class="modal-icon-wrapper"><i class="fas fa-exclamation-triangle modal-icon"></i></div>
+            <h3>¡Error!</h3>
+            <p id="errorModalMessage">Ha ocurrido un error inesperado al guardar los datos.</p>
+            <button id="closeModalError" type="button" class="btn-modal-close">Cerrar</button>
         </div>
     </div>
 
-<script type="module">
-// --- Importaciones Firebase ---
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-import { getFirestore, collection, addDoc, serverTimestamp, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-// --- Configuración Firebase ---
-const firebaseConfig = {
-    apiKey: "AIzaSyDHrAEU4HI2onL1bRZpRfB5GAbsbD6_XBE",
-    authDomain: "cablelatin-prueba.firebaseapp.com",
-    projectId: "cablelatin-prueba",
-    storageBucket: "cablelatin-prueba.firebasestorage.app",
-    messagingSenderId: "370823325775",
-    appId: "1:370823325775:web:cbd9142e612bc0a979623a",
-    measurementId: "G-PV3NRMJBW2"
-};
-const appId = firebaseConfig.projectId;
-
-// --- Variables Globales ---
-let app, auth, db;
-let userId = null;
-let isAuthReady = false;
-let availablePlans = [];
-
-// --- Inicialización Firebase y Auth ---
-try {
-    app = initializeApp(firebaseConfig);
-    auth = getAuth(app);
-    db = getFirestore(app);
-    console.log("Firebase inicializado en registrar_cliente:", appId);
-
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            userId = user.uid;
-            isAuthReady = true;
-            console.log("Autenticado:", userId);
-            loadPlans(); // Cargar planes una vez autenticado
-        } else {
-            isAuthReady = false;
-            userId = null;
-            console.log("No autenticado, intentando anónimo...");
-            signInAnonymously(auth).catch(error => {
-                console.error("Error auth anónima:", error);
-                showErrorModal('No se pudo iniciar sesión para guardar datos.');
-            });
-        }
-    });
-} catch (e) {
-    console.error("Error inicializando Firebase:", e);
-    showErrorModal('Error crítico al conectar con la base de datos.');
-}
-
-// --- Lógica del Formulario y Componentes ---
-document.addEventListener('DOMContentLoaded', () => {
-    lucide.createIcons();
-
-    // --- Referencias del DOM ---
-    const multiStepForm = document.getElementById('multiStepForm');
-    const tabItems = document.querySelectorAll('.tab-item');
-    const steps = document.querySelectorAll('.form-step');
-    const successModal = document.getElementById('successModal');
-    const errorModal = document.getElementById('errorModal');
-    const closeModalSuccess = document.getElementById('closeModalSuccess');
-    const closeModalError = document.getElementById('closeModalError');
-    const errorModalMessage = document.getElementById('errorModalMessage');
-    const customerNameDisplay = document.getElementById('customerNameDisplay');
-    const nombresInput = document.getElementById('nombres');
-    const apellidosInput = document.getElementById('apellidos');
-    const tipoClienteRadios = document.querySelectorAll('input[name="tipoCliente"]');
-    const tipoDocumentoSelect = document.getElementById('tipoDocumento');
-    const nDocumentoLabel = document.querySelector('label[for="nDocumento"]');
-    const planSelect = document.getElementById('tipoPlan');
-    const precioPlanInput = document.getElementById('precioPlan');
-    const submitButton = document.getElementById('btnSubmit');
-
-    // --- Lógica Sidebar ---
-    initSidebar();
-
-    // --- Lógica Modales ---
-    window.showErrorModal = (message) => {
-        if (errorModalMessage) errorModalMessage.textContent = message;
-        if (errorModal) {
-            errorModal.classList.remove('hidden');
-            requestAnimationFrame(() => errorModal.classList.add('open'));
-            lucide.createIcons();
-        }
-    };
-
-    const closeTheSuccessModal = () => {
-        if (successModal) {
-            successModal.classList.remove('open');
-            setTimeout(() => {
-                successModal.classList.add('hidden');
-                // Redirigir a la página de clientes
-                window.location.href = 'clientes.html';
-            }, 300);
-        }
-    };
-    
-    const closeTheErrorModal = () => {
-        if (errorModal) {
-            errorModal.classList.remove('open');
-            setTimeout(() => errorModal.classList.add('hidden'), 300);
-        }
-    };
-
-    if (closeModalSuccess) closeModalSuccess.addEventListener('click', closeTheSuccessModal);
-    if (closeModalError) closeModalError.addEventListener('click', closeTheErrorModal);
-    if (successModal) successModal.addEventListener('click', (e) => { if (e.target === successModal) closeTheSuccessModal(); });
-    if (errorModal) errorModal.addEventListener('click', (e) => { if (e.target === errorModal) closeTheErrorModal(); });
-
-
-    // --- Lógica Formulario Multi-paso ---
-    const updateTabsAndSteps = (targetStep) => {
-        tabItems.forEach(tab => {
-            tab.classList.remove('active');
-            if (tab.dataset.step == targetStep) tab.classList.add('active');
-        });
-        steps.forEach(step => step.classList.remove('active'));
-        const targetStepElement = document.querySelector(`.form-step[data-step="${targetStep}"]`);
-        if (targetStepElement) targetStepElement.classList.add('active');
-    };
-
-    document.querySelectorAll('.btn-next, .btn-prev').forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetStep = button.dataset.targetStep;
-
-            if (targetStep == 2) {
-                const step1Inputs = document.querySelectorAll('.form-step[data-step="1"] [required]');
-                let isValid = true;
-                step1Inputs.forEach(input => {
-                    input.style.borderColor = '';
-                    if (!input.value.trim()) {
-                        isValid = false;
-                        input.style.borderColor = 'red';
-                    }
-                });
-
-                if (!isValid) {
-                    showErrorModal("Por favor, complete todos los campos requeridos del Paso 1.");
-                    return;
-                }
-
-                if (customerNameDisplay) {
-                    const nombre = nombresInput.value.trim();
-                    const apellido = apellidosInput.value.trim();
-                    customerNameDisplay.textContent = `${nombre} ${apellido}`.trim() || "(Cliente no especificado)";
-                }
-            }
-            updateTabsAndSteps(targetStep);
-            window.scrollTo(0, 0);
-        });
-    });
-
-    // --- Lógica Carga de Planes ---
-    window.loadPlans = async () => {
-        if (!isAuthReady || !db) return;
-        if (!planSelect) return;
-        planSelect.innerHTML = '<option value="">Cargando...</option>';
-        planSelect.disabled = true;
-
-        const planesRef = collection(db, 'artifacts', appId, 'public', 'data', 'planes');
-        const q = query(planesRef, orderBy("nombre"));
-
-        try {
-            const snapshot = await getDocs(q);
-            availablePlans = [];
-            planSelect.innerHTML = '<option value="">-- Seleccione un Plan --</option>';
-            snapshot.forEach((doc) => {
-                const plan = { id: doc.id, ...doc.data() };
-                if (plan.estado === 'Activo') { // Solo mostrar planes activos
-                    availablePlans.push(plan);
-                    const option = document.createElement('option');
-                    option.value = plan.id;
-                    option.textContent = `${plan.nombre} (S/ ${parseFloat(plan.precio || 0).toFixed(2)})`;
-                    option.dataset.price = parseFloat(plan.precio || 0).toFixed(2);
-                    planSelect.appendChild(option);
-                }
-            });
-            planSelect.disabled = availablePlans.length === 0;
-        } catch (error) {
-            console.error("Error cargando planes:", error);
-            planSelect.innerHTML = '<option value="">Error al cargar</option>';
-            showErrorModal(`No se pudieron cargar los planes: ${error.message}`);
-        }
-    };
-
-    if (planSelect && precioPlanInput) {
-        planSelect.addEventListener('change', (e) => {
-            const selectedPlanId = e.target.value;
-            const selectedPlan = availablePlans.find(p => p.id === selectedPlanId);
-            precioPlanInput.value = selectedPlan ? parseFloat(selectedPlan.precio || 0).toFixed(2) : '0.00';
-        });
-    }
-
-    // --- Lógica Envío de Formulario ---
-    if (multiStepForm) {
-        multiStepForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (!isAuthReady || !db) {
-                showErrorModal("La conexión con la base de datos no está lista. Intente de nuevo.");
-                return;
-            }
-
-            // Validar campos del paso 2
-            const step2Inputs = document.querySelectorAll('.form-step[data-step="2"] [required]');
-            let isStep2Valid = true;
-            step2Inputs.forEach(input => {
-                input.style.borderColor = '';
-                if (!input.value.trim()) {
-                    isStep2Valid = false;
-                    input.style.borderColor = 'red';
-                }
-            });
-            if (!isStep2Valid) {
-                showErrorModal("Por favor, complete todos los campos requeridos del Paso 2.");
-                return;
-            }
-
-            submitButton.disabled = true;
-            submitButton.innerHTML = 'Guardando... <i class="fas fa-spinner fa-spin"></i>';
-
-            try {
-                const formData = new FormData(multiStepForm);
-                
-                // 1. Crear documento de Cliente
-                const direccionCompleta = `${formData.get('direccionCompleta')}, ${formData.get('distrito')}, ${formData.get('provincia')}, ${formData.get('departamento')}`;
-                
-                const clienteData = {
-                    nombre: formData.get('nombres'),
-                    apellido: formData.get('apellidos'),
-                    tipo_cliente: formData.get('tipoCliente'),
-                    dni: formData.get('nDocumento'),
-                    correo: formData.get('email'),
-                    telefono: formData.get('telefono'),
-                    direccion: direccionCompleta,
-                    referencia: formData.get('referencia'),
-                    estado: 'Activo', // Nuevo cliente siempre activo
-                    fecha_registro: serverTimestamp()
-                };
-
-                const clientesRef = collection(db, 'artifacts', appId, 'public', 'data', 'clientes');
-                const clienteDocRef = await addDoc(clientesRef, clienteData);
-                console.log("Cliente registrado con ID:", clienteDocRef.id);
-
-                // 2. Crear documento de Servicio
-                const selectedPlanId = formData.get('tipoPlan');
-                const selectedPlanData = availablePlans.find(p => p.id === selectedPlanId);
-
-                const servicioData = {
-                    id_cliente: clienteDocRef.id,
-                    id_plan: selectedPlanId,
-                    plan_info: selectedPlanData ? { nombre: selectedPlanData.nombre, precio: parseFloat(selectedPlanData.precio || 0) } : null,
-                    servicios_adicionales: formData.get('serviciosAdicionales'),
-                    costo_adicional: parseFloat(formData.get('costoAdicional') || 0),
-                    fecha_inicio: formData.get('fechaInicio'),
-                    ciclo_facturacion: parseInt(formData.get('cicloFacturacion') || 15),
-                    estado: formData.get('estadoServicio'),
-                    observaciones: formData.get('observaciones'),
-                    fecha_registro: serverTimestamp()
-                };
-
-                const serviciosRef = collection(db, 'artifacts', appId, 'public', 'data', 'servicios_clientes');
-                await addDoc(serviciosRef, servicioData);
-                console.log("Servicio registrado para el cliente:", clienteDocRef.id);
-
-                // 3. Mostrar éxito y redirigir
-                if (successModal) {
-                    successModal.classList.remove('hidden');
-                    requestAnimationFrame(() => {
-                        successModal.classList.add('open');
-                    });
-                    lucide.createIcons();
-                }
-
-            } catch (error) {
-                console.error("Error al registrar:", error);
-                showErrorModal(`Ocurrió un error al guardar los datos: ${error.message}`);
-            } finally {
-                submitButton.disabled = false;
-                submitButton.innerHTML = 'Registrar Cliente y Servicio &check;';
-            }
-        });
-    }
-
-    // --- Lógica Tipo Cliente / Documento ---
-    const actualizarTipoDocumento = () => {
-        const tipoClienteSeleccionado = document.querySelector('input[name="tipoCliente"]:checked').value;
-        
-        if (tipoClienteSeleccionado === 'Empresarial') {
-            if (tipoDocumentoSelect) {
-                tipoDocumentoSelect.value = 'RUC';
-                tipoDocumentoSelect.disabled = true;
-            }
-            if (nDocumentoLabel) nDocumentoLabel.textContent = 'Nº de RUC:';
-        } else {
-            if (tipoDocumentoSelect) {
-                tipoDocumentoSelect.value = 'DNI';
-                tipoDocumentoSelect.disabled = false;
-            }
-            if (nDocumentoLabel) nDocumentoLabel.textContent = 'Nº de Documento:';
-        }
-        const rucOption = tipoDocumentoSelect?.querySelector('option[value="RUC"]');
-        if (rucOption) rucOption.hidden = (tipoClienteSeleccionado !== 'Empresarial');
-    };
-    
-    if (tipoClienteRadios.length > 0) {
-        actualizarTipoDocumento();
-        tipoClienteRadios.forEach(radio => radio.addEventListener('change', actualizarTipoDocumento));
-    }
-});
-
-// --- Lógica del Sidebar (unificada) ---
-function initSidebar() {
-    // Submenús desplegables
-    document.querySelectorAll(".has-submenu").forEach((item) => {
-        const header = item.querySelector(".submenu-header");
-        header.addEventListener("click", () => {
-            // Cerrar otros submenús abiertos
-            document.querySelectorAll(".has-submenu.open").forEach(openItem => {
-                if (openItem !== item) {
-                    openItem.classList.remove("open");
-                }
-            });
-            // Abrir/cerrar el actual
-            item.classList.toggle("open");
-        });
-    });
-
-    // Botón para colapsar/expandir sidebar
-    const sidebar = document.getElementById("sidebar");
-    const toggleBtnInternal = document.getElementById("sidebar-toggle-internal");
-    if (toggleBtnInternal && sidebar) {
-        toggleBtnInternal.addEventListener("click", () => {
-            sidebar.classList.toggle("collapsed");
-        });
-    }
-    
-    // Botón para mostrar/ocultar en móvil
-    const toggleBtnMobile = document.getElementById("sidebar-toggle-mobile-main");
-    if (toggleBtnMobile && sidebar) {
-        toggleBtnMobile.addEventListener("click", () => {
-            sidebar.classList.toggle("open"); // Para vista móvil
-        });
-    }
-
-    // Marcar item activo
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    const activeLink = document.querySelector(`.sidebar-nav a[href$="${currentPage}"]`);
-    if (activeLink) {
-        const navItem = activeLink.closest('.nav-item');
-        if (navItem) {
-            navItem.classList.add('active');
-            const parentSubmenu = navItem.closest('.has-submenu');
-            if (parentSubmenu) {
-                parentSubmenu.classList.add('open');
-            }
-        }
-    }
-}
-</script>
+    <!-- Scripts de API y lógica unificada -->
+    <script src="js/api.js"></script>
+    <script src="js/registrar_cliente.js"></script>
 </body>
 </html>

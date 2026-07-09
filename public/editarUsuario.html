@@ -4,107 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Usuario - Cable Latín</title>
-    <!-- Tailwind CSS -->
+
+    <!-- Fuentes y CDN de íconos -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Iconos Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        /* Estilo para el spinner */
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        .spinner {
-            animation: spin 1s linear infinite;
-        }
-        /* Estilos para inputs deshabilitados */
-        input:disabled, select:disabled {
-            background-color: #e9ecef;
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-    </style>
+
+    <!-- Estilos específicos -->
+    <link rel="stylesheet" href="css/editarUsuario.css">
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
 
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
-        
-        <!-- Estado de Carga (se muestra al inicio) -->
+        <!-- Loader -->
         <div id="loader" class="text-center py-10">
             <i data-lucide="loader" class="w-12 h-12 mx-auto text-blue-600 spinner"></i>
-            <p class="mt-4 text-gray-600">Cargando datos del usuario...</p>
+            <p class="mt-4 text-gray-600">Cargando datos del usuario desde el servidor...</p>
         </div>
-
-        <!-- Mensaje de Error (si no se encuentra el ID) -->
+        <!-- Error -->
         <div id="error" class="text-center py-10 hidden">
             <i data-lucide="alert-triangle" class="w-12 h-12 mx-auto text-red-600"></i>
             <p class="mt-4 text-gray-700 font-semibold">Error al Cargar</p>
             <p id="errorMessage" class="mt-2 text-gray-600">No se pudo encontrar el usuario.</p>
-            <button class="mt-6 bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300" onclick="window.history.back()">
-                Volver
-            </button>
+            <button class="mt-6 bg-gray-200 text-gray-800 px-4 py-2 rounded-md" onclick="window.history.back()">Volver</button>
         </div>
-
-        <!-- Formulario (oculto hasta que carguen los datos) -->
+        <!-- Formulario -->
         <form id="editarUsuarioForm" class="space-y-4 hidden">
             <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Editar Usuario</h1>
-
-            <!-- ID Usuario (Read-only) -->
             <div class="form-group">
                 <label for="idUsuario" class="block text-sm font-medium text-gray-700">ID Usuario (UID):</label>
-                <input type="text" id="idUsuario" name="idUsuario" required disabled class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                <input type="text" id="idUsuario" name="idUsuario" required disabled class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" />
             </div>
-
-            <!-- Nombre -->
             <div class="form-group">
                 <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre Completo:</label>
-                <input type="text" id="nombre" name="nombre" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                <input type="text" id="nombre" name="nombre" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" />
             </div>
-            
-            <!-- Usuario (Nickname) -->
             <div class="form-group">
                 <label for="usuario" class="block text-sm font-medium text-gray-700">Nombre de Usuario (Login):</label>
-                <input type="text" id="usuario" name="usuario" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                <input type="text" id="usuario" name="usuario" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" />
             </div>
-
-            <!-- Correo (Read-only) -->
             <div class="form-group">
                 <label for="correo" class="block text-sm font-medium text-gray-700">Correo Electrónico:</label>
-                <input type="email" id="correo" name="correo" required disabled class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
-                <p class="text-xs text-gray-500 mt-1">El correo no se puede modificar desde aquí.</p>
+                <input type="email" id="correo" name="correo" required disabled class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" />
+                <p class="text-xs text-gray-500 mt-1">El correo electrónico no puede ser modificado.</p>
             </div>
-            
-            <!-- Teléfono -->
             <div class="form-group">
                 <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono:</label>
-                <input type="tel" id="telefono" name="telefono" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                <input type="tel" id="telefono" name="telefono" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" />
             </div>
-
-            <!-- Rol -->
             <div class="form-group">
                 <label for="rol" class="block text-sm font-medium text-gray-700">Rol:</label>
-                <select id="rol" name="rol" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white">
+                <select id="rol" name="rol" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md bg-white">
                     <option value="vendedor">Vendedor</option>
                     <option value="supervisor">Supervisor</option>
                     <option value="administrador">Administrador</option>
                 </select>
             </div>
-
-            <!-- Estado -->
             <div class="form-group">
                 <label for="estado" class="block text-sm font-medium text-gray-700">Estado:</label>
-                <select id="estado" name="estado" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white">
+                <select id="estado" name="estado" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md bg-white">
                     <option value="Activo">Activo</option>
                     <option value="Inactivo">Inactivo</option>
                 </select>
             </div>
-
-            <!-- Botones -->
             <div class="flex items-center justify-end space-x-4 pt-4">
-                <button type="button" class="btn-cancelar bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300" onclick="window.history.back()">
-                    Cancelar
-                </button>
-                <button type="submit" id="btnGuardar" class="btn-guardar bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center justify-center space-x-2 w-36">
+                <button type="button" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md" onclick="window.history.back()">Cancelar</button>
+                <button type="submit" id="btnGuardar" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center justify-center space-x-2 w-36">
                     <i data-lucide="save" class="w-5 h-5 icon-save"></i>
                     <i data-lucide="loader" class="w-5 h-5 icon-loader spinner" style="display: none;"></i>
                     <span id="btn-text">Actualizar</span>
@@ -119,234 +85,12 @@
             <i id="modalIcon" class="w-16 h-16 mx-auto mb-4"></i>
             <h3 id="modalTitle" class="text-xl font-bold mb-2"></h3>
             <p id="modalMessage" class="text-gray-600 mb-6"></p>
-            <button id="modalClose" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 w-full">
-                Entendido
-            </button>
+            <button id="modalClose" class="bg-blue-600 text-white px-4 py-2 rounded-md w-full">Entendido</button>
         </div>
     </div>
 
-
-    <!-- ============================================== -->
-    <!--          SCRIPT DE FIREBASE Y LÓGICA           -->
-    <!-- ============================================== -->
-    <script type="module">
-        // --- Importaciones de Firebase ---
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { 
-            getFirestore, 
-            doc, 
-            getDoc,         // <-- Para LEER el documento
-            updateDoc,      // <-- Para ACTUALIZAR
-            serverTimestamp 
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // --- Configuración Firebase ---
-        const firebaseConfig = {
-          apiKey: "AIzaSyDHrAEU4HI2onL1bRZpRfB5GAbsbD6_XBE",
-          authDomain: "cablelatin-prueba.firebaseapp.com",
-          projectId: "cablelatin-prueba",
-          storageBucket: "cablelatin-prueba.firebasestorage.app",
-          messagingSenderId: "370823325775",
-          appId: "1:370823325775:web:cbd9142e612bc0a979623a",
-          measurementId: "G-PV3NRMJBW2"
-        };
-        
-        // --- Variables Globales ---
-        const appId = firebaseConfig.projectId;
-        let app, auth, db;
-        let adminUserId = null;
-        let userDocRef = null; // Referencia al documento del usuario que estamos editando
-        
-        // --- Referencias a Elementos DOM ---
-        const form = document.getElementById('editarUsuarioForm');
-        const loader = document.getElementById('loader');
-        const errorEl = document.getElementById('error');
-        const errorMessage = document.getElementById('errorMessage');
-        
-        const btnGuardar = document.getElementById('btnGuardar');
-        const btnText = document.getElementById('btn-text');
-        const iconSave = btnGuardar.querySelector('.icon-save');
-        const iconLoader = btnGuardar.querySelector('.icon-loader');
-        
-        const modal = document.getElementById('feedbackModal');
-        const modalIcon = document.getElementById('modalIcon');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalMessage = document.getElementById('modalMessage');
-        const modalClose = document.getElementById('modalClose');
-
-        // --- Inicialización Firebase ---
-        try {
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-            console.log("Firebase inicializado");
-            initAuth(); 
-        } catch (e) {
-            console.error("Error inicializando Firebase:", e);
-            showError("Error de Conexión a Firebase.");
-        }
-
-        // --- Autenticación (del admin) ---
-        function initAuth() {
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    adminUserId = user.uid;
-                    console.log("Admin autenticado:", adminUserId);
-                    // Una vez autenticado, cargar los datos del usuario
-                    loadUserData();
-                } else {
-                    try {
-                        await signInAnonymously(auth);
-                    } catch (error) {
-                        console.error("Error auth anónima:", error);
-                        showError("Error de autenticación.");
-                    }
-                }
-            });
-        }
-        
-        /**
-         * Carga los datos del usuario desde Firestore y los pone en el formulario
-         */
-        async function loadUserData() {
-            // 1. Obtener el ID del usuario desde la URL (ej. ?id=ABC123)
-            const params = new URLSearchParams(window.location.search);
-            const userIdToEdit = params.get('id');
-
-            if (!userIdToEdit) {
-                showError("No se especificó un ID de usuario.");
-                return;
-            }
-
-            try {
-                // 2. Definir la referencia al documento
-                userDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'personal', userIdToEdit);
-
-                // 3. Obtener los datos del documento
-                const docSnap = await getDoc(userDocRef);
-
-                if (docSnap.exists()) {
-                    // 4. Si el usuario existe, rellenar el formulario
-                    const userData = docSnap.data();
-                    
-                    document.getElementById('idUsuario').value = userIdToEdit;
-                    document.getElementById('nombre').value = userData.nombre || '';
-                    document.getElementById('usuario').value = userData.usuario || '';
-                    document.getElementById('correo').value = userData.email || '';
-                    document.getElementById('telefono').value = userData.telefono || '';
-                    document.getElementById('rol').value = userData.rol || 'vendedor';
-                    document.getElementById('estado').value = userData.estado || 'Activo';
-
-                    // 5. Ocultar el loader y mostrar el formulario
-                    loader.classList.add('hidden');
-                    form.classList.remove('hidden');
-
-                } else {
-                    // 6. Si el documento no existe
-                    showError(`No se encontró ningún usuario con el ID: ${userIdToEdit}`);
-                }
-            } catch (err) {
-                console.error("Error al cargar datos:", err);
-                showError("Ocurrió un error al cargar los datos del usuario.");
-            }
-        }
-
-        // --- Manejador del Formulario de Actualización ---
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (!userDocRef) { // Doble chequeo
-                showModal(false, "Error", "No se ha cargado la referencia del usuario.");
-                return;
-            }
-
-            setLoading(true);
-
-            // 1. Obtener datos del formulario
-            const formData = new FormData(form);
-            
-            const dataToUpdate = {
-                nombre: formData.get('nombre'),
-                usuario: formData.get('usuario'),
-                telefono: formData.get('telefono'),
-                rol: formData.get('rol'),
-                estado: formData.get('estado'),
-                // No actualizamos el email (deshabilitado)
-                // No actualizamos la contraseña (como solicitaste)
-            };
-
-            try {
-                // --- Actualizar el documento en Firestore ---
-                await updateDoc(userDocRef, dataToUpdate);
-                console.log("Perfil de usuario actualizado en Firestore.");
-
-                // --- Éxito ---
-                showModal(true, "¡Usuario Actualizado!", "Los datos del usuario se guardaron correctamente.", () => {
-                    // Al cerrar el modal de éxito, volver a la lista
-                    window.location.href = 'usuario.html'; 
-                });
-
-            } catch (error) {
-                console.error("Error al actualizar usuario:", error);
-                showModal(false, "Error al Guardar", "Ocurrió un error al guardar los cambios.");
-            } finally {
-                setLoading(false);
-            }
-        });
-
-        // --- Funciones de UI ---
-        
-        function setLoading(isLoading) {
-            if (isLoading) {
-                btnGuardar.disabled = true;
-                btnText.textContent = "Guardando...";
-                iconSave.style.display = 'none';
-                iconLoader.style.display = 'inline-block';
-            } else {
-                btnGuardar.disabled = false;
-                btnText.textContent = "Actualizar";
-                iconSave.style.display = 'inline-block';
-                iconLoader.style.display = 'none';
-            }
-        }
-        
-        function showError(message) {
-            errorMessage.textContent = message;
-            loader.classList.add('hidden');
-            errorEl.classList.remove('hidden');
-        }
-
-        // Modal de Feedback (con callback opcional)
-        let modalCallback = null;
-        function showModal(isSuccess, title, message, callback = null) {
-            modalTitle.textContent = title;
-            modalMessage.textContent = message;
-            modalCallback = callback; // Guardar el callback
-
-            if (isSuccess) {
-                modalIcon.setAttribute('data-lucide', 'check-circle');
-                modalIcon.className = "w-16 h-16 mx-auto mb-4 text-green-500";
-                modalClose.className = "bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 w-full";
-            } else {
-                modalIcon.setAttribute('data-lucide', 'alert-triangle');
-                modalIcon.className = "w-16 h-16 mx-auto mb-4 text-red-500";
-                modalClose.className = "bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 w-full";
-            }
-            
-            lucide.createIcons();
-            modal.classList.remove('hidden');
-        }
-
-        modalClose.addEventListener('click', () => {
-            modal.classList.add('hidden');
-            // Si hay un callback guardado (como el de volver a la pág anterior), ejecutarlo
-            if (modalCallback) {
-                modalCallback();
-            }
-        });
-
-        // Cargar iconos iniciales
-        lucide.createIcons();
-    </script>
+    <!-- Scripts de lógica -->
+    <script src="js/api.js"></script>
+    <script src="js/editarUsuario.js" type="module"></script>
 </body>
 </html>

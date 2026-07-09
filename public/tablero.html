@@ -5,145 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - CABLE LATIN</title>
     
+    <!-- Fuentes y CDN de Íconos -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
+    <!-- Chart.js para visualizaciones analíticas -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <style>
-        /* Estilos base */
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f8f9fa; /* Color de fondo claro */
-        }
-
-        /* Estilo para el contenido principal, asumiendo una sidebar de 256px en desktop */
-        .main-content {
-            transition: margin-left 0.3s ease;
-            /* En móvil, no hay margen para el sidebar */
-            margin-left: 0; 
-        }
-        @media (min-width: 1024px) {
-            .main-content {
-                margin-left: 256px; /* Ajusta esto al ancho de tu sidebar (w-64) */
-            }
-        }
-
-        /* Estilo para el contenedor del gráfico para que no se encoja */
-        .chart-container {
-            position: relative;
-            height: 250px; /* Altura fija para los gráficos */
-            width: 100%;
-        }
-
-        /* Pequeño spinner para los números de las tarjetas */
-        .card-value {
-            min-height: 36px; /* Evita que la tarjeta salte de tamaño al cargar */
-        }
-        
-        /* Ocultar/Mostrar Submenú */
-        .submenu {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-in-out;
-        }
-        .menu-item.open .submenu {
-            max-height: 500px; /* Suficiente para expandir el menú */
-        }
-    </style>
+    <!-- Estilos Unificados de la Suite -->
+    <link rel="stylesheet" href="css/tablero.css">
 </head>
 <body class="bg-gray-100">
 
-    <aside id="sidebar-container" class="fixed top-0 left-0 h-full w-64 bg-white shadow-xl z-30 hidden lg:block border-r border-gray-200">
-        
-        <div class="p-6 border-b border-gray-200">
-            <h2 class="text-2xl font-black text-blue-700">CABLE LATIN</h2>
-        </div>
-        
-        <nav class="p-4 space-y-1">
-            
-            <a href="tablero.html" class="flex items-center space-x-3 p-3 rounded-lg text-white bg-blue-600 font-semibold shadow-md transition-all duration-150" aria-current="page">
-                <i class="fas fa-tachometer-alt"></i>
-                <span>Dashboard</span>
-            </a>
-
-            <div class="menu-item">
-                <a href="#" class="flex items-center justify-between p-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors duration-150" onclick="toggleSubmenu(event)">
-                    <span class="flex items-center space-x-3">
-                        <i class="fas fa-cogs"></i>
-                        <span>Administración</span>
-                    </span>
-                    <i class="fas fa-chevron-right text-xs transition-transform duration-300"></i>
-                </a>
-                <ul class="submenu bg-gray-50/70 py-1">
-                    <li><a href="usuario.html" class="block py-2 pl-10 pr-3 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-lg">Usuarios</a></li>
-                    <li><a href="planes.html" class="block py-2 pl-10 pr-3 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-lg">Planes y Servicios</a></li>
-                </ul>
-            </div>
-
-            <div class="menu-item">
-                <a href="#" class="flex items-center justify-between p-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors duration-150" onclick="toggleSubmenu(event)">
-                    <span class="flex items-center space-x-3">
-                        <i class="fas fa-address-book"></i>
-                        <span>Clientes</span>
-                    </span>
-                    <i class="fas fa-chevron-right text-xs transition-transform duration-300"></i>
-                </a>
-                <ul class="submenu bg-gray-50/70 py-1">
-                    <li><a href="clientes.html" class="block py-2 pl-10 pr-3 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-lg">Clientes</a></li>
-                    <li><a href="facturas.html" class="block py-2 pl-10 pr-3 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-lg">Facturas</a></li>
-                    <li><a href="pagos.html" class="block py-2 pl-10 pr-3 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-lg">Pagos</a></li>
-                </ul>
-            </div>
-
-            <div class="menu-item">
-                <a href="#" class="flex items-center justify-between p-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors duration-150" onclick="toggleSubmenu(event)">
-                    <span class="flex items-center space-x-3">
-                        <i class="fas fa-chart-bar"></i>
-                        <span>Reportes</span>
-                    </span>
-                    <i class="fas fa-chevron-right text-xs transition-transform duration-300"></i>
-                </a>
-                <ul class="submenu bg-gray-50/70 py-1">
-                    <li><a href="reportes.html" class="block py-2 pl-10 pr-3 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-lg">Reportes</a></li>
-                </ul>
-            </div>
-            
-            <hr class="my-3 border-gray-200">
-
-            <a href="perfil.html" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors duration-150">
-                <i class="fas fa-user-circle"></i>
-                <span>Perfil</span>
-            </a>
-
-            <a href="#" onclick="signOut(event)" class="flex items-center space-x-3 p-3 rounded-lg text-red-500 hover:bg-red-50 transition-colors duration-150">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Cerrar Sesión</span>
-            </a>
-            
-        </nav>
+    <!-- Sidebar Dinámico (Ancho y estilos gestionados de forma unificada por css/tablero.css) -->
+    <aside id="sidebar-container" class="hidden lg:block z-30">
+        <!-- El contenido se renderiza dinámicamente mediante js/sidebar.js -->
     </aside>
+
+    <!-- Contenido Principal -->
     <main class="main-content p-4 md:p-8">
         
+        <!-- Botón hamburguesa móvil -->
         <button id="mobile-menu-toggle" class="lg:hidden fixed top-4 left-4 bg-blue-600 text-white p-3 rounded-full shadow-lg z-40">
             <i class="fas fa-bars"></i>
         </button>
 
-        <header class="flex justify-between items-center mb-6">
+        <header class="flex justify-between items-center mb-6 pl-14 lg:pl-0">
             <div>
                 <h1 class="text-3xl font-bold text-gray-800">Tablero</h1>
                 <p class="text-gray-500">Resumen general de tu sistema.</p>
             </div>
-
-
-            <button onclick="window.location.href='registrar_cliente.html'" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition-colors flex items-center space-x-2" title="Añadir Nuevo Cliente">
+            <button onclick="window.location.href='registrar_cliente.html'"
+                class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition-colors flex items-center space-x-2">
                 <i class="fas fa-plus"></i>
                 <span class="hidden md:inline">Añadir Cliente</span>
             </button>
         </header>
 
+        <!-- Tarjetas de Resumen KPI -->
         <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             
             <div class="bg-white p-6 rounded-xl shadow-lg flex items-center space-x-4 border-l-4 border-blue-600">
@@ -152,7 +54,9 @@
                 </div>
                 <div>
                     <h3 class="text-gray-500 text-sm font-medium">Clientes Totales</h3>
-                    <p id="count-clientes" class="text-3xl font-bold text-gray-800 card-value">...</p>
+                    <p id="count-clientes" class="text-3xl font-bold text-gray-800 card-value flex items-center">
+                        <i class="fas fa-spinner fa-spin text-gray-300"></i>
+                    </p>
                 </div>
             </div>
 
@@ -161,8 +65,10 @@
                     <i class="fas fa-folder-open fa-2x"></i>
                 </div>
                 <div>
-                    <h3 class="text-gray-500 text-sm font-medium">Planes Activos</h3>
-                    <p id="count-planes" class="text-3xl font-bold text-gray-800 card-value">...</p>
+                    <h3 class="text-gray-500 text-sm font-medium">Servicios Activos</h3>
+                    <p id="count-planes" class="text-3xl font-bold text-gray-800 card-value flex items-center">
+                        <i class="fas fa-spinner fa-spin text-gray-300"></i>
+                    </p>
                 </div>
             </div>
 
@@ -172,7 +78,9 @@
                 </div>
                 <div>
                     <h3 class="text-gray-500 text-sm font-medium">Servicios Suspendidos</h3>
-                    <p id="count-pendientes" class="text-3xl font-bold text-gray-800 card-value">...</p>
+                    <p id="count-pendientes" class="text-3xl font-bold text-gray-800 card-value flex items-center">
+                        <i class="fas fa-spinner fa-spin text-gray-300"></i>
+                    </p>
                 </div>
             </div>
 
@@ -181,415 +89,58 @@
                     <i class="fas fa-dollar-sign fa-2x"></i>
                 </div>
                 <div>
-                    <h3 class="text-gray-500 text-sm font-medium">Ingresos (30 días)</h3>
-                    <p id="count-ingresos" class="text-3xl font-bold text-gray-800 card-value">...</p>
+                    <h3 class="text-gray-500 text-sm font-medium">Ingresos Totales</h3>
+                    <p id="count-ingresos" class="text-3xl font-bold text-gray-800 card-value flex items-center">
+                        <i class="fas fa-spinner fa-spin text-gray-300"></i>
+                    </p>
                 </div>
             </div>
 
         </section>
 
+        <!-- Gráficos Analíticos -->
         <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             
             <div class="bg-white p-6 rounded-xl shadow-lg">
                 <h3 class="text-xl font-semibold text-gray-700 mb-4">Servicios Activos por Plan</h3>
-                <div class="chart-container">
+                <div class="chart-container" id="container-activePlansChart">
                     <canvas id="activePlansChart"></canvas>
                 </div>
             </div>
 
             <div class="bg-white p-6 rounded-xl shadow-lg">
                 <h3 class="text-xl font-semibold text-gray-700 mb-4">Nuevos Clientes (Últ. 6 Meses)</h3>
-                <div class="chart-container">
+                <div class="chart-container" id="container-newClientsChart">
                     <canvas id="newClientsChart"></canvas>
                 </div>
             </div>
 
             <div class="bg-white p-6 rounded-xl shadow-lg">
-                <h3 class="text-xl font-semibold text-gray-700 mb-4">Ingresos (Últ. 30 Días)</h3>
-                <div class="chart-container">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Ingresos por Día (Últ. 30 Días)</h3>
+                <div class="chart-container" id="container-monthlyIncomeChart">
                     <canvas id="monthlyIncomeChart"></canvas>
                 </div>
             </div>
 
             <div class="bg-white p-6 rounded-xl shadow-lg">
                 <h3 class="text-xl font-semibold text-gray-700 mb-4">Servicios Suspendidos por Plan</h3>
-                <div class="chart-container">
+                <div class="chart-container" id="container-inactivePlansChart">
                     <canvas id="inactivePlansChart"></canvas>
                 </div>
             </div>
 
         </section>
     </main>
-    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden lg:hidden" onclick="closeMobileSidebar()"></div>
 
+    <!-- Overlay móvil -->
+    <div id="sidebar-overlay"
+        class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden lg:hidden"
+        onclick="closeMobileSidebar()">
+    </div>
 
-    <script type="module">
-        // --- Importaciones de Firebase ---
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInAnonymously, signOut as firebaseSignOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { 
-            getFirestore, 
-            collection, 
-            onSnapshot,
-            query,
-            where,
-            setLogLevel
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Establecer nivel de log para depuración de Firestore
-        setLogLevel('debug');
-
-        // --- Configuración Firebase (CORREGIDA CON TU SCRIPT) ---
-        const firebaseConfig = {
-          apiKey: "AIzaSyDHrAEU4HI2onL1bRZpRfB5GAbsbD6_XBE",
-          authDomain: "cablelatin-prueba.firebaseapp.com",
-          projectId: "cablelatin-prueba",
-          storageBucket: "cablelatin-prueba.firebasestorage.app",
-          messagingSenderId: "370823325775",
-          appId: "1:370823325775:web:cbd9142e612bc0a979623a",
-          measurementId: "G-PV3NRMJBW2"
-        };
-        
-        // --- Variables Globales ---
-        const appId = firebaseConfig.projectId; // Usamos el projectId para la ruta de los 'artifacts'
-        let app, auth, db;
-        let userId = null;
-        let isAuthReady = false;
-
-        // Referencias a Colecciones
-        let clientesRef, planesRef, serviciosRef, pagosRef;
-
-        // Referencias a Gráficos
-        let chartActivePlans, chartNewClients, chartIncome, chartInactivePlans;
-        
-        // --- Referencias a Elementos DOM ---
-        const countClientes = document.getElementById('count-clientes');
-        const countPlanes = document.getElementById('count-planes');
-        const countPendientes = document.getElementById('count-pendientes');
-        const countIngresos = document.getElementById('count-ingresos');
-        
-        // Referencias para el menú móvil
-        const sidebar = document.getElementById('sidebar-container');
-        const overlay = document.getElementById('sidebar-overlay');
-        const menuToggle = document.getElementById('mobile-menu-toggle');
-
-        // --- Funciones del Sidebar y Móvil ---
-        menuToggle.addEventListener('click', openMobileSidebar);
-
-        function openMobileSidebar() {
-            sidebar.classList.remove('hidden');
-            overlay.classList.remove('hidden');
-            // Mover el sidebar a la posición en móvil
-            sidebar.style.transform = 'translateX(0)';
-        }
-
-        function closeMobileSidebar() {
-            // Ocultar el sidebar en móvil (solo si la pantalla es menor a lg)
-            if (window.innerWidth < 1024) {
-                 // Puedes usar una clase de transición para un cierre suave
-                 sidebar.classList.add('hidden');
-                 overlay.classList.add('hidden');
-            }
-        }
-        
-        // Función de Toggle para Submenús
-        window.toggleSubmenu = function(event) {
-            event.preventDefault(); 
-            const parentItem = event.currentTarget.closest('.menu-item');
-            const submenu = parentItem.querySelector('.submenu');
-            const icon = event.currentTarget.querySelector('.fa-chevron-right');
-
-            // Cierra todos los otros submenús abiertos
-            document.querySelectorAll('.menu-item.open').forEach(item => {
-                if (item !== parentItem) {
-                    item.classList.remove('open');
-                    item.querySelector('.fa-chevron-right').style.transform = 'rotate(0deg)';
-                }
-            });
-
-            // Togglea el submenú actual
-            parentItem.classList.toggle('open');
-            if (parentItem.classList.contains('open')) {
-                icon.style.transform = 'rotate(90deg)';
-            } else {
-                icon.style.transform = 'rotate(0deg)';
-            }
-        }
-
-        // Función de Cerrar Sesión
-        window.signOut = async function(event) {
-            event.preventDefault();
-            try {
-                // Alerta de modal custom, en este caso solo logueamos
-                console.log("Cerrando sesión...");
-                await firebaseSignOut(auth);
-                window.location.href = 'login.html'; // Redirigir al login
-            } catch (error) {
-                console.error("Error al cerrar sesión:", error);
-                // Mostrar mensaje de error en un modal o div
-            }
-        }
-
-        // --- Inicialización Firebase ---
-        try {
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-            console.log("Firebase inicializado para Dashboard.");
-            initAuth();
-        } catch (e) {
-            console.error("Error inicializando Firebase:", e);
-        }
-
-        // --- Autenticación ---
-        function initAuth() {
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    userId = user.uid;
-                    isAuthReady = true;
-                    console.log("Usuario autenticado:", userId);
-
-                    // Definir rutas de colecciones (usando la ruta pública)
-                    clientesRef = collection(db, 'artifacts', appId, 'public', 'data', 'clientes');
-                    planesRef = collection(db, 'artifacts', appId, 'public', 'data', 'planes');
-                    serviciosRef = collection(db, 'artifacts', appId, 'public', 'data', 'servicios_clientes');
-                    pagosRef = collection(db, 'artifacts', appId, 'public', 'data', 'pagos');
-
-                    // Cargar datos
-                    loadSummaryCards();
-                    initCharts();
-
-                } else {
-                    // Si no hay usuario autenticado, intenta el inicio de sesión anónimo (para Canvas)
-                    try {
-                        await signInAnonymously(auth);
-                    } catch (error) {
-                        console.error("Error auth anónima:", error);
-                    }
-                }
-            });
-        }
-
-        // ==============================================
-        //        CARGA DE TARJETAS DE RESUMEN
-        // ==============================================
-        function loadSummaryCards() {
-            if (!isAuthReady) return;
-
-            // 1. Clientes Totales
-            onSnapshot(clientesRef, (snapshot) => {
-                countClientes.textContent = snapshot.size;
-            });
-
-            // 2. Planes Activos (de la lista pública de planes)
-            const qPlanes = query(planesRef, where("estado", "==", "Activo"));
-            onSnapshot(qPlanes, (snapshot) => {
-                countPlanes.textContent = snapshot.size;
-            });
-
-            // 3. Servicios Suspendidos (de los servicios de clientes)
-            const qPendientes = query(serviciosRef, where("estado", "==", "Suspendido"));
-            onSnapshot(qPendientes, (snapshot) => {
-                countPendientes.textContent = snapshot.size;
-            });
-
-            // 4. Ingresos (Últimos 30 días)
-            const thirtyDaysAgo = new Date();
-            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-            const thirtyDaysAgoStr = thirtyDaysAgo.toISOString().split('T')[0];
-
-            // La consulta de pagos no incluye un orderBy, lo cual es correcto.
-            const qIngresos = query(pagosRef, where("fecha_pago", ">=", thirtyDaysAgoStr));
-            onSnapshot(qIngresos, (snapshot) => {
-                let total = 0;
-                snapshot.forEach(doc => {
-                    const pago = doc.data();
-                    total += pago.plan_info?.precio || 0;
-                });
-                countIngresos.textContent = `S/ ${total.toFixed(2)}`;
-            });
-        }
-
-        // ==============================================
-        //        INICIALIZACIÓN DE GRÁFICOS
-        // ==============================================
-        function initCharts() {
-            initActivePlansChart();
-            initNewClientsChart();
-            initMonthlyIncomeChart();
-            initInactivePlansChart();
-        }
-
-        // --- Gráfico 1: Servicios Activos por Plan (Torta) ---
-        function initActivePlansChart() {
-            const ctx = document.getElementById('activePlansChart').getContext('2d');
-            const q = query(serviciosRef, where("estado", "==", "Activo"));
-            
-            onSnapshot(q, (snapshot) => {
-                const planCounts = new Map();
-                snapshot.forEach(doc => {
-                    const planNombre = doc.data().plan_info?.nombre || 'Sin Plan';
-                    planCounts.set(planNombre, (planCounts.get(planNombre) || 0) + 1);
-                });
-
-                if (chartActivePlans) chartActivePlans.destroy();
-                chartActivePlans = new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        labels: [...planCounts.keys()],
-                        datasets: [{
-                            label: 'Servicios Activos',
-                            data: [...planCounts.values()],
-                            backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#34D399'],
-                            hoverOffset: 4
-                        }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
-            });
-        }
-
-        // --- Gráfico 2: Nuevos Clientes (Barras) ---
-        function initNewClientsChart() {
-            const ctx = document.getElementById('newClientsChart').getContext('2d');
-            const sixMonthsAgo = new Date();
-            sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-
-            // Nota: Aquí se asume que 'fecha_registro' está almacenado como un campo de fecha de Firestore. 
-            // Si lo guardaste como string ISO, esta query podría no funcionar correctamente. 
-            const q = query(clientesRef); // Simplifico la query para evitar errores de índice y filtro de fecha
-
-            onSnapshot(q, (snapshot) => {
-                const monthCounts = new Map();
-                const monthLabels = [];
-                const now = new Date();
-                
-                // Preparar los últimos 6 meses en el mapa para asegurar el orden
-                for (let i = 5; i >= 0; i--) {
-                    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-                    const monthKey = `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}`;
-                    const monthName = d.toLocaleString('es-ES', { month: 'short' });
-                    monthCounts.set(monthKey, 0);
-                    monthLabels.push(monthName.charAt(0).toUpperCase() + monthName.slice(1));
-                }
-
-                snapshot.forEach(doc => {
-                    // Manejar Timestamp o String de Fecha. Se asume que es un objeto con método toDate()
-                    const fechaRegistroData = doc.data().fecha_registro;
-                    let fechaRegistro;
-
-                    if (fechaRegistroData && fechaRegistroData.toDate) {
-                        fechaRegistro = fechaRegistroData.toDate();
-                    } else if (typeof fechaRegistroData === 'string') {
-                        fechaRegistro = new Date(fechaRegistroData);
-                    } else {
-                        return; // Saltar si la fecha no es válida
-                    }
-
-                    if (fechaRegistro >= sixMonthsAgo) {
-                        const monthKey = `${fechaRegistro.getFullYear()}-${(fechaRegistro.getMonth() + 1).toString().padStart(2, '0')}`;
-                        if (monthCounts.has(monthKey)) {
-                            monthCounts.set(monthKey, monthCounts.get(monthKey) + 1);
-                        }
-                    }
-                });
-
-                if (chartNewClients) chartNewClients.destroy();
-                chartNewClients = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: monthLabels,
-                        datasets: [{
-                            label: 'Nuevos Clientes',
-                            data: [...monthCounts.values()],
-                            backgroundColor: '#3B82F6',
-                            borderRadius: 4
-                        }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
-            });
-        }
-
-        // --- Gráfico 3: Ingresos Diarios (Línea) ---
-        function initMonthlyIncomeChart() {
-            const ctx = document.getElementById('monthlyIncomeChart').getContext('2d');
-            
-            const thirtyDaysAgo = new Date();
-            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-            const thirtyDaysAgoStr = thirtyDaysAgo.toISOString().split('T')[0];
-
-            const q = query(pagosRef, where("fecha_pago", ">=", thirtyDaysAgoStr));
-
-            onSnapshot(q, (snapshot) => {
-                const dailyIncome = new Map();
-                const labels = [];
-
-                // Preparar los últimos 30 días
-                for (let i = 30; i >= 0; i--) {
-                    const d = new Date();
-                    d.setDate(d.getDate() - i);
-                    const dayKey = d.toISOString().split('T')[0];
-                    dailyIncome.set(dayKey, 0);
-                    labels.push(d.getDate()); // Solo el día para la etiqueta
-                }
-                
-                snapshot.forEach(doc => {
-                    const pago = doc.data();
-                    const dayKey = pago.fecha_pago; // Asumimos que fecha_pago es string 'YYYY-MM-DD'
-                    if (dailyIncome.has(dayKey)) {
-                        dailyIncome.set(dayKey, dailyIncome.get(dayKey) + (pago.plan_info?.precio || 0));
-                    }
-                });
-
-                if (chartIncome) chartIncome.destroy();
-                chartIncome = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Ingresos Diarios (S/)',
-                            data: [...dailyIncome.values()],
-                            borderColor: '#10B981',
-                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                            fill: true,
-                            tension: 0.3
-                        }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
-            });
-        }
-
-        // --- Gráfico 4: Servicios Suspendidos (Dona) ---
-        function initInactivePlansChart() {
-            const ctx = document.getElementById('inactivePlansChart').getContext('2d');
-            const q = query(serviciosRef, where("estado", "==", "Suspendido"));
-            
-            onSnapshot(q, (snapshot) => {
-                const planCounts = new Map();
-                snapshot.forEach(doc => {
-                    const planNombre = doc.data().plan_info?.nombre || 'Sin Plan';
-                    planCounts.set(planNombre, (planCounts.get(planNombre) || 0) + 1);
-                });
-
-                if (chartInactivePlans) chartInactivePlans.destroy();
-                chartInactivePlans = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: [...planCounts.keys()],
-                        datasets: [{
-                            label: 'Servicios Suspendidos',
-                            data: [...planCounts.values()],
-                            backgroundColor: ['#F59E0B', '#EF4444', '#8B5CF6', '#6B7280'],
-                            hoverOffset: 4
-                        }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
-            });
-        }
-
-    </script>
+    <!-- Scripts de Integración -->
+    <script src="js/api.js"></script>
+    <script src="js/sidebar.js"></script>
+    <script src="js/tablero.js"></script>
 </body>
 </html>

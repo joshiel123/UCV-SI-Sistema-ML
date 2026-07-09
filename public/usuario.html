@@ -3,689 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Usuarios</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome -->
+    <title>Usuarios - CABLE LATIN</title>
+
+    <!-- Fuentes y CDN de Íconos -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-    <style>
-        /* Estilos personalizados */
-        :root {
-            --color-principal: #0d6efd; 
-            --color-fondo: #f8f9fa;
-            --color-texto: #212529;
-            --color-texto-secundario: #6c757d;
-            --color-borde: #dee2e6;
-            --color-blanco: #ffffff;
-            --color-verde: #198754;
-            --color-verde-fondo: #d1e7dd;
-            --color-rojo: #dc3545;
-            --color-rojo-fondo: #f8d7da;
-            --color-gris: #6c757d;
-            --color-gris-fondo: #e2e3e5;
-        }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--color-fondo);
-            color: var(--color-texto);
-            display: flex;
-        }
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-        /* ---------------------------------------------------- */
-        /* ESTILOS DEL SIDEBAR COLAPSABLE                       */
-        /* ---------------------------------------------------- */
-        #sidebar-container {
-            width: 250px; 
-            background-color: var(--color-blanco); 
-            min-height: 100vh;
-            flex-shrink: 0;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); 
-            position: sticky; 
-            top: 0;
-            display: flex;
-            flex-direction: column;
-            z-index: 10;
-            transition: width 0.3s ease; 
-        }
-        
-        /* Estado Colapsado */
-        #sidebar-container.collapsed {
-            width: 65px; 
-        }
-
-        /* Oculta texto y flechas cuando está colapsado */
-        #sidebar-container.collapsed .sidebar-header,
-        #sidebar-container.collapsed .sidebar-link span,
-        #sidebar-container.collapsed .sidebar-dropdown-title .fa-chevron-down,
-        #sidebar-container.collapsed .sidebar-footer .sidebar-link span,
-        #sidebar-container.collapsed .sidebar-submenu {
-            display: none !important; 
-            opacity: 0;
-            transition: opacity 0.1s;
-        }
-        
-        /* Ajusta padding y centrado de íconos */
-        #sidebar-container.collapsed .sidebar-link {
-            justify-content: center;
-            padding: 0.75rem 0.5rem;
-        }
-        #sidebar-container.collapsed .sidebar-link i {
-            margin-right: 0 !important;
-        }
-
-        /* Contenido principal se ajusta */
-        .main-content {
-            flex-grow: 1;
-            padding: 2rem;
-            max-width: calc(100% - 250px);
-            transition: max-width 0.3s ease;
-        }
-        
-        .main-content.expanded {
-            max-width: calc(100% - 65px); 
-        }
-        
-        /* Botón de toggle */
-        #toggle-sidebar-btn {
-            background-color: var(--color-principal);
-            color: var(--color-blanco);
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            position: absolute;
-            right: -15px; 
-            top: 75px;
-            z-index: 20;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-
-        /* ---------------------------------------------------- */
-        /* ESTILOS DEL MENÚ INTERNO                             */
-        /* ---------------------------------------------------- */
-        .sidebar-link {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1.25rem;
-            color: var(--color-texto);
-            text-decoration: none;
-            transition: all 0.2s ease;
-            font-size: 1rem;
-            border-radius: 0.5rem; /* Bordes redondeados */
-            margin: 0.25rem 0.5rem;
-        }
-        .sidebar-link:hover:not(.active) { background-color: var(--color-fondo); }
-        .sidebar-link.active {
-            background-color: var(--color-principal); 
-            color: var(--color-blanco); 
-            font-weight: 600;
-            box-shadow: 0 4px 6px rgba(13, 110, 253, 0.2);
-        }
-        .sidebar-dropdown-title { cursor: pointer; user-select: none; }
-
-        .sidebar-submenu {
-            overflow: hidden; 
-            transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
-            max-height: 0;
-            padding: 0;
-            margin: 0 0.5rem;
-            border-radius: 0 0 0.5rem 0.5rem;
-        }
-        .sidebar-submenu.open {
-            max-height: 500px; 
-            padding: 0.5rem 0; 
-            background-color: #f7f7f7; 
-        }
-        .sidebar-submenu .sidebar-link {
-            padding-left: 2.5rem; 
-            font-size: 0.95rem;
-            margin: 0.1rem 0;
-            color: #4a5568; 
-            border-radius: 0.25rem;
-        }
-        .sidebar-submenu .sidebar-link.active {
-            background-color: #e6f0ff; 
-            color: var(--color-principal); 
-            font-weight: 500;
-            box-shadow: none;
-        }
-        .sidebar-header {
-            padding: 1rem 1.25rem;
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--color-principal);
-            border-bottom: 1px solid var(--color-borde);
-            text-align: center;
-        }
-        .sidebar-footer {
-            margin-top: auto; 
-            padding: 1rem 1.25rem;
-            border-top: 1px solid var(--color-borde);
-        }
-        .rotate-icon { transform: rotate(180deg); }
-
-        /* ---------------------------------------------------- */
-        /* ESTILOS DE LA TABLA Y MODAL                          */
-        /* ---------------------------------------------------- */
-        .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-        .content-header h1 { font-size: 2.5rem; font-weight: 700; margin: 0; }
-        .breadcrumb { font-size: 0.9rem; color: var(--color-texto-secundario); margin: 0; }
-        .btn-primary { background-color: var(--color-principal); color: var(--color-blanco); border: none; border-radius: 0.75rem; width: 50px; height: 50px; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.3s ease; }
-        .card { background-color: var(--color-blanco); border: 1px solid var(--color-borde); border-radius: 0.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow: hidden; }
-        .table-container { width: 100%; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        table th, table td { padding: 1rem 1.25rem; border-bottom: 1px solid var(--color-borde); vertical-align: middle; }
-        table th { font-weight: 700; font-size: 0.9rem; text-transform: uppercase; color: var(--color-texto-secundario); background-color: var(--color-fondo); }
-        .status-pill, .role-pill { padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.8rem; font-weight: 700; text-transform: capitalize; }
-        .status-pill.active { color: var(--color-verde); background-color: var(--color-verde-fondo); }
-        .status-pill.inactive { color: var(--color-rojo); background-color: var(--color-rojo-fondo); }
-        .role-pill.administrador { color: var(--color-rojo); background-color: var(--color-rojo-fondo); }
-        .role-pill.supervisor { color: var(--color-principal); background-color: #cfe2ff; }
-        .role-pill.vendedor { color: var(--color-gris); background-color: var(--color-gris-fondo); }
-        .table-actions a { color: var(--color-texto-secundario); margin-right: 1rem; font-size: 1.1rem; transition: color 0.3s ease; }
-        .table-footer { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; background-color: var(--color-fondo); font-size: 0.9rem; color: var(--color-texto-secundario); border-top: 1px solid var(--color-borde);}
-        .modal-backdrop { position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.75); display: flex; align-items: center; justify-content: center; z-index: 50; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; }
-        .modal-backdrop.open { opacity: 1; pointer-events: all; }
-        .modal-content { background-color: var(--color-blanco); padding: 2rem; border-radius: 0.75rem; width: 100%; max-width: 400px; transform: scale(0.95); transition: transform 0.3s ease; }
-        .modal-content h3 { font-size: 1.25rem; font-weight: 700; margin-top: 0; margin-bottom: 0.5rem; color: var(--color-rojo); }
-        .modal-actions { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem; }
-        .btn { padding: 0.5rem 1rem; border-radius: 0.5rem; border: none; font-weight: 600; cursor: pointer; transition: background-color 0.3s ease; }
-        .btn-cancel { background-color: var(--color-gris-fondo); color: var(--color-gris); }
-        .btn-confirm-delete { background-color: var(--color-rojo); color: var(--color-blanco); }
-    </style>
+    <!-- Estilos Unificados de la Suite -->
+    <link rel="stylesheet" href="css/tablero.css">
+    <link rel="stylesheet" href="css/usuario.css">
 </head>
-<body>
-    
-    <!-- Sidebar (Menú Lateral) -->
-    <div id="sidebar-container">
-        <!-- Botón para Colapsar/Expandir el Sidebar -->
-        <button id="toggle-sidebar-btn" onclick="toggleSidebar()" title="Colapsar/Expandir">
-            <i class="fas fa-chevron-left" id="toggle-icon"></i> 
+<body class="bg-gray-100">
+
+    <!-- Sidebar Dinámico -->
+    <aside id="sidebar-container" class="hidden lg:block z-30">
+        <!-- El contenido se renderiza dinámicamente mediante js/sidebar.js -->
+    </aside>
+
+    <!-- Contenido Principal -->
+    <main class="main-content p-4 md:p-8">
+
+        <!-- Botón hamburguesa móvil -->
+        <button id="mobile-menu-toggle" class="lg:hidden fixed top-4 left-4 bg-blue-600 text-white p-3 rounded-full shadow-lg z-40">
+            <i class="fas fa-bars"></i>
         </button>
-        
-        <!-- Header del Sidebar -->
-        <div class="sidebar-header">CABLE LATIN</div>
 
-        <!-- Contenedor del Menú Principal -->
-        <nav class="flex-grow overflow-y-auto">
-            <ul class="list-none p-0 m-0">
-                
-                <!-- 1. DASHBOARD -->
-                <li>
-                    <a href="tablero.html" class="sidebar-link">
-                        <i class="fas fa-tachometer-alt w-5 h-5 mr-3"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-
-                <!-- 2. ADMINISTRACIÓN (Dropdown) -->
-                <li>
-                    <div id="admin-dropdown-title" class="sidebar-link sidebar-dropdown-title" 
-                       onclick="toggleCollapse('admin-menu', 'admin-icon')">
-                        <i class="fas fa-cogs w-5 h-5 mr-3"></i>
-                        <span>Administración</span>
-                        <i class="fas fa-chevron-down w-3 h-3 ml-auto transition-transform duration-300" id="admin-icon"></i>
-                    </div>
-                    <!-- Submenú -->
-                    <ul id="admin-menu" class="sidebar-submenu list-none p-0 m-0">
-                        <li>
-                            <a href="usuario.html" class="sidebar-link active">
-                                <i class="fas fa-user-friends w-5 h-5 mr-3"></i><span>Usuarios</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="planes.html" class="sidebar-link">
-                                <i class="fas fa-list-alt w-5 h-5 mr-3"></i><span>Planes y Servicios</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                
-                <!-- 3. CLIENTES (Dropdown) -->
-                <li>
-                    <div id="clientes-dropdown-title" class="sidebar-link sidebar-dropdown-title" 
-                       onclick="toggleCollapse('clientes-menu', 'clientes-icon')">
-                        <i class="fas fa-users w-5 h-5 mr-3"></i>
-                        <span>Clientes</span>
-                        <i class="fas fa-chevron-down w-3 h-3 ml-auto transition-transform duration-300" id="clientes-icon"></i>
-                    </div>
-                    <ul id="clientes-menu" class="sidebar-submenu list-none p-0 m-0">
-                        <li><a href="clientes.html" class="sidebar-link"><i class="fas fa-user w-5 h-5 mr-3"></i><span>Clientes</span></a></li>
-                        <li><a href="facturas.html" class="sidebar-link"><i class="fas fa-file-invoice w-5 h-5 mr-3"></i><span>Facturas</span></a></li>
-                        <li><a href="pagos.html" class="sidebar-link"><i class="fas fa-money-bill-wave w-5 h-5 mr-3"></i><span>Pagos</span></a></li>
-                    </ul>
-                </li>
-                
-                <!-- 4. REPORTES (Dropdown) -->
-                <li>
-                    <div id="reportes-dropdown-title" class="sidebar-link sidebar-dropdown-title" 
-                       onclick="toggleCollapse('reportes-menu', 'reportes-icon')">
-                        <i class="fas fa-chart-line w-5 h-5 mr-3"></i>
-                        <span>Reportes</span>
-                        <i class="fas fa-chevron-down w-3 h-3 ml-auto transition-transform duration-300" id="reportes-icon"></i>
-                    </div>
-                    <!-- Submenú -->
-                    <ul id="reportes-menu" class="sidebar-submenu list-none p-0 m-0">
-                        <li>
-                            <a href="reportes.html" class="sidebar-link">
-                                <i class="fas fa-chart-bar w-5 h-5 mr-3"></i><span>Reportes</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                
-                <!-- 5. PERFIL -->
-                <li>
-                    <a href="perfil.html" class="sidebar-link">
-                        <i class="fas fa-user-circle w-5 h-5 mr-3"></i>
-                        <span>Perfil</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-        
-        <!-- Footer: CERRAR SESIÓN -->
-        <div class="sidebar-footer">
-            <a href="#" class="sidebar-link text-red-600 hover:bg-red-50" onclick="handleSignOut(event)">
-                <i class="fas fa-sign-out-alt w-5 h-5 mr-3"></i>
-                <span>Cerrar Sesión</span>
-            </a>
-        </div>
-    </div>
-    
-    <!-- Contenido Principal (Main) -->
-    <main class="main-content">
-        
-        <div class="content-header">
+        <header class="flex justify-between items-center mb-6 pl-14 lg:pl-0">
             <div>
-                <p class="breadcrumb">Administración / Usuarios</p>
-                <h1>Usuarios</h1>
-                <small id="current-uid-display" class="text-xs text-gray-500 hidden"></small>
+                <p class="text-sm text-gray-500 mb-1">Administración / Usuarios</p>
+                <h1 class="text-3xl font-bold text-gray-800">Usuarios</h1>
             </div>
-            <!-- Botón de Añadir -->
-            <button class="btn-primary" title="Añadir Usuario" onclick="location.href='crearUsuario.html'">
+            <button onclick="location.href='crearUsuario.html'"
+                class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition-colors flex items-center space-x-2">
                 <i class="fas fa-plus"></i>
+                <span class="hidden md:inline">Añadir Usuario</span>
             </button>
+        </header>
+
+        <!-- Tabla de Usuarios -->
+        <div class="bg-white p-6 rounded-xl shadow-lg">
+
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                <div>
+                    <label for="show-entries" class="text-sm text-gray-600 mr-2">Mostrar</label>
+                    <select id="show-entries" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="10" selected>10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                    </select>
+                    <span class="text-sm text-gray-600 ml-2">registros</span>
+                </div>
+                <div class="relative w-full md:w-72">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <i class="fas fa-search text-gray-400"></i>
+                    </span>
+                    <input type="search" id="search-table" placeholder="Buscar usuario..."
+                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+
+            <div class="overflow-x-auto rounded-lg border border-gray-200">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 text-gray-700 border-b border-gray-200">
+                            <th class="p-4 font-semibold text-sm uppercase text-gray-500">ID</th>
+                            <th class="p-4 font-semibold text-sm uppercase text-gray-500">Usuario</th>
+                            <th class="p-4 font-semibold text-sm uppercase text-gray-500">Nombre</th>
+                            <th class="p-4 font-semibold text-sm uppercase text-gray-500">Correo</th>
+                            <th class="p-4 font-semibold text-sm uppercase text-gray-500">Teléfono</th>
+                            <th class="p-4 font-semibold text-sm uppercase text-gray-500">Rol</th>
+                            <th class="p-4 font-semibold text-sm uppercase text-gray-500">Estado</th>
+                            <th class="p-4 font-semibold text-sm uppercase text-gray-500 text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usuarios-table-body" class="divide-y divide-gray-100 text-gray-700 text-sm">
+                        <tr>
+                            <td colspan="8" class="text-center p-8 text-gray-500">
+                                <i class="fas fa-spinner fa-spin mr-2"></i> Cargando usuarios...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
+                <span class="text-sm text-gray-500" id="footer-info">Mostrando 0 de 0 registros</span>
+            </div>
         </div>
 
-        <div class="card table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID (Fragmento)</th>
-                        <th>Usuario</th>
-                        <th>Nombre</th>
-                        <th>Correo</th>
-                        <th>Teléfono</th>
-                        <th>Rol</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <!-- Cuerpo de la tabla: se llenará con datos de Firebase -->
-                <tbody id="usuarios-table-body">
-                    <tr>
-                        <td colspan="8" class="text-center py-8">
-                            <i class="fas fa-spinner fa-spin text-2xl text-gray-400"></i>
-                            <span class="ml-2">Conectando y cargando usuarios...</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <div class="table-footer">
-                <span id="footer-info">Mostrando 0 de 0 registros</span>
-                <nav class="pagination">
-                    <a href="#" class="text-gray-400 pointer-events-none">Anterior</a>
-                    <a href="#" class="active">1</a>
-                    <a href="#" class="text-gray-400 pointer-events-none">Siguiente</a>
-                </nav>
-            </div>
-        </div>
-        
     </main>
 
+    <!-- Overlay móvil -->
+    <div id="sidebar-overlay"
+        class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden lg:hidden"
+        onclick="closeMobileSidebar()">
+    </div>
+
     <!-- Modal de Confirmar Eliminación -->
-    <div id="confirmDeleteModal" class="modal-backdrop">
-        <div class="modal-content">
-            <h3><i class="fas fa-exclamation-triangle"></i> Confirmar Eliminación</h3>
-            <p id="modalDeleteMessage">¿Estás seguro de que deseas eliminar este usuario? Esta acción no se puede deshacer.</p>
-            <div class="modal-actions">
-                <button id="modalCancelDelete" class="btn btn-cancel">Cancelar</button>
-                <button id="modalConfirmDelete" class="btn btn-confirm-delete">Sí, Eliminar</button>
+    <div id="confirmDeleteModal" class="usr-modal-overlay">
+        <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-sm relative transform transition-all scale-95 usr-modal-content">
+            <h3 class="text-lg font-bold text-red-600 mb-2">
+                <i class="fas fa-exclamation-triangle mr-2"></i> Confirmar Eliminación
+            </h3>
+            <p id="modalDeleteMessage" class="text-sm text-gray-600 mb-6">
+                ¿Estás seguro de que deseas eliminar este usuario? Esta acción no se puede deshacer.
+            </p>
+            <div class="flex justify-end gap-3">
+                <button id="modalCancelDelete"
+                    class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium text-sm transition">
+                    Cancelar
+                </button>
+                <button id="modalConfirmDelete"
+                    class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-medium text-sm transition">
+                    Sí, Eliminar
+                </button>
             </div>
         </div>
     </div>
 
-
-    <!-- ============================================== -->
-    <!--          SCRIPT DE FIREBASE Y LÓGICA           -->
-    <!-- ============================================== -->
-    <script type="module">
-        // --- Importaciones de Firebase ---
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { 
-            getAuth, 
-            onAuthStateChanged, 
-            signInAnonymously, 
-            signOut as firebaseSignOut 
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { 
-            getFirestore, 
-            collection, 
-            onSnapshot,
-            doc,        
-            deleteDoc,
-            setLogLevel    
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Establecer nivel de log para depuración de Firestore
-        setLogLevel('debug');
-
-        // --- Configuración Firebase (USANDO TUS DATOS PROVISTOS) ---
-        const firebaseConfig = {
-          apiKey: "AIzaSyDHrAEU4HI2onL1bRZpRfB5GAbsbD6_XBE",
-          authDomain: "cablelatin-prueba.firebaseapp.com",
-          projectId: "cablelatin-prueba",
-          storageBucket: "cablelatin-prueba.firebasestorage.app",
-          messagingSenderId: "370823325775",
-          appId: "1:370823325775:web:cbd9142e612bc0a979623a",
-          measurementId: "G-PV3NRMJBW2"
-        };
-        
-        // --- Variables Globales ---
-        const appId = firebaseConfig.projectId; // Usamos el projectId para la ruta de los 'artifacts'
-        let app, auth, db;
-        let userId = null;
-        let isAuthReady = false;
-        
-        // --- Referencias DOM ---
-        const tableBody = document.getElementById('usuarios-table-body');
-        const footerInfo = document.getElementById('footer-info');
-        const modal = document.getElementById('confirmDeleteModal');
-        const modalMessage = document.getElementById('modalDeleteMessage');
-        const btnCancelDelete = document.getElementById('modalCancelDelete');
-        const btnConfirmDelete = document.getElementById('modalConfirmDelete');
-        let userIdToDelete = null;
-
-        // --- Inicialización Firebase ---
-        try {
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-            initAuth();
-        } catch (e) {
-            console.error("Error inicializando Firebase:", e);
-            renderError("Error de Conexión a Firebase. Revisa la configuración.");
-        }
-
-        /**
-         * Maneja el estado de autenticación y prepara la carga de datos.
-         */
-        function initAuth() {
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    userId = user.uid;
-                    document.getElementById('current-uid-display').textContent = `UID: ${userId}`;
-                    listenForUsers();
-                } else {
-                    // Si no hay usuario, intenta iniciar sesión anónimamente
-                    try {
-                        const anonUserCredential = await signInAnonymously(auth);
-                        userId = anonUserCredential.user.uid;
-                        document.getElementById('current-uid-display').textContent = `UID Anónimo: ${userId}`;
-                        console.warn("Autenticado anónimamente. Los permisos de lectura/escritura dependen de tus reglas.");
-                        listenForUsers(); // Intenta cargar datos incluso como anónimo
-                    } catch (error) {
-                        console.error("Error auth anónima:", error);
-                        renderError("Error de autenticación. Revisa las reglas de seguridad.");
-                    }
-                }
-                isAuthReady = true;
-            });
-        }
-        
-        /**
-         * Escucha en tiempo real la colección de usuarios (pública).
-         */
-        function listenForUsers() {
-            if (!userId) {
-                console.log("UserID no disponible, esperando autenticación.");
-                return;
-            }
-            
-            // La ruta a la colección donde se guardan los perfiles de usuario.
-            const usersCollectionPath = `artifacts/${firebaseConfig.projectId}/public/data/personal`;
-            const usersCollectionRef = collection(db, usersCollectionPath);
-            
-            console.log(`Escuchando la colección: ${usersCollectionPath}`);
-
-            // Usamos onSnapshot para la actualización en tiempo real.
-            onSnapshot(usersCollectionRef, (snapshot) => {
-                console.log(`Se recibieron ${snapshot.docs.length} documentos.`);
-                renderTable(snapshot.docs);
-            }, (error) => {
-                console.error("Error al escuchar la colección 'personal':", error);
-                // Analizar el error para dar un mensaje más útil.
-                let errorMessage = "No se pudieron cargar los datos de usuarios.";
-                if (error.code === 'permission-denied') {
-                    errorMessage = "Error de permisos. Revisa las reglas de seguridad de Firestore.";
-                } else if (error.code === 'unauthenticated') {
-                    errorMessage = "No estás autenticado. Se requiere iniciar sesión.";
-                }
-                renderError(`${errorMessage} (Ver consola para detalles)`);
-            });
-        }
-        
-        /**
-         * Dibuja la tabla con los datos de Firebase.
-         */
-        function renderTable(userDocs) {
-            tableBody.innerHTML = '';
-
-            if (userDocs.length === 0) {
-                tableBody.innerHTML = `
-                    <tr>
-                        <td colspan="8" class="text-center py-8 text-gray-500">
-                            No se encontraron usuarios.
-                            <a href="crearUsuario.html" class="text-blue-600 hover:underline ml-1">¡Crea el primero!</a>
-                        </td>
-                    </tr>`;
-                footerInfo.textContent = "Mostrando 0 de 0 registros";
-                return;
-            }
-
-            footerInfo.textContent = `Mostrando ${userDocs.length} de ${userDocs.length} registros`;
-
-            userDocs.forEach(doc => {
-                const user = doc.data();
-                const uid = doc.id;
-                
-                const estado = user.estado || 'Inactivo';
-                const rol = user.rol || 'N/A';
-                
-                const estadoClass = estado === 'Activo' ? 'active' : 'inactive';
-                const rolClass = rol.toLowerCase().replace(/\s/g, ''); // Para usar en las clases CSS
-
-                const newRow = tableBody.insertRow();
-                newRow.innerHTML = `
-                    <td>${uid.substring(0, 8)}...</td>
-                    <td>${user.usuario || 'N/A'}</td>
-                    <td>${user.nombre || 'N/A'}</td>
-                    <td>${user.email || 'N/A'}</td>
-                    <td>${user.telefono || 'N/A'}</td>
-                    <td>
-                        <span class="role-pill ${rolClass}">${rol}</span>
-                    </td>
-                    <td>
-                        <span class="status-pill ${estadoClass}">${estado}</span>
-                    </td>
-                    <td class="table-actions">
-                        <a href="editarUsuario.html?id=${uid}" title="Editar">
-                            <i class="fas fa-pencil-alt text-blue-600 hover:text-blue-800"></i>
-                        </a>
-                        <a href="#" title="Eliminar" class="btn-delete" data-id="${uid}" data-name="${user.nombre || user.usuario || 'Usuario'}">
-                            <i class="fas fa-trash-alt text-red-600 hover:text-red-800"></i>
-                        </a>
-                    </td>
-                `;
-            });
-        }
-        
-        /**
-         * Muestra un error en la tabla.
-         */
-        function renderError(message) {
-            tableBody.innerHTML = `
-                <tr>
-                    <td colspan="8" class="text-center py-8 text-red-600 font-semibold">
-                        <i class="fas fa-exclamation-triangle mr-2"></i>
-                        ${message}
-                    </td>
-                </tr>`;
-            footerInfo.textContent = "Error al cargar";
-        }
-
-        // ==============================================
-        //          LÓGICA DE ELIMINACIÓN
-        // ==============================================
-
-        function showConfirmModal(id, name) {
-            userIdToDelete = id;
-            modalMessage.textContent = `¿Estás seguro de que deseas eliminar a "${name}" (ID: ${id.substring(0, 8)}...)? Esta acción no se puede deshacer.`;
-            modal.classList.add('open');
-        }
-
-        function hideConfirmModal() {
-            userIdToDelete = null;
-            modal.classList.remove('open');
-        }
-
-        async function deleteUser() {
-            if (!userIdToDelete || !isAuthReady) return;
-            
-            const userDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'personal', userIdToDelete);
-
-            try {
-                await deleteDoc(userDocRef);
-                hideConfirmModal();
-                console.log(`Usuario con ID ${userIdToDelete} eliminado exitosamente.`);
-            } catch (error) {
-                console.error("Error al eliminar el documento:", error);
-                hideConfirmModal();
-                // Usamos un div temporal en lugar de alert()
-                const errorMessage = document.createElement('div');
-                errorMessage.className = 'fixed top-0 right-0 m-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg shadow-lg z-50';
-                errorMessage.textContent = `Error al eliminar: ${error.message}. Verifica tus permisos de Firebase.`;
-                document.body.appendChild(errorMessage);
-                setTimeout(() => document.body.removeChild(errorMessage), 5000);
-            }
-        }
-        
-        /**
-         * Maneja el cierre de sesión de Firebase.
-         */
-        async function handleSignOut(event) {
-            event.preventDefault();
-            try {
-                await firebaseSignOut(auth);
-                // Redirige al login o a la página de inicio
-                window.location.href = 'login.html'; 
-            } catch (error) {
-                console.error("Error al cerrar sesión:", error);
-            }
-        }
-        window.handleSignOut = handleSignOut;
-
-        // --- Event Listeners de la Tabla y Modal ---
-        tableBody.addEventListener('click', (e) => {
-            const deleteButton = e.target.closest('.btn-delete');
-            if (deleteButton) {
-                e.preventDefault();
-                const id = deleteButton.dataset.id;
-                const name = deleteButton.dataset.name;
-                showConfirmModal(id, name);
-            }
-        });
-        
-        btnCancelDelete.addEventListener('click', hideConfirmModal);
-        btnConfirmDelete.addEventListener('click', deleteUser);
-
-
-        // ==============================================
-        //          LÓGICA DE SIDEBAR (Funciones)
-        // ==============================================
-
-        /**
-         * Función para alternar la visibilidad de los submenús
-         */
-        function toggleCollapse(menuId, iconId) {
-            // Evita el despliegue de submenús si el sidebar está colapsado 
-            if (document.getElementById('sidebar-container').classList.contains('collapsed')) {
-                return; 
-            }
-            
-            const menu = document.getElementById(menuId);
-            const icon = document.getElementById(iconId);
-
-            if (menu.classList.contains('open')) {
-                menu.classList.remove('open');
-                if (icon) icon.classList.remove('rotate-icon');
-            } else {
-                menu.classList.add('open');
-                if (icon) icon.classList.add('rotate-icon');
-            }
-        }
-        window.toggleCollapse = toggleCollapse; 
-
-        /**
-         * Función para alternar el estado colapsado/expandido del sidebar
-         */
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar-container');
-            const mainContent = document.querySelector('.main-content');
-            const icon = document.getElementById('toggle-icon');
-            
-            sidebar.classList.toggle('collapsed');
-            mainContent.classList.toggle('expanded');
-            
-            if (sidebar.classList.contains('collapsed')) {
-                // Colapsado: Gira el ícono y cierra todos los submenús
-                icon.classList.remove('fa-chevron-left');
-                icon.classList.add('fa-chevron-right');
-                
-                document.querySelectorAll('.sidebar-submenu.open').forEach(menu => {
-                     menu.classList.remove('open');
-                     const iconId = menu.id.replace('-menu', '-icon');
-                     const iconToRotate = document.getElementById(iconId);
-                     if(iconToRotate) iconToRotate.classList.remove('rotate-icon');
-                });
-
-            } else {
-                // Expandido: Gira el ícono y vuelve a abrir el menú de Administración (por ser la página actual)
-                icon.classList.remove('fa-chevron-right');
-                icon.classList.add('fa-chevron-left');
-                
-                document.getElementById('admin-menu').classList.add('open');
-                document.getElementById('admin-icon').classList.add('rotate-icon');
-            }
-        }
-        window.toggleSidebar = toggleSidebar; 
-
-        // --- Configuración inicial al cargar la página ---
-        document.addEventListener('DOMContentLoaded', () => {
-             // Asegura que el menú de Administración esté abierto por defecto
-             document.getElementById('admin-menu').classList.add('open');
-             document.getElementById('admin-icon').classList.add('rotate-icon');
-        });
-
-    </script>
+    <!-- Scripts de Integración -->
+    <script src="js/api.js"></script>
+    <script src="js/sidebar.js"></script>
+    <script src="js/usuario.js" type="module"></script>
 </body>
 </html>
