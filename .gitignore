@@ -1,2 +1,30 @@
+# Archivos de credenciales — NUNCA subir al repositorio
+backend/.env
+backend/firebase-credentials.json
 
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+.venv/
+venv/
+env/
+
+# Node.js
+node_modules/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# IDE
+.idea/
+
+# Archivos ignorados anteriores
 Cablelatin/public/html/login.html

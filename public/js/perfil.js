@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const usuarioString = sessionStorage.getItem('usuarioLogueado');
                 if (!usuarioString) {
-                    alert('Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.');
+                    alert("Sesión expirada. Por favor inicie sesión nuevamente.");
                     return;
                 }
                 let usuario = JSON.parse(usuarioString); // Use let to allow modification
@@ -183,10 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
-    if (closeProfileModalBtn) {
-        closeProfileModalBtn.addEventListener('click', closeProfileModal);
-    }
+        if (closeProfileModalBtn) { closeProfileModalBtn.addEventListener('click', closeProfileModal); }
     
     if (profileModal) {
         profileModal.addEventListener('click', (e) => {

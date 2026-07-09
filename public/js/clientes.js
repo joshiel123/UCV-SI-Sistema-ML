@@ -1,306 +1,605 @@
-// ==============================================
-// DATOS DE PRUEBA (Nuestra "Base de Datos" estática)
-// ==============================================
-let clientesPrueba = [
-    { id: 'TEST001A', dni: '47123456', nombre: 'Juan', apellido: 'Pérez', telefono: '987654321', direccion: 'Calle Falsa 123', estado: 'Activo' },
-    { id: 'TEST002B', dni: '93456789', nombre: 'María', apellido: 'Gómez', telefono: '912345678', direccion: 'Av. Siempre Viva 742', estado: 'Suspendido' },
-    { id: 'TEST003C', dni: '10987654', nombre: 'Carlos', apellido: 'Rodríguez', telefono: '955554444', direccion: 'Jr. Luna Nueva 200', estado: 'Inactivo' }
-];
-
-// ==============================================
-// REFERENCIAS DOM
-// ==============================================
-const tableBody = document.getElementById('clients-table-body');
-const footerInfo = document.getElementById('footer-info');
-
-// ==============================================
-// 1. FUNCIONES DE MANEJO DE MODALES
-// ==============================================
-
 /**
- * Abre un modal específico.
- * @param {string} modalId - ID del modal a abrir.
+ * clientes.js — Gestión de clientes
+ * Cable Latín — Frontend
+ *
+ * Consume ClientesAPI (api.js). No accede directamente a Firebase.
  */
-window.openModal = (modalId) => {
-    const modal = document.getElementById(modalId);
-    if(modal) modal.classList.add('open');
-};
 
-/**
- * Cierra un modal específico.
- * @param {string} modalId - ID del modal a cerrar.
- */
-window.closeModal = (modalId) => {
-    const modal = document.getElementById(modalId);
-    if(modal) modal.classList.remove('open');
-};
+// ===================== ESTADO MÓDULO =====================
+
+let _todosLosClientes  = [];
+let _clientesFiltrados = [];
+let _paginaActual      = 1;
+let _itemsPorPagina    = 10;
 
 
-/**
- * Muestra el modal de notificación de éxito o eliminación.
- * @param {string} title - Título del mensaje.
- * @param {string} message - Contenido del mensaje.
- * @param {string} type - 'success' o 'delete' para cambiar estilos y el icono.
- */
-window.showNotificationModal = (title, message, type = 'success') => {
-    const modal = document.getElementById('modal-notification');
-    const contentEl = modal.querySelector('.modal-content');
-    const iconEl = document.getElementById('notification-icon');
-    
-    // Limpiar clases y establecer el tipo
-    contentEl.className = 'modal-content';
-    
-    if (type === 'delete') {
-        contentEl.classList.add('notification-delete');
-        iconEl.innerHTML = '<i class="fas fa-trash-alt"></i>';
+// ===================== INICIALIZACIÓN =====================
+
+document.addEventListener('DOMContentLoaded', async () => {
+
+    const autorizado = await AuthAPI.protegerPagina();
+    if (!autorizado) return;
+
+    _inicializarSidebarEmbebido();
+    await _cargarClientes();
+    _inicializarControles();
+    _inicializarFormularios();
+});
+
+
+// ===================== CARGA DE DATOS =====================
+
+async function _cargarClientes() {
+    const tbody = document.getElementById('clients-table-body');
+    if (!tbody) return;
+
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="8" style="text-align:center; padding:30px; color:#6c757d;">
+                <i class="fas fa-spinner fa-spin"></i> Cargando clientes...
+            </td>
+        </tr>`;
+
+    try {
+        const respuesta = await ClientesAPI.listar();
+
+        if (!respuesta || !respuesta.success) {
+            _renderizarError(tbody, respuesta?.message || 'No se pudieron cargar los clientes.');
+            return;
+        }
+
+        _todosLosClientes = respuesta.data || [];
+        _aplicarFiltrosYRenderizar();
+
+    } catch (error) {
+        console.error('[Clientes] Error cargando clientes:', error);
+        _renderizarError(tbody, 'Error de conexión con el servidor.');
+    }
+}
+
+
+// ===================== FILTRADO Y PAGINACIÓN =====================
+
+function _aplicarFiltrosYRenderizar() {
+    const termino = (document.getElementById('search-table')?.value || '').toLowerCase().trim();
+
+    _clientesFiltrados = _todosLosClientes.filter(c => {
+        const nombreCompleto = `${c.nombre || ''} ${c.apellido || ''}`.toLowerCase();
+        const doc            = (c.numero_documento || c.dni || '').toLowerCase();
+        return nombreCompleto.includes(termino) || doc.includes(termino);
+    });
+
+    _paginaActual = 1;
+    _renderizarPaginaActual();
+}
+
+function _renderizarPaginaActual() {
+    const tbody = document.getElementById('clients-table-body');
+    if (!tbody) return;
+
+    const total      = _clientesFiltrados.length;
+    const totalPags  = Math.ceil(total / _itemsPorPagina) || 1;
+    _paginaActual    = Math.max(1, Math.min(_paginaActual, totalPags));
+
+    const inicio     = (_paginaActual - 1) * _itemsPorPagina;
+    const fin        = inicio + _itemsPorPagina;
+    const pagina     = _clientesFiltrados.slice(inicio, fin);
+
+    tbody.innerHTML  = '';
+
+    if (pagina.length === 0) {
+        const msg = document.getElementById('search-table')?.value
+            ? 'No se encontraron clientes con ese criterio.'
+            : 'No hay clientes registrados.';
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:30px;color:#6c757d;">${msg}</td></tr>`;
     } else {
-        contentEl.classList.add('notification-success');
-        iconEl.innerHTML = '<i class="fas fa-check-circle"></i>';
+        pagina.forEach(c => tbody.appendChild(_crearFilaCliente(c)));
     }
 
-    // Establecer contenido
-    document.getElementById('notification-title').textContent = title;
-    document.getElementById('notification-message').innerHTML = message;
+    _renderizarPaginacion(total, totalPags);
+}
 
-    // Abrir
-    openModal('modal-notification');
-};
+function _crearFilaCliente(cliente) {
+    const uid    = cliente.id || '';
+    const doc    = _esc(cliente.numero_documento || cliente.dni || 'N/A');
+    const nombre = `${_esc(cliente.apellido || '')}, ${_esc(cliente.nombre || '')}`.replace(/^,\s*$/, 'N/A');
+    const estado = (cliente.estado || 'inactivo').toLowerCase();
 
-/**
- * Muestra el modal de confirmación de eliminación.
- * @param {string} clienteId - ID del cliente.
- * @param {string} clienteNombre - Nombre completo del cliente.
- */
-window.showConfirmModal = (clienteId, clienteNombre) => {
-    const messageEl = document.getElementById('confirm-message');
-    const actionButton = document.getElementById('confirm-action-button');
+    const claseEstado = {
+        activo:     'activo',
+        suspendido: 'suspendido',
+        inactivo:   'inactivo',
+        cortado:    'cortado',
+        pendiente:  'pendiente',
+        instalacion:'instalacion'
+    }[estado] || 'inactivo';
+
+    const fila = document.createElement('tr');
+    fila.innerHTML = `
+        <td>${_esc(uid.substring(0, 8))}...</td>
+        <td><div class="user-photo-placeholder"><i class="fas fa-user"></i></div></td>
+        <td>${doc}</td>
+        <td>${nombre}</td>
+        <td>${_esc(cliente.telefono || 'N/A')}</td>
+        <td>${_esc((cliente.direccion || 'N/A').substring(0, 30))}${(cliente.direccion || '').length > 30 ? '...' : ''}</td>
+        <td><span class="status-pill ${claseEstado}">${_esc(cliente.estado || 'N/A')}</span></td>
+        <td class="table-actions">
+            <button class="btn-icon edit"    title="Editar Cliente"  data-id="${uid}"><i class="fas fa-pencil-alt"></i></button>
+            <button class="btn-icon service" title="Editar Servicio" data-id="${uid}" data-nombre="${nombre}"><i class="fas fa-wifi"></i></button>
+            <button class="btn-icon delete"  title="Desactivar"      data-id="${uid}" data-nombre="${nombre}"><i class="fas fa-trash-alt"></i></button>
+        </td>
+    `;
+
+    fila.querySelector('.edit').addEventListener('click',    () => _abrirModalEditarCliente(cliente));
+    fila.querySelector('.service').addEventListener('click', () => _abrirModalEditarServicio(uid, nombre));
+    fila.querySelector('.delete').addEventListener('click',  () => _confirmarDesactivar(uid, nombre));
+
+    return fila;
+}
+
+function _renderizarPaginacion(total, totalPags) {
+    const footerInfo = document.getElementById('footer-info');
+    const paginacion = document.getElementById('pagination');
+    if (!footerInfo || !paginacion) return;
+
+    const inicio = total === 0 ? 0 : (_paginaActual - 1) * _itemsPorPagina + 1;
+    const fin    = Math.min(_paginaActual * _itemsPorPagina, total);
+    footerInfo.textContent = `Mostrando ${inicio} a ${fin} de ${total} registros`;
+
+    const pageNumbers = paginacion.querySelector('#page-numbers');
+    const prevLink    = paginacion.querySelector('[data-action="prev"]');
+    const nextLink    = paginacion.querySelector('[data-action="next"]');
+    if (!pageNumbers || !prevLink || !nextLink) return;
+
+    pageNumbers.innerHTML = '';
+
+    const maxPags = 5;
+    let desde = Math.max(1, _paginaActual - Math.floor(maxPags / 2));
+    let hasta  = Math.min(totalPags, desde + maxPags - 1);
+    if (hasta - desde + 1 < maxPags) desde = Math.max(1, hasta - maxPags + 1);
+
+    if (desde > 1) {
+        pageNumbers.appendChild(_crearLinkPagina(1));
+        if (desde > 2) pageNumbers.appendChild(_crearEllipsis());
+    }
+
+    for (let i = desde; i <= hasta; i++) {
+        const link = _crearLinkPagina(i);
+        if (i === _paginaActual) link.classList.add('active');
+        pageNumbers.appendChild(link);
+    }
+
+    if (hasta < totalPags) {
+        if (hasta < totalPags - 1) pageNumbers.appendChild(_crearEllipsis());
+        pageNumbers.appendChild(_crearLinkPagina(totalPags));
+    }
+
+    prevLink.classList.toggle('disabled', _paginaActual === 1);
+    nextLink.classList.toggle('disabled', _paginaActual >= totalPags);
+
+    paginacion.querySelectorAll('.page-link').forEach(link => {
+        const nuevo = link.cloneNode(true);
+        link.parentNode.replaceChild(nuevo, link);
+        if (!nuevo.classList.contains('disabled') && !nuevo.classList.contains('ellipsis')) {
+            nuevo.addEventListener('click', e => {
+                e.preventDefault();
+                const accion = nuevo.dataset.action;
+                const pagina = nuevo.dataset.page;
+                if (accion === 'prev')       _paginaActual--;
+                else if (accion === 'next')  _paginaActual++;
+                else if (pagina)             _paginaActual = parseInt(pagina, 10);
+                _renderizarPaginaActual();
+            });
+        }
+    });
+}
+
+function _crearLinkPagina(num) {
+    const a = document.createElement('a');
+    a.href = '#';
+    a.textContent = num;
+    a.classList.add('page-link');
+    a.dataset.page = num;
+    return a;
+}
+
+function _crearEllipsis() {
+    const s = document.createElement('span');
+    s.textContent = '...';
+    s.classList.add('ellipsis');
+    s.style.cssText = 'padding:6px 10px;color:#6c757d;';
+    return s;
+}
+
+
+// ===================== MODAL EDITAR CLIENTE =====================
+
+function _abrirModalEditarCliente(cliente) {
+    const form = document.getElementById('form-editar-cliente');
+    if (!form) return;
+    form.reset();
+
+    document.getElementById('edit-cliente-id').value         = cliente.id        || '';
+    document.getElementById('edit-nombre').value             = cliente.nombre    || '';
+    document.getElementById('edit-apellido').value           = cliente.apellido  || '';
+    document.getElementById('edit-dni').value                = cliente.numero_documento || cliente.dni || '';
+    document.getElementById('edit-email').value              = cliente.email     || '';
+    document.getElementById('edit-telefono').value           = cliente.telefono  || '';
+    document.getElementById('edit-estado-cliente').value     = cliente.estado    || 'Activo';
+    document.getElementById('edit-direccion').value          = cliente.direccion || '';
+    document.getElementById('edit-referencia').value         = cliente.referencia || '';
+
+    const tipoCliente = cliente.tipo_cliente || 'Residencia';
+    form.querySelectorAll('input[name="tipo_cliente"]').forEach(r => {
+        r.checked = r.value === tipoCliente;
+    });
+
+    openModal('modal-editar-cliente');
+}
+
+
+// ===================== MODAL EDITAR SERVICIO =====================
+
+function _hidratarOpcionesPlanes(elementoSelect, idPlanSeleccionado) {
+    if (!elementoSelect) return;
     
-    // Establecer el mensaje de advertencia
-    messageEl.innerHTML = `Está a punto de **eliminar permanentemente** al cliente **${clienteNombre}** (ID: ${clienteId}). ¿Desea continuar?`;
+    const planes = [
+        { id: 'basico_cable', nombre: 'Plan Básico Cable', precio: '50.00' },
+        { id: 'estandar_cable', nombre: 'Plan Estándar Cable', precio: '75.00' },
+        { id: 'estelar_cable', nombre: 'Plan Estelar Cable', precio: '110.00' },
+        { id: 'duo_basico', nombre: 'Dúo Básico (Cable + 50Mbps)', precio: '90.00' },
+        { id: 'duo_avanzado',  nombre: 'Duo Avanzado (Cable + 100Mbps)', precio: '130.00' }
+    ];
 
-    // Asignar la acción al botón "Eliminar"
-    actionButton.onclick = () => {
-        deleteConfirmed(clienteId, clienteNombre);
+    elementoSelect.innerHTML = '<option value="">-- Seleccione Plan --</option>';
+    planes.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.dataset.price = p.precio;
+        opt.textContent = `${p.nombre} (S/ ${p.precio})`;
+        if (p.id === idPlanSeleccionado) {
+            opt.selected = true;
+        }
+        elementoSelect.appendChild(opt);
+    });
+}
+
+async function _abrirModalEditarServicio(clienteId, nombreCliente) {
+    const form     = document.getElementById('form-editar-servicio');
+    const nombreEl = document.getElementById('edit-servicio-nombre-cliente');
+    const selectPlan = document.getElementById('edit-plan-tipo');
+    if (!form) return;
+
+    form.reset();
+    if (nombreEl) nombreEl.textContent = nombreCliente;
+
+    try {
+        const respuesta = await FacturasAPI.listar({ cliente_id: clienteId });
+
+        if (!respuesta?.success || !respuesta.data?.length) {
+            _mostrarNotificacion('info', 'Sin Servicio', 'Este cliente no tiene un servicio asociado registrado.');
+            return;
+        }
+
+        const servicio = respuesta.data[0];
+
+        _hidratarOpcionesPlanes(selectPlan, servicio.id_plan);
+
+        document.getElementById('edit-servicio-doc-id').value       = servicio.id                    || '';
+        document.getElementById('edit-servicio-cliente-id').value   = clienteId;
+        document.getElementById('edit-precio-plan').value           = servicio.monto                 || '0.00';
+        document.getElementById('edit-servicios-adicionales').value = servicio.servicios_adicionales || 'Ninguno';
+        document.getElementById('edit-costo-adicional').value       = servicio.costo_adicional       || '0.00';
+        document.getElementById('edit-fecha-inicio').value          = servicio.fecha_inicio          || '';
+        document.getElementById('edit-ciclo-facturacion').value     = servicio.ciclo_facturacion     || '';
+        document.getElementById('edit-estado-servicio').value       = servicio.estado               || 'Activo';
+        document.getElementById('edit-observaciones-tecnicas').value = servicio.observaciones        || '';
+
+        openModal('modal-editar-servicio');
+
+    } catch (error) {
+        console.error('[Clientes] Error cargando servicio:', error);
+        _mostrarNotificacion('error', 'Error', 'No se pudo cargar el servicio del cliente.');
+    }
+}
+
+
+// ===================== CONFIRMAR DESACTIVAR =====================
+
+function _confirmarDesactivar(clienteId, nombre) {
+    const msgEl = document.getElementById('confirm-message');
+    const btnEl = document.getElementById('confirm-action-button');
+    if (!msgEl || !btnEl) return;
+
+    msgEl.innerHTML = `Está a punto de desactivar al cliente <strong>${_esc(nombre)}</strong>. El cliente pasará a estado Inactivo.`;
+
+    btnEl.onclick = async () => {
         closeModal('modal-confirm');
+        await _desactivarCliente(clienteId, nombre);
     };
 
     openModal('modal-confirm');
-};
-
-
-// ==============================================
-// 2. LÓGICA DE CARGA DE DATOS PARA EDICIÓN
-// ==============================================
-
-/**
- * Carga los datos de un cliente en el modal de edición de datos personales.
- */
-window.openEditClientModal = (clienteId) => {
-    const cliente = clientesPrueba.find(c => c.id === clienteId);
-    if (!cliente) return;
-    
-    // Datos detallados de prueba
-    const datosDetalle = {
-        tipoCliente: (clienteId === 'TEST001A' || clienteId === 'TEST003C') ? "Residencia/Personal" : "Empresarial(RUC)",
-        tipoDocumento: clienteId === 'TEST002B' ? "RUC" : "DNI",
-        email: "contacto@cablelatin.com",
-        direccionCalle: cliente.direccion,
-        distrito: "Lima",
-        provincia: "Lima",
-        departamento: "Lima",
-        referencia: "Casa de color azul, puerta de metal.",
-    };
-
-    // Rellenar el formulario
-    document.getElementById('edit-cliente-id').value = clienteId; 
-    document.getElementById('edit-tipo-residencia').checked = (datosDetalle.tipoCliente === "Residencia/Personal");
-    document.getElementById('edit-tipo-empresarial').checked = (datosDetalle.tipoCliente === "Empresarial(RUC)");
-    document.getElementById('edit-nombre').value = cliente.nombre;
-    document.getElementById('edit-apellido').value = cliente.apellido;
-    document.getElementById('edit-tipo-documento').value = datosDetalle.tipoDocumento;
-    document.getElementById('edit-numero-documento').value = cliente.dni;
-    document.getElementById('edit-email').value = datosDetalle.email;
-    document.getElementById('edit-telefono').value = cliente.telefono;
-    document.getElementById('edit-direccion-calle').value = datosDetalle.direccionCalle;
-    document.getElementById('edit-distrito').value = datosDetalle.distrito;
-    document.getElementById('edit-provincia').value = datosDetalle.provincia;
-    document.getElementById('edit-departamento').value = datosDetalle.departamento;
-    document.getElementById('edit-referencia').value = datosDetalle.referencia;
-    
-    openModal('modal-editar-cliente');
-};
-
-/**
- * Carga los datos del servicio de un cliente en el modal de edición de servicio.
- */
-window.openEditServiceModal = (clienteId) => {
-    
-    // Datos del servicio de prueba
-    const servicioDePrueba = {
-        planTipo: clienteId === 'TEST001A' ? "Duo" : "Basico TV", 
-        cicloFacturacion: clienteId === 'TEST001A' ? "10" : "25", 
-        velocidadInternet: clienteId === 'TEST001A' ? "100 Mbps" : "N/A (Solo TV)", 
-        fechaInicio: "2024-08-01", 
-        precioPlan: clienteId === 'TEST001A' ? "89.90" : "40.00", 
-        fechaVencimiento: "2025-08-01", 
-        serviciosAdicionales: clienteId === 'TEST001A' ? "IP Fija" : "Ninguno", 
-        estadoServicio: clientesPrueba.find(c => c.id === clienteId)?.estado || "Activo", 
-        costoAdicional: clienteId === 'TEST001A' ? "10.00" : "0.00", 
-        observacionesTecnicas: "Anotar detalles de la instalación...",
-    };
-    
-    // Rellenar el formulario
-    document.getElementById('edit-servicio-cliente-id').value = clienteId;
-    document.getElementById('edit-plan-tipo').value = servicioDePrueba.planTipo;
-    document.getElementById('edit-ciclo-facturacion').value = servicioDePrueba.cicloFacturacion;
-    document.getElementById('edit-velocidad-internet').value = servicioDePrueba.velocidadInternet;
-    document.getElementById('edit-fecha-inicio').value = servicioDePrueba.fechaInicio;
-    document.getElementById('edit-precio-plan').value = servicioDePrueba.precioPlan;
-    document.getElementById('edit-fecha-vencimiento').value = servicioDePrueba.fechaVencimiento;
-    document.getElementById('edit-servicios-adicionales').value = servicioDePrueba.serviciosAdicionales;
-    document.getElementById('edit-estado-servicio').value = servicioDePrueba.estadoServicio;
-    document.getElementById('edit-costo-adicional').value = servicioDePrueba.costoAdicional;
-    document.getElementById('edit-observaciones-tecnicas').value = servicioDePrueba.observacionesTecnicas;
-
-    openModal('modal-editar-servicio');
-};
-
-
-// ==============================================
-// 3. MANEJADORES DE SUBMIT (Simulación de Guardado)
-// ==============================================
-
-function handleEditClientSubmit(e) {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
-    
-    // 1. Simulación de actualización de datos en la lista y recarga de tabla
-    let clienteIndex = clientesPrueba.findIndex(c => c.id === data.id);
-    if (clienteIndex !== -1) {
-        clientesPrueba[clienteIndex].nombre = data.nombre;
-        clientesPrueba[clienteIndex].apellido = data.apellido;
-        clientesPrueba[clienteIndex].dni = data.numeroDocumento;
-        clientesPrueba[clienteIndex].telefono = data.telefono;
-        clientesPrueba[clienteIndex].direccion = data.direccionCalle;
-        loadStaticClients(); 
-    }
-
-    // 2. Cerrar el modal de edición y mostrar notificación de éxito
-    closeModal('modal-editar-cliente');
-    showNotificationModal(
-        "¡Actualización Exitosa! 🎉",
-        `Los datos del cliente se actualizo correctamente.`
-    );
 }
 
-function handleEditServiceSubmit(e) {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
+async function _desactivarCliente(clienteId, nombre) {
+    try {
+        const respuesta = await ClientesAPI.eliminar(clienteId);
 
-    // 1. Simulación de actualización del estado del cliente y recarga de tabla
-    let clienteIndex = clientesPrueba.findIndex(c => c.id === data.clienteId);
-    if (clienteIndex !== -1) {
-        clientesPrueba[clienteIndex].estado = data.estadoServicio;
-        loadStaticClients(); 
-    }
-
-    // 2. Cerrar el modal de edición y mostrar notificación de éxito
-    closeModal('modal-editar-servicio');
-    showNotificationModal(
-        "Servicio Actualizado",
-        `El plan de servicio se actualizo correctamente .`
-    );
-}
-
-// ==============================================
-// 4. LÓGICA DE ELIMINACIÓN
-// ==============================================
-
-/**
- * Función llamada al pulsar el icono de basura, que muestra el modal de confirmación.
- */
-window.deleteClient = (clienteId) => {
-    const cliente = clientesPrueba.find(c => c.id === clienteId);
-    if (cliente) {
-        showConfirmModal(clienteId, `${cliente.nombre} ${cliente.apellido}`);
-    }
-};
-
-/**
- * Función que ejecuta la eliminación después de la confirmación del usuario.
- */
-function deleteConfirmed(clienteId, clienteNombre) {
-    
-    const initialLength = clientesPrueba.length;
-    // Simulación de la eliminación
-    clientesPrueba = clientesPrueba.filter(c => c.id !== clienteId);
-    
-    if (clientesPrueba.length < initialLength) {
-        loadStaticClients(); 
-        showNotificationModal(
-            "Cliente Eliminado",
-            `El cliente **${clienteNombre}** ha sido eliminado correctamente.`,
-            'delete'
-        );
+        if (respuesta?.success) {
+            _mostrarNotificacion('success', 'Cliente Desactivado',
+                `El cliente "${_esc(nombre)}" fue desactivado correctamente.`);
+            await _cargarClientes();
+        } else {
+            _mostrarNotificacion('error', 'Error',
+                respuesta?.message || 'No se pudo desactivar el cliente.');
+        }
+    } catch (error) {
+        console.error('[Clientes] Error desactivando:', error);
+        _mostrarNotificacion('error', 'Error de Conexión', 'No se pudo conectar con el servidor.');
     }
 }
 
-// ==============================================
-// 5. CARGA Y RENDERIZADO DE LA TABLA
-// ==============================================
 
-function renderClientRow(cliente) {
-    const estadoClass = cliente.estado.toLowerCase().replace(/\s/g, '-');
-    const estadoBadgeClass = `status-${estadoClass}`;
+// ===================== FORMULARIOS =====================
 
-    const row = document.createElement('tr');
-    row.innerHTML = `
-        <td>${cliente.id}</td>
-        <td><i class="fas fa-user-circle" style="font-size: 24px; color: #ccc;"></i></td>
-        <td>${cliente.dni}</td>
-        <td>${cliente.nombre} ${cliente.apellido}</td>
-        <td>${cliente.telefono}</td>
-        <td>${cliente.direccion}</td>
-        <td><span class="status-badge ${estadoBadgeClass}">${cliente.estado}</span></td>
-        <td class="action-cell">
-            <button class="btn-action" title="Editar Cliente/Datos" onclick="openEditClientModal('${cliente.id}')">
-                <i class="fas fa-pencil-alt"></i>
-            </button>
-            <button class="btn-action" title="Editar Servicio/Plan" onclick="openEditServiceModal('${cliente.id}')">
-                <i class="fas fa-satellite-dish"></i>
-            </button>
-            <button class="btn-action btn-delete" title="Eliminar Cliente" onclick="deleteClient('${cliente.id}')">
-                <i class="fas fa-trash-alt"></i>
-            </button>
-        </td>
-    `;
-    return row;
+function _inicializarFormularios() {
+
+    document.getElementById('form-editar-cliente')
+        ?.addEventListener('submit', async e => {
+            e.preventDefault();
+            const fd        = new FormData(e.target);
+            const clienteId = fd.get('id');
+            if (!clienteId) return;
+
+            const datos = {
+                nombre:           fd.get('nombre'),
+                apellido:         fd.get('apellido'),
+                numero_documento: fd.get('dni'),
+                email:            fd.get('correo'),
+                telefono:         fd.get('telefono'),
+                direccion:        fd.get('direccion'),
+                referencia:       fd.get('referencia'),
+                estado:           fd.get('estado'),
+                tipo_cliente:     e.target.querySelector('input[name="tipoCliente"]:checked')?.value || 'Residencial'
+            };
+
+            try {
+                const respuesta = await ClientesAPI.actualizar(clienteId, datos);
+                if (respuesta?.success) {
+                    closeModal('modal-editar-cliente');
+                    _mostrarNotificacion('success', 'Cliente Actualizado', 'Datos guardados correctamente.');
+                    await _cargarClientes();
+                } else {
+                    _mostrarNotificacion('error', 'Error', respuesta?.message || 'No se pudo actualizar.');
+                }
+            } catch (error) {
+                console.error('[Clientes] Error actualizando:', error);
+                _mostrarNotificacion('error', 'Error de Conexión', 'No se pudo conectar con el servidor.');
+            }
+        });
+
+    // Formulario de edición de servicios (Reescrito robustamente con selectores DOM nativos directos)
+    document.getElementById('form-editar-servicio')
+        ?.addEventListener('submit', async e => {
+            e.preventDefault();
+            
+            const servicioId = document.getElementById('edit-servicio-doc-id')?.value;
+            if (!servicioId) {
+                _mostrarNotificacion('error', 'Error de Formulario', 'No se pudo encontrar el identificador del servicio.');
+                return;
+            }
+
+            const selectPlan = document.getElementById('edit-plan-tipo');
+            const planNombre = selectPlan && selectPlan.selectedIndex >= 0
+                ? selectPlan.options[selectPlan.selectedIndex].text.split('(')[0].trim()
+                : '';
+
+            const datos = {
+                id_plan:               document.getElementById('edit-plan-tipo')?.value || '',
+                plan_nombre:           planNombre,
+                monto:                 parseFloat(document.getElementById('edit-precio-plan')?.value || 0),
+                costo_adicional:       parseFloat(document.getElementById('edit-costo-adicional')?.value || 0),
+                servicios_adicionales: document.getElementById('edit-servicios-adicionales')?.value || 'Ninguno',
+                fecha_inicio:          document.getElementById('edit-fecha-inicio')?.value || '',
+                ciclo_facturacion:     parseInt(document.getElementById('edit-ciclo-facturacion')?.value || 15, 10),
+                estado:                document.getElementById('edit-estado-servicio')?.value || 'Activo',
+                observaciones:         document.getElementById('edit-observaciones-tecnicas')?.value || ''
+            };
+
+            try {
+                const respuesta = await FacturasAPI.actualizar(servicioId, datos);
+                if (respuesta?.success) {
+                    closeModal('modal-editar-servicio');
+                    _mostrarNotificacion('success', 'Servicio Actualizado', 'Los datos del servicio se guardaron correctamente.');
+                    await _cargarClientes();
+                } else {
+                    _mostrarNotificacion('error', 'Error', respuesta?.message || 'No se pudo actualizar el servicio.');
+                }
+            } catch (error) {
+                console.error('[Clientes] Error actualizando servicio:', error);
+                _mostrarNotificacion('error', 'Error de Conexión', 'No se pudo conectar con el servidor.');
+            }
+        });
 }
 
-function loadStaticClients() {
-    tableBody.innerHTML = ''; 
-    
-    clientesPrueba.forEach(cliente => {
-        const row = renderClientRow(cliente);
-        tableBody.appendChild(row);
+
+// ===================== CONTROLES DE TABLA =====================
+
+function _inicializarControles() {
+    document.getElementById('search-table')
+        ?.addEventListener('input', _aplicarFiltrosYRenderizar);
+
+    document.getElementById('show-entries')
+        ?.addEventListener('change', e => {
+            _itemsPorPagina = parseInt(e.target.value, 10);
+            _paginaActual   = 1;
+            _renderizarPaginaActual();
+        });
+
+    // Evento de cambio para actualizar el precio del plan seleccionado en la edición
+    const selectPlan = document.getElementById('edit-plan-tipo');
+    const inputPrecio = document.getElementById('edit-precio-plan');
+    if (selectPlan && inputPrecio) {
+        selectPlan.addEventListener('change', () => {
+            const selected = selectPlan.options[selectPlan.selectedIndex];
+            inputPrecio.value = selected?.dataset?.price || '0.00';
+        });
+    }
+}
+
+
+// ===================== SIDEBAR EMBEBIDO =====================
+
+function _inicializarSidebarEmbebido() {
+    const btnMain = document.getElementById('sidebar-toggle-main');
+    const sidebar = document.getElementById('sidebar');
+    if (btnMain && sidebar) {
+        btnMain.addEventListener('click', () => sidebar.classList.toggle('active'));
+    }
+
+    document.addEventListener('click', e => {
+        if (window.innerWidth > 768) return;
+        if (!sidebar || !sidebar.classList.contains('active')) return;
+        if (!sidebar.contains(e.target) && !btnMain?.contains(e.target)) {
+            sidebar.classList.remove('active');
+        }
     });
-    
-    // Actualizar el pie de página
-    const total = clientesPrueba.length;
-    if(footerInfo) footerInfo.textContent = `Mostrando 1 a ${total} de ${total} registros (Prueba)`;
 }
 
-// ==============================================
-// 6. INICIALIZACIÓN
-// ==============================================
 
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Cargar la tabla con datos iniciales
-    loadStaticClients(); 
+// ===================== MODALES =====================
 
-    // 2. Asignar listeners a los formularios de edición
-    document.getElementById('form-editar-cliente').addEventListener('submit', handleEditClientSubmit);
-    document.getElementById('form-editar-servicio').addEventListener('submit', handleEditServiceSubmit);
-});
+window.openModal = (modalId) => {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+    modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('open'), 10);
+};
+
+window.closeModal = (modalId) => {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+    modal.classList.remove('open');
+    setTimeout(() => modal.style.display = 'none', 300);
+    if (modalId === 'modal-confirm') {
+        const btn = document.getElementById('confirm-action-button');
+        if (btn) btn.onclick = null;
+    }
+};
+
+function _mostrarNotificacion(tipo, titulo, mensaje) {
+    const modal = document.getElementById('modal-notification');
+    if (!modal) return;
+
+    const esExito = tipo === 'success';
+    const esInfo  = tipo === 'info';
+    const iconClass = esExito ? 'fa-check-circle' : esInfo ? 'fa-info-circle' : 'fa-exclamation-triangle';
+    const color     = esExito ? 'var(--success-color)' : esInfo ? 'var(--info-color)' : 'var(--danger-color)';
+    const btnClass  = esExito ? 'btn-primary' : esInfo ? 'btn-secondary' : 'btn-danger';
+
+    modal.innerHTML = `
+        <div class="modal-content ${esExito ? 'notification-success' : 'notification-error'}">
+            <div class="notification-icon" style="color:${color}"><i class="fas ${iconClass}"></i></div>
+            <div class="notification-title">${_esc(titulo)}</div>
+            <div class="notification-message">${_esc(mensaje)}</div>
+            <div class="notification-buttons">
+                <button type="button" class="btn ${btnClass}" onclick="closeModal('modal-notification')">Aceptar</button>
+            </div>
+        </div>`;
+
+    openModal('modal-notification');
+}
+
+
+// ===================== UTILIDADES =====================
+
+function _esc(texto) {
+    const d = document.createElement('div');
+    d.appendChild(document.createTextNode(String(texto ?? '')));
+    return d.innerHTML;
+}
+
+function _renderizarError(tbody, mensaje) {
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="8" style="text-align:center;padding:30px;color:#dc3545;font-weight:600;">
+                <i class="fas fa-exclamation-triangle"></i> ${_esc(mensaje)}
+            </td>
+        </tr>`;
+}
+
+
+async function importarExcelConML(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // Mostrar loader/cargando
+    console.log("Procesando Excel con Machine Learning...");
+    
+    try {
+        const token = localStorage.getItem('cl_token');
+        const respuestaRaw = await fetch('http://localhost:5000/api/clientes/importar-ml', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        });
+
+        const res = await respuestaRaw.json();
+
+        if (res.success) {
+            alert(`🤖 Validación Inteligente Finalizada
+
+----------------------------------------
+
+Registros analizados: ${res.resumen.analizados}
+
+Importados correctamente: ${res.resumen.importados}
+
+Información incompleta: ${res.resumen.campos_incompletos}
+
+Errores tipográficos: ${res.resumen.errores_tipograficos}
+
+Registros duplicados: ${res.resumen.duplicados}
+
+Documentos inválidos: ${res.resumen.dni_invalidos}
+
+Inconsistencias lógicas: ${res.resumen.inconsistencias_logicas}
+
+----------------------------------------
+
+Correcciones automáticas
+
+Distritos corregidos: ${res.resumen.distritos_corregidos}
+
+Planes autocompletados: ${res.resumen.planes_autocompletados}
+
+Registros descartados: ${res.resumen.descartados}
+
+----------------------------------------
+
+Proceso completado correctamente.`);
+            
+            // Recargar la tabla de clientes para ver los nuevos registros
+            if (typeof _cargarClientes === 'function') {
+                _cargarClientes();
+            } else if (typeof cargarClientes === 'function') {
+                cargarClientes();
+            } else {
+                window.location.reload();
+            }
+        } else {
+            alert(`Error en el modelo: ${res.message}`);
+        }
+    } catch (error) {
+        console.error("Error importando:", error);
+        alert("Error de conexión con el servidor de Machine Learning.");
+    } finally {
+        // Limpiar el input para permitir volver a cargar
+        event.target.value = '';
+    }
+}
