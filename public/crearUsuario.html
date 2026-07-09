@@ -4,84 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Usuario - Cable Latín</title>
-    <!-- Tailwind CSS para estilos rápidos -->
+
+    <!-- Fuentes y CDN de íconos -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Iconos Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        /* Estilo para el spinner */
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        .spinner {
-            animation: spin 1s linear infinite;
-        }
-    </style>
+
+    <!-- Estilos específicos -->
+    <link rel="stylesheet" href="css/crearUsuario.css">
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
 
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
         <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Crear Nuevo Usuario</h1>
-        
         <form id="crearUsuarioForm" class="space-y-4">
-            <!-- Nombre -->
             <div class="form-group">
                 <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre Completo:</label>
-                <input type="text" id="nombre" name="nombre" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                <input type="text" id="nombre" name="nombre" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
             </div>
-            
-            <!-- Usuario (Nickname) -->
             <div class="form-group">
                 <label for="usuario" class="block text-sm font-medium text-gray-700">Nombre de Usuario (Login):</label>
-                <input type="text" id="usuario" name="usuario" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                <input type="text" id="usuario" name="usuario" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
             </div>
-
-            <!-- Correo (Para Autenticación) -->
             <div class="form-group">
                 <label for="correo" class="block text-sm font-medium text-gray-700">Correo Electrónico:</label>
-                <input type="email" id="correo" name="correo" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                <input type="email" id="correo" name="correo" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
             </div>
-
-            <!-- Contraseña (Para Autenticación) -->
             <div class="form-group">
                 <label for="contrasena" class="block text-sm font-medium text-gray-700">Contraseña:</label>
-                <input type="password" id="contrasena" name="contrasena" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" minlength="6">
+                <input type="password" id="contrasena" name="contrasena" required minlength="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
                 <p class="text-xs text-gray-500 mt-1">Mínimo 6 caracteres.</p>
             </div>
-            
-            <!-- Teléfono -->
             <div class="form-group">
                 <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono:</label>
-                <input type="tel" id="telefono" name="telefono" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                <input type="tel" id="telefono" name="telefono" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
             </div>
-
-            <!-- Rol (¡NUEVO!) -->
             <div class="form-group">
                 <label for="rol" class="block text-sm font-medium text-gray-700">Rol:</label>
-                <select id="rol" name="rol" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white">
+                <select id="rol" name="rol" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     <option value="" disabled selected>-- Seleccione un rol --</option>
                     <option value="vendedor">Vendedor</option>
                     <option value="supervisor">Supervisor</option>
                     <option value="administrador">Administrador</option>
                 </select>
             </div>
-
-            <!-- Estado -->
             <div class="form-group">
                 <label for="estado" class="block text-sm font-medium text-gray-700">Estado:</label>
-                <select id="estado" name="estado" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white">
+                <select id="estado" name="estado" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     <option value="Activo">Activo</option>
                     <option value="Inactivo">Inactivo</option>
                 </select>
             </div>
-
-            <!-- Botones -->
             <div class="flex items-center justify-end space-x-4 pt-4">
-                <button type="button" class="btn-cancelar bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300" onclick="window.history.back()">
-                    Cancelar
-                </button>
-                <button type="submit" id="btnGuardar" class="btn-guardar bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center justify-center space-x-2 w-32">
+                <button type="button" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300" onclick="window.history.back()">Cancelar</button>
+                <button type="submit" id="btnGuardar" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center justify-center space-x-2 w-32">
                     <i data-lucide="save" class="w-5 h-5 icon-save"></i>
                     <i data-lucide="loader" class="w-5 h-5 icon-loader spinner" style="display: none;"></i>
                     <span id="btn-text">Guardar</span>
@@ -96,199 +73,12 @@
             <i id="modalIcon" class="w-16 h-16 mx-auto mb-4"></i>
             <h3 id="modalTitle" class="text-xl font-bold mb-2"></h3>
             <p id="modalMessage" class="text-gray-600 mb-6"></p>
-            <button id="modalClose" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 w-full">
-                Entendido
-            </button>
+            <button id="modalClose" class="bg-blue-600 text-white px-4 py-2 rounded-md w-full">Entendido</button>
         </div>
     </div>
 
-
-    <!-- ============================================== -->
-    <!--          SCRIPT DE FIREBASE Y LÓGICA           -->
-    <!-- ============================================== -->
-    <script type="module">
-        // --- Importaciones de Firebase ---
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        // Importar Auth para crear usuarios
-        import { 
-            getAuth, 
-            onAuthStateChanged, 
-            signInAnonymously,
-            createUserWithEmailAndPassword // <-- ¡IMPORTANTE!
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        // Importar Firestore para guardar el perfil
-        import { 
-            getFirestore, 
-            doc, 
-            setDoc, // <-- Para guardar el perfil con un ID específico
-            serverTimestamp 
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // --- Configuración Firebase ---
-        const firebaseConfig = {
-          apiKey: "AIzaSyDHrAEU4HI2onL1bRZpRfB5GAbsbD6_XBE",
-          authDomain: "cablelatin-prueba.firebaseapp.com",
-          projectId: "cablelatin-prueba",
-          storageBucket: "cablelatin-prueba.firebasestorage.app",
-          messagingSenderId: "370823325775",
-          appId: "1:370823325775:web:cbd9142e612bc0a979623a",
-          measurementId: "G-PV3NRMJBW2"
-        };
-        
-        // --- Variables Globales ---
-        const appId = firebaseConfig.projectId;
-        let app, auth, db;
-        let adminUserId = null; // El ID del admin que está USANDO este formulario
-        
-        // --- Referencias a Elementos DOM ---
-        const form = document.getElementById('crearUsuarioForm');
-        const btnGuardar = document.getElementById('btnGuardar');
-        const btnText = document.getElementById('btn-text');
-        const iconSave = btnGuardar.querySelector('.icon-save');
-        const iconLoader = btnGuardar.querySelector('.icon-loader');
-        
-        const modal = document.getElementById('feedbackModal');
-        const modalIcon = document.getElementById('modalIcon');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalMessage = document.getElementById('modalMessage');
-        const modalClose = document.getElementById('modalClose');
-
-        // --- Inicialización Firebase ---
-        try {
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-            console.log("Firebase inicializado");
-            // Autenticamos al admin/usuario actual anónimamente para que tenga permisos
-            initAuth(); 
-        } catch (e) {
-            console.error("Error inicializando Firebase:", e);
-            showModal(false, "Error de Conexión", "No se pudo conectar a Firebase. Recargue la página.");
-        }
-
-        // --- Autenticación (del usuario que usa el formulario) ---
-        function initAuth() {
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    adminUserId = user.uid;
-                    console.log("Admin/Usuario autenticado:", adminUserId);
-                    // Ahora el admin tiene permisos para escribir
-                } else {
-                    try {
-                        await signInAnonymously(auth);
-                    } catch (error) {
-                        console.error("Error auth anónima:", error);
-                    }
-                }
-            });
-        }
-        
-        // --- Manejador del Formulario ---
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (!adminUserId) {
-                showModal(false, "Error", "No tienes permisos. Recarga la página.");
-                return;
-            }
-
-            // Mostrar estado de carga
-            setLoading(true);
-
-            // 1. Obtener datos del formulario
-            const formData = new FormData(form);
-            const email = formData.get('correo');
-            const password = formData.get('contrasena');
-            
-            const profileData = {
-                nombre: formData.get('nombre'),
-                usuario: formData.get('usuario'),
-                telefono: formData.get('telefono'),
-                rol: formData.get('rol'),
-                estado: formData.get('estado'),
-                email: email, // Guardamos el email también en el perfil
-                fecha_creacion: serverTimestamp()
-            };
-
-            try {
-                // --- PASO 1: Crear el usuario en Firebase Authentication ---
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const newUserId = userCredential.user.uid;
-                console.log("Usuario creado en Auth con UID:", newUserId);
-
-                // --- PASO 2: Guardar el perfil en Firestore ---
-                // Usamos el UID de Auth como ID del documento en Firestore
-                // Lo guardamos en una colección pública "personal"
-                const userDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'personal', newUserId);
-                
-                await setDoc(userDocRef, profileData);
-                console.log("Perfil de usuario guardado en Firestore.");
-
-                // --- Éxito ---
-                showModal(true, "¡Usuario Creado!", "El nuevo usuario ha sido registrado exitosamente.");
-                form.reset();
-
-            } catch (error) {
-                // --- Manejo de Errores ---
-                console.error("Error al crear usuario:", error);
-                let userMessage = "Ocurrió un error desconocido.";
-                
-                // Traducir errores comunes de Firebase Auth
-                if (error.code === 'auth/email-already-in-use') {
-                    userMessage = "El correo electrónico ya está registrado.";
-                } else if (error.code === 'auth/weak-password') {
-                    userMessage = "La contraseña es muy débil. Debe tener al menos 6 caracteres.";
-                } else if (error.code === 'auth/invalid-email') {
-                    userMessage = "El formato del correo electrónico no es válido.";
-                }
-                
-                showModal(false, "Error al Guardar", userMessage);
-
-            } finally {
-                // Ocultar estado de carga
-                setLoading(false);
-            }
-        });
-
-        // --- Funciones de UI ---
-        
-        function setLoading(isLoading) {
-            if (isLoading) {
-                btnGuardar.disabled = true;
-                btnText.textContent = "Guardando...";
-                iconSave.style.display = 'none';
-                iconLoader.style.display = 'inline-block';
-            } else {
-                btnGuardar.disabled = false;
-                btnText.textContent = "Guardar";
-                iconSave.style.display = 'inline-block';
-                iconLoader.style.display = 'none';
-            }
-        }
-
-        function showModal(isSuccess, title, message) {
-            modalTitle.textContent = title;
-            modalMessage.textContent = message;
-
-            if (isSuccess) {
-                modalIcon.setAttribute('data-lucide', 'check-circle');
-                modalIcon.className = "w-16 h-16 mx-auto mb-4 text-green-500";
-                modalClose.className = "bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 w-full";
-            } else {
-                modalIcon.setAttribute('data-lucide', 'alert-triangle');
-                modalIcon.className = "w-16 h-16 mx-auto mb-4 text-red-500";
-                modalClose.className = "bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 w-full";
-            }
-            
-            lucide.createIcons(); // Renderizar el ícono
-            modal.classList.remove('hidden');
-        }
-
-        modalClose.addEventListener('click', () => {
-            modal.classList.add('hidden');
-        });
-
-        // Cargar iconos iniciales
-        lucide.createIcons();
-    </script>
+    <!-- Scripts de lógica -->
+    <script src="js/api.js"></script>
+    <script src="js/crearUsuario.js" type="module"></script>
 </body>
 </html>

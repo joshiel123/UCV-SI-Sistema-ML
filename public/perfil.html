@@ -1,133 +1,98 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Perfil - CABLE LATIN</title>
-    
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <link rel="stylesheet" href="/Cablelatin/public/css/perfil.css">
-    
-    <style>
-        /* Estilos básicos para el loader del botón (puedes personalizarlos) */
-        .loader {
-            border: 2px solid #f3f3f3;
-            border-top: 2px solid #3498db;
-            border-radius: 50%;
-            width: 16px;
-            height: 16px;
-            animation: spin 1s linear infinite;
-            display: none; /* Oculto por defecto */
-            margin-right: 8px;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Cable Latin</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Shared design -->
+    <link rel="stylesheet" href="css/perfil.css">
 </head>
-<body>
-
-    <div id="sidebar-container"></div>
-
-    <main id="main-content">
-        
-        <header class="header-main">
-                    </header>
-
-        <div class="form-wrapper-center">
-            <div class="panel-form">
-                
-                <h2 class="form-title">Mi Perfil</h2>
-            
-                <form id="profileForm">
-                    
-                    <div class="profile-pic-section">
-                        <div class="pic-wrapper">
-                            <i data-lucide="user-circle-2" class="profile-icon-placeholder"></i>
-                        </div>
-                        <button type="button" class="btn-action btn-secondary">
-                            <i data-lucide="upload-cloud"></i>
-                            Cambiar Foto
-                        </button>
-                    </div>
-
-                    <div class="form-content-grid">
-                        <div>
-                            <div class="form-group-grid">
-                                <label for="fullName">Nombre Completo:</label>
-                                <input type="text" id="fullName" name="fullName" placeholder="Cargando...">
-                            </div>
-                            <div class="form-group-grid">
-                                <label for="username">Nombre de Usuario (no editable):</label>
-                                <input type="text" id="username" name="username" placeholder="Cargando..." readonly class="is-readonly">
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <div class="form-group-grid">
-                                <label for="email">Correo Electrónico:</label>
-                                <input type="email" id="email" name="email" placeholder="Cargando...">
-                            </div>
-                            <div class="form-group-grid">
-                                <label for="role">Cargo / Rol (no editable):</label>
-                                <input type="text" id="role" name="role" placeholder="Cargando..." readonly class="is-readonly">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="my-4 border-t"></div>
-
-                    <div class="form-content-grid">
-                        <h3 class="form-subtitle">Cambiar Contraseña</h3>
-                        <div>
-                            <div class="form-group-grid">
-                                <label for="passCurrent">Contraseña Actual:</label>
-                                <input type="password" id="passCurrent" name="passCurrent" placeholder="Requerida para cambiar email o contraseña">
-                            </div>
-                        </div>
-                        <div>
-                            <div class="form-group-grid">
-                                <label for="passNew">Nueva Contraseña:</label>
-                                <input type="password" id="passNew" name="passNew" placeholder="Dejar en blanco para no cambiar">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-4 flex justify-end">
-                        <button type="submit" id="btnSave" class="btn-action btn-save">
-                            <div class="loader"></div>
-                            <i data-lucide="save" class="icon-save"></i>
-                            <span id="btn-text">Guardar Cambios</span>
-                        </button>
-                    </div>
-
-                </form>
-
-            </div> 
-        </div> 
-        </main>
-
-        <div id="profileSuccessModal" class="fixed inset-0 flex items-center justify-center hidden">
-        <div class="modal-content">
-            <div class="modal-icon-wrapper">
-                <i data-lucide="check" class="modal-icon"></i>
-            </div>
-            <div class="mt-4">
-                <h3>¡Perfil Actualizado!</h3>
-                <p>Tu información ha sido guardada exitosamente.</p>
-            </div>
-            <div>
-                <button id="closeProfileModal" type="button" class="btn-modal-close">
-                    Aceptar
-                </button>
-            </div>
-        </div>
-    </div>
-
-        <script src="/Cablelatin/public/js/perfil.js"></script>
-       
-  </body>
+<body class="bg-gray-100">
+    <!-- Sidebar container (populated by js/sidebar.js) -->
+    <aside id="sidebar-container" class="hidden lg:block"></aside>
+    <div class="main-content">
+        <main class="container p-4 md:p-8">
+            <header class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold">Mi Perfil</h1>
+                <div class="user-links">
+                    <a href="#" id="logoutBtn" class="logout">Cerrar sesión</a>
+                </div>
+            </header>
+            <div class="form-wrapper-center">
+                <div class="panel-form">
+                    <h2 class="form-title">Mi Perfil</h2>
+                    <form id="profileForm">
+                        <div class="profile-pic-section">
+                            <div class="pic-wrapper">
+                                <i data-lucide="user-circle-2" class="profile-icon-placeholder"></i>
+                            </div>
+                            <button type="button" class="btn-action btn-secondary">
+                                <i data-lucide="upload-cloud"></i> Cambiar Foto
+                            </button>
+                        </div>
+                        <div class="form-content-grid">
+                            <div class="form-group-grid">
+                                <label for="fullName">Nombre Completo:</label>
+                                <input type="text" id="fullName" name="fullName" placeholder="Cargando...">
+                            </div>
+                            <div class="form-group-grid">
+                                <label for="username">Nombre de Usuario (no editable):</label>
+                                <input type="text" id="username" name="username" placeholder="Cargando..." readonly class="is-readonly">
+                            </div>
+                            <div class="form-group-grid">
+                                <label for="email">Correo Electrónico:</label>
+                                <input type="email" id="email" name="email" placeholder="Cargando...">
+                            </div>
+                            <div class="form-group-grid">
+                                <label for="role">Cargo / Rol (no editable):</label>
+                                <input type="text" id="role" name="role" placeholder="Cargando..." readonly class="is-readonly">
+                            </div>
+                        </div>
+                        <div class="my-4 border-t"></div>
+                        <h3 class="form-subtitle">Cambiar Contraseña</h3>
+                        <div class="form-content-grid">
+                            <div class="form-group-grid">
+                                <label for="passCurrent">Contraseña Actual:</label>
+                                <input type="password" id="passCurrent" name="passCurrent" placeholder="Requerida para cambiar email o contraseña">
+                            </div>
+                            <div class="form-group-grid">
+                                <label for="passNew">Nueva Contraseña:</label>
+                                <input type="password" id="passNew" name="passNew" placeholder="Dejar en blanco para no cambiar">
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-end">
+                            <button type="submit" id="btnSave" class="btn-action btn-save">
+                                <div class="loader"></div>
+                                <i data-lucide="save" class="icon-save"></i>
+                                <span id="btn-text">Guardar Cambios</span>
+                            </button>
+                        </div>
+                    </form>
+                <div class="flex justify-end mt-4"><a href="tablero.html" class="btn-action btn-secondary">Volver</a></div>
+                </div>
+            </div>
+          
+            <!-- Success Modal -->
+            <div id="profileSuccessModal" class="fixed inset-0 flex items-center justify-center hidden">
+                <div class="modal-content">
+                    <div class="modal-icon-wrapper">
+                        <i data-lucide="check" class="modal-icon"></i>
+                    </div>
+                    <h3>¡Perfil Actualizado!</h3>
+                    <p>Tu información ha sido guardada exitosamente.</p>
+                    <button id="closeProfileModal" type="button" class="btn-modal-close">Aceptar</button>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/api.js"></script>
+    <script type="module" src="js/sidebar.js"></script>
+    <script type="module" src="js/perfil.js"></script>
+</body>
 </html>

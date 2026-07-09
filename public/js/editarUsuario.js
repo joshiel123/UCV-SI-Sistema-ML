@@ -1,69 +1,179 @@
-// Espera a que todo el HTML esté cargado
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // --- 1. SIMULACIÓN DE CARGA DE DATOS ---
-    // En una app real, aquí recibirías un ID y buscarías estos datos en tu base de datos.
-    // Por ahora, usamos datos fijos.
-    const datosUsuarioSimulados = {
-        idUsuario: "ID_001",
-        nombre: "Ana Torres",
-        usuario: "atorres",
-        correo: "ana.torres@example.com",
-        telefono: "987654321",
-        estado: "Activo"
-        // Nota: La contraseña NUNCA se debe cargar desde la base de datos al formulario por seguridad.
-    };
+/**
+ * editarUsuario.js — Lógica para editar usuarios existentes en Firebase
+ * Cable Latín — Frontend
+ */
 
-    // Función para llenar el formulario con los datos
-    function cargarDatosEnFormulario(datos) {
-        document.getElementById('idUsuario').value = datos.idUsuario;
-        document.getElementById('idUsuario').disabled = true; // El ID no se debe poder cambiar
-        document.getElementById('nombre').value = datos.nombre;
-        document.getElementById('usuario').value = datos.usuario;
-        document.getElementById('correo').value = datos.correo;
-        document.getElementById('telefono').value = datos.telefono;
-        document.getElementById('estado').value = datos.estado;
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+// Configuración Firebase (debe coincidir con otros módulos)
+const firebaseConfig = {
+    apiKey: "AIzaSyDHrAEU4HI2onL1bRZpRfB5GAbsbD6_XBE",
+    authDomain: "cablelatin-prueba.firebaseapp.com",
+    projectId: "cablelatin-prueba",
+    storageBucket: "cablelatin-prueba.firebasestorage.app",
+    messagingSenderId: "370823325775",
+    appId: "1:370823325775:web:cbd9142e612bc0a979623a",
+    measurementId: "G-PV3NRMJBW2"
+};
+
+let app, auth, db;
+let adminUserId = null; // UID del admin autenticado
+let isReady = false;
+
+function initFirebase() {
+    try {
+        app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = getFirestore(app);
+        console.log("[EditarUsuario] Firebase inicializado");
+        initAuth();
+    } catch (e) {
+        console.error("[EditarUsuario] Error inicializando Firebase:", e);
+        showModal(false, "Error de Conexión", "No se pudo conectar a Firebase. Recargue la página.");
+    }
+}
+
+function initAuth() {
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            adminUserId = user.uid;
+            isReady = true;
+            console.log("[EditarUsuario] Admin autenticado:", adminUserId);
+            loadUserData();
+        } else {
+            try {
+                await signInAnonymously(auth);
+            } catch (error) {
+                console.error("[EditarUsuario] Auth anónima falló:", error);
+                showModal(false, "Error de Autenticación", "No se pudo iniciar sesión anónimamente.");
+            }
+        }
+    });
+}
+
+/** UI Helpers **/
+function setLoading(isLoading) {
+    const btnGuardar = document.getElementById('btnGuardar');
+    const btnText = document.getElementById('btn-text');
+    const iconSave = btnGuardar.querySelector('.icon-save');
+    const iconLoader = btnGuardar.querySelector('.icon-loader');
+    if (isLoading) {
+        btnGuardar.disabled = true;
+        btnText.textContent = "Actualizando...";
+        iconSave.style.display = 'none';
+        iconLoader.style.display = 'inline-block';
+    } else {
+        btnGuardar.disabled = false;
+        btnText.textContent = "Actualizar";
+        iconSave.style.display = 'inline-block';
+        iconLoader.style.display = 'none';
+    }
+}
+
+function showModal(isSuccess, title, message) {
+    const modal = document.getElementById('feedbackModal');
+    const modalIcon = document.getElementById('modalIcon');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalMessage = document.getElementById('modalMessage');
+    const modalClose = document.getElementById('modalClose');
+
+    modalTitle.textContent = title;
+    modalMessage.textContent = message;
+
+    if (isSuccess) {
+        modalIcon.setAttribute('data-lucide', 'check-circle');
+        modalIcon.className = 'w-16 h-16 mx-auto mb-4 text-green-500';
+    } else {
+        modalIcon.setAttribute('data-lucide', 'alert-triangle');
+        modalIcon.className = 'w-16 h-16 mx-auto mb-4 text-red-500';
+    }
+    lucide.createIcons();
+    modal.classList.remove('hidden');
+}
+
+document.getElementById('modalClose').addEventListener('click', () => {
+    document.getElementById('feedbackModal').classList.add('hidden');
+});
+
+/** Helpers **/
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
+async function loadUserData() {
+    const uid = getQueryParam('uid');
+    if (!uid) {
+        document.getElementById('loader').classList.add('hidden');
+        const errDiv = document.getElementById('error');
+        errDiv.classList.remove('hidden');
+        document.getElementById('errorMessage').textContent = 'UID no proporcionado en la URL.';
+        return;
     }
 
-    // Llama a la función para llenar el formulario
-    cargarDatosEnFormulario(datosUsuarioSimulados);
-
-    
-    // --- 2. MANEJO DEL ENVÍO (ACTUALIZACIÓN) ---
-    const form = document.getElementById('editarUsuarioForm');
-
-    form.addEventListener('submit', (event) => {
-        event.preventDefault(); // Evita el envío tradicional
-
-        // Recopila los datos (incluyendo los que se hayan modificado)
-        const idUsuario = document.getElementById('idUsuario').value; // Sigue siendo el mismo
-        const nombre = document.getElementById('nombre').value;
-        const usuario = document.getElementById('usuario').value;
-        const contrasena = document.getElementById('contrasena').value;
-        const correo = document.getElementById('correo').value;
-        const telefono = document.getElementById('telefono').value;
-        const estado = document.getElementById('estado').value;
-
-        // Mostramos en consola lo que se "enviaría" para actualizar
-        console.log('Datos del usuario actualizados:');
-        console.log('ID Usuario:', idUsuario);
-        console.log('Nombre:', nombre);
-        console.log('Usuario:', usuario);
-        
-        // Lógica para la contraseña: si el campo no está vacío, se actualiza.
-        if (contrasena) {
-            console.log('Nueva Contraseña:', contrasena);
-        } else {
-            console.log('Contraseña: (Sin cambios)');
+    try {
+        const userDocRef = doc(db, 'artifacts', firebaseConfig.projectId, 'public', 'data', 'personal', uid);
+        const snapshot = await getDoc(userDocRef);
+        if (!snapshot.exists()) {
+            throw new Error('Usuario no encontrado en Firestore.');
         }
-        
-        console.log('Correo:', correo);
-        console.log('Teléfono:', telefono);
-        console.log('Estado:', estado);
+        const data = snapshot.data();
+        // Populate form fields
+        document.getElementById('idUsuario').value = uid;
+        document.getElementById('nombre').value = data.nombre || '';
+        document.getElementById('usuario').value = data.usuario || '';
+        document.getElementById('correo').value = data.email || '';
+        document.getElementById('telefono').value = data.telefono || '';
+        document.getElementById('rol').value = data.rol || 'vendedor';
+        document.getElementById('estado').value = data.estado || 'Activo';
+        // Show form, hide loader
+        document.getElementById('loader').classList.add('hidden');
+        document.getElementById('editarUsuarioForm').classList.remove('hidden');
+    } catch (error) {
+        console.error('[EditarUsuario] Error cargando datos:', error);
+        document.getElementById('loader').classList.add('hidden');
+        const errDiv = document.getElementById('error');
+        errDiv.classList.remove('hidden');
+        document.getElementById('errorMessage').textContent = error.message;
+    }
+}
 
-        alert('Usuario actualizado con éxito (simulado)!');
-        
-        // Opcionalmente, redirigir de vuelta a la lista de usuarios
-        // window.location.href = 'usuario.html'; 
+function attachFormHandler() {
+    const form = document.getElementById('editarUsuarioForm');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!isReady) {
+            showModal(false, 'Error', 'El sistema no está listo. Recargue la página.');
+            return;
+        }
+        const uid = document.getElementById('idUsuario').value;
+        setLoading(true);
+        const formData = new FormData(form);
+        const updates = {
+            nombre: formData.get('nombre'),
+            usuario: formData.get('usuario'),
+            telefono: formData.get('telefono'),
+            rol: formData.get('rol'),
+            estado: formData.get('estado'),
+            fecha_modificacion: serverTimestamp()
+        };
+        try {
+            const userDocRef = doc(db, 'artifacts', firebaseConfig.projectId, 'public', 'data', 'personal', uid);
+            await updateDoc(userDocRef, updates);
+            showModal(true, '¡Actualizado!', 'Los cambios fueron guardados exitosamente.');
+        } catch (error) {
+            console.error('[EditarUsuario] Error actualizando usuario:', error);
+            showModal(false, 'Error al Guardar', error.message);
+        } finally {
+            setLoading(false);
+        }
     });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    initFirebase();
+    attachFormHandler();
+    lucide.createIcons();
 });

@@ -4,1276 +4,186 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Pagos</title>
-    
-    <!-- Tailwind CSS para un diseño moderno -->
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/Cablelatin/public/css/pagos.css">
-    
-    <!-- Google Font: Inter -->
+    <link rel="stylesheet" href="css/pagos.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome (ya lo tenías) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
-    <!-- jsPDF para generar reportes PDF -->
+
+    <!-- jsPDF para generar comprobantes PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <!-- jsPDF-autoTable para crear tablas fácilmente en el PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body class="bg-gray-100">
-    
-    <style>
-     :root {
---primary-color: #007bff;
---danger-color: #dc3545;
---secondary-color: #6c757d;
---success-color: #28a745;
---light-bg: #f8f9fa;
---card-bg: #ffffff;
---text-color: #333333;
---light-text-color: #666666;
---border-color: #e9ecef;
---sidebar-width: 250px;
-}
 
-/* === SIDEBAR === */
-.sidebar {
-width: var(--sidebar-width);
-background-color: var(--card-bg);
-box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-padding: 20px 0;
-display: flex;
-flex-direction: column;
-border-right: 1px solid var(--border-color);
-flex-shrink: 0;
-transition: width 0.3s ease;
-z-index: 100;
-height: 100vh;
-}
-
-.sidebar-header {
-display: flex;
-align-items: center;
-justify-content: space-between;
-padding: 0 20px 20px;
-border-bottom: 1px solid var(--border-color);
-margin-bottom: 20px;
-}
-
-.sidebar-header .logo {
-display: flex;
-align-items: center;
-gap: 10px;
-font-weight: 700;
-font-size: 1.2em;
-color: var(--primary-color);
-white-space: nowrap;
-}
-
-.sidebar-header .logo i {
-font-size: 1.5em;
-}
-
-.sidebar-header .sidebar-toggle-btn {
-color: var(--secondary-color);
-cursor: pointer;
-font-size: 1.2em;
-}
-
-.sidebar-nav ul {
-list-style: none;
-padding: 0;
-margin: 0;
-width: 100%;
-}
-
-.sidebar-nav .nav-item {
-display: flex;
-align-items: center;
-flex-wrap: wrap;
-padding: 14px 20px;
-color: var(--light-text-color);
-cursor: pointer;
-position: relative;
-transition: all 0.3s ease;
-white-space: nowrap;
-overflow: hidden;
-font-size: 0.95em;
-}
-
-.sidebar-nav .nav-item a {
-color: inherit;
-text-decoration: none;
-display: flex;
-align-items: center;
-width: 100%;
-}
-
-.sidebar-nav .nav-item.active {
-background-color: rgba(0, 123, 255, 0.1);
-color: var(--primary-color);
-border-left: 3px solid var(--primary-color);
-padding-left: 17px;
-font-weight: 500;
-}
-
-.sidebar-nav .nav-item:not(.active):hover {
-background-color: rgba(0, 0, 0, 0.03);
-}
-
-.sidebar-nav .nav-item > i:first-child {
-margin-right: 12px;
-width: 20px;
-font-size: 1.1em;
-}
-
-.sidebar-nav .nav-item > span {
-flex-grow: 1;
-}
-
-.sidebar-nav .nav-item.has-submenu .arrow-icon {
-margin-left: auto;
-transition: transform 0.3s ease;
-font-size: 0.8em;
-}
-
-.sidebar-nav .submenu {
-list-style: none;
-padding: 5px 0 5px 0;
-margin: 0;
-display: none;
-width: 100%;
-background-color: #fdfdfd;
-}
-
-.sidebar-nav .submenu li {
-padding: 10px 20px 10px 52px;
-color: var(--light-text-color);
-font-size: 0.9em;
-transition: all 0.2s ease;
-}
-
-.sidebar-nav .submenu li:hover {
-color: var(--primary-color);
-background-color: rgba(0, 123, 255, 0.05);
-}
-
-.sidebar-nav .nav-item.open > .submenu {
-display: block;
-}
-
-.sidebar-nav .nav-item.open > .submenu-header .arrow-icon {
-transform: rotate(90deg);
-}
-
-/* === MODO COLAPSABLE === */
-.sidebar.collapsed {
-width: 70px;
-}
-
-.sidebar.collapsed .sidebar-header .logo span,
-.sidebar.collapsed .sidebar-nav span,
-.sidebar.collapsed .submenu {
-display: none;
-}
-
-.sidebar.collapsed .nav-item {
-justify-content: center;
-padding: 14px 0;
-}
-
-.sidebar.collapsed .nav-item i:first-child {
-margin: 0;
-}
-
-/* === RESPONSIVE === */
-@media (max-width: 768px) {
-.sidebar {
-    position: fixed;
-    left: -250px;
-    top: 0;
-    height: 100vh;
-    transition: left 0.3s ease;
-}
-.sidebar.active {
-    left: 0;
-}
-}
-
-    </style>
-    <style>
-    /* ========================================
-   CSS PROFESIONAL PARA DASHBOARD
-   Estructurado y optimizado para un diseño moderno y responsivo.
-   Basado en el CSS proporcionado, reescrito para mayor claridad, consistencia y profesionalismo.
-   ======================================== */
-
-/* Variables globales para colores, tamaños y otros valores reutilizables */
-:root {
-    --primary-color: #007bff; /* Azul principal */
-    --danger-color: #dc3545;  /* Rojo para alertas */
-    --secondary-color: #6c757d; /* Gris secundario */
-    --success-color: #28a745; /* Verde para éxito */
-    --light-bg: #f8f9fa; /* Fondo gris claro */
-    --card-bg: #ffffff; /* Fondo de tarjetas */
-    --text-color: #333333; /* Texto principal */
-    --light-text-color: #666666; /* Texto secundario */
-    --border-color: #e9ecef; /* Bordes */
-    --sidebar-width: 250px; /* Ancho del sidebar */
-    --sidebar-collapsed-width: 80px; /* Ancho colapsado */
-    --border-radius: 8px; /* Radio de bordes */
-    --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra estándar */
-    --transition: all 0.3s ease; /* Transición suave */
-}
-
-/* Reset básico para consistencia */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: 'Roboto', sans-serif;
-    font-size: 14px;
-    line-height: 1.5;
-    color: var(--text-color);
-    background-color: var(--light-bg);
-    min-height: 100vh;
-    display: flex;
-}
-
-/* Layout principal del dashboard */
-.dashboard-container {
-    display: flex;
-    width: 100%;
-    min-height: 100vh;
-}
-
-/* ========================================
-   SIDEBAR
-   ======================================== */
-
-        /* ---------------------------------------------------- */
-        /* ESTILOS DEL SIDEBAR COLAPSABLE                       */
-        /* ---------------------------------------------------- */
-        #sidebar-container {
-            width: 250px; 
-            background-color: var(--color-blanco); 
-            min-height: 100vh;
-            flex-shrink: 0;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); 
-            position: sticky; 
-            top: 0;
-            display: flex;
-            flex-direction: column;
-            z-index: 10;
-            transition: width 0.3s ease; 
-        }
-        
-        /* Estado Colapsado */
-        #sidebar-container.collapsed {
-            width: 65px; 
-        }
-
-        /* Oculta texto y flechas cuando está colapsado */
-        #sidebar-container.collapsed .sidebar-header,
-        #sidebar-container.collapsed .sidebar-link span,
-        #sidebar-container.collapsed .sidebar-dropdown-title .fa-chevron-down,
-        #sidebar-container.collapsed .sidebar-footer .sidebar-link span,
-        #sidebar-container.collapsed .sidebar-submenu {
-            display: none !important; 
-            opacity: 0;
-            transition: opacity 0.1s;
-        }
-        
-        /* Ajusta padding y centrado de íconos */
-        #sidebar-container.collapsed .sidebar-link {
-            justify-content: center;
-            padding: 0.75rem 0.5rem;
-        }
-        #sidebar-container.collapsed .sidebar-link i {
-            margin-right: 0 !important;
-        }
-
-        /* Contenido principal se ajusta */
-        .main-content {
-            flex-grow: 1;
-            padding: 2rem;
-            max-width: calc(100% - 250px);
-            transition: max-width 0.3s ease;
-        }
-        
-        .main-content.expanded {
-            max-width: calc(100% - 65px); 
-        }
-        
-        /* Botón de toggle */
-        #toggle-sidebar-btn {
-            background-color: var(--color-principal);
-            color: var(--color-blanco);
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            position: absolute;
-            right: -15px; 
-            top: 75px;
-            z-index: 20;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-
-        /* ---------------------------------------------------- */
-        /* ESTILOS DEL MENÚ INTERNO                             */
-        /* ---------------------------------------------------- */
-        .sidebar-link {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1.25rem;
-            color: var(--color-texto);
-            text-decoration: none;
-            transition: all 0.2s ease;
-            font-size: 1rem;
-            border-radius: 0.5rem; /* Bordes redondeados */
-            margin: 0.25rem 0.5rem;
-        }
-        .sidebar-link:hover:not(.active) { background-color: var(--color-fondo); }
-        .sidebar-link.active {
-            background-color: var(--color-principal); 
-            color: var(--color-blanco); 
-            font-weight: 600;
-            box-shadow: 0 4px 6px rgba(13, 110, 253, 0.2);
-        }
-        .sidebar-dropdown-title { cursor: pointer; user-select: none; }
-
-        .sidebar-submenu {
-            overflow: hidden; 
-            transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
-            max-height: 0;
-            padding: 0;
-            margin: 0 0.5rem;
-            border-radius: 0 0 0.5rem 0.5rem;
-        }
-        .sidebar-submenu.open {
-            max-height: 500px; 
-            padding: 0.5rem 0; 
-            background-color: #f7f7f7; 
-        }
-        .sidebar-submenu .sidebar-link {
-            padding-left: 2.5rem; 
-            font-size: 0.95rem;
-            margin: 0.1rem 0;
-            color: #4a5568; 
-            border-radius: 0.25rem;
-        }
-        .sidebar-submenu .sidebar-link.active {
-            background-color: #e6f0ff; 
-            color: var(--color-principal); 
-            font-weight: 500;
-            box-shadow: none;
-        }
-        .sidebar-header {
-            padding: 1rem 1.25rem;
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--color-principal);
-            border-bottom: 1px solid var(--color-borde);
-            text-align: center;
-        }
-        .sidebar-footer {
-            margin-top: auto; 
-            padding: 1rem 1.25rem;
-            border-top: 1px solid var(--color-borde);
-        }
-        .rotate-icon { transform: rotate(180deg); }
-
-
-
-
-/* ========================================
-   CONTENIDO PRINCIPAL
-   ======================================== */
-.main-content {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--light-bg);
-    overflow-x: auto;
-}
-
-/* Barra de navegación superior */
-.main-navbar {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    background-color: var(--card-bg);
-    padding: 15px 30px;
-    border-bottom: 1px solid var(--border-color);
-    box-shadow: var(--box-shadow);
-}
-
-.navbar-user-links a {
-    font-size: 0.9em;
-    color: var(--light-text-color);
-    text-decoration: none;
-    margin-left: 20px;
-    font-weight: 500;
-    transition: var(--transition);
-}
-
-.navbar-user-links a.logout {
-    color: var(--primary-color);
-}
-
-.navbar-user-links a:hover {
-    text-decoration: underline;
-    color: var(--primary-color);
-}
-
-/* Cuerpo del contenido */
-.content-body {
-    padding: 30px;
-    flex-grow: 1;
-}
-
-.content-header h1 {
-    margin: 0 0 25px 0;
-    font-size: 1.8em;
-    font-weight: 500;
-    color: var(--text-color);
-}
-
-/* Contenedor de la tabla (tarjeta) */
-.card-table-wrapper {
-    background-color: var(--card-bg);
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    padding: 25px;
-    margin-bottom: 20px;
-}
-
-/* Filtros de la tabla */
-.table-filters {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 25px;
-}
-
-.filter-group {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.filter-group label {
-    font-size: 0.9em;
-    color: var(--light-text-color);
-    white-space: nowrap;
-}
-
-.filter-group input[type="text"] {
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    padding: 8px 30px 8px 12px;
-    font-size: 0.9em;
-    width: 130px;
-    transition: var(--transition);
-}
-
-.filter-group input[type="text"]:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
-
-.filter-group .fa-calendar-alt {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--secondary-color);
-}
-
-.btn-primary-filter {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 9px 15px;
-    font-size: 0.9em;
-    font-weight: 500;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.btn-primary-filter:hover {
-    background-color: #0056b3;
-}
-
-.search-group {
-    margin-left: auto;
-}
-
-.search-group input[type="search"] {
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    padding: 8px 12px;
-    font-size: 0.9em;
-    width: 250px;
-    transition: var(--transition);
-}
-
-.search-group input[type="search"]:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
-
-/* Controles de la tabla */
-.table-controls {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.table-controls label {
-    font-size: 0.9em;
-    color: var(--light-text-color);
-}
-
-.table-controls select {
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    padding: 8px 12px;
-    font-size: 0.9em;
-    margin: 0 8px;
-    transition: var(--transition);
-}
-
-.table-controls select:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
-
-/* Contenedor de la tabla */
-.table-container {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-/* Cabecera de la tabla */
-thead th {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
-    color: var(--light-text-color);
-    font-size: 0.8em;
-    text-transform: uppercase;
-    font-weight: 500;
-    white-space: nowrap;
-}
-
-/* Cuerpo de la tabla */
-tbody td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
-    color: var(--text-color);
-    font-size: 0.9em;
-    white-space: nowrap;
-    vertical-align: middle;
-}
-
-tbody tr:last-child td {
-    border-bottom: none;
-}
-
-/* Píldora de estado */
-.status-pill.success {
-    border-radius: 4px;
-    padding: 4px 8px;
-    font-size: 0.8em;
-    font-weight: 500;
-    background-color: #e0f5e9;
-    color: var(--success-color);
-}
-
-/* Acciones de la tabla */
-.table-actions .btn-icon {
-    border: none;
-    background-color: #f1f3f5;
-    border-radius: 4px;
-    padding: 6px 9px;
-    margin: 0 2px;
-    cursor: pointer;
-    color: var(--secondary-color);
-    transition: var(--transition);
-}
-
-.table-actions .btn-icon:hover {
-    background-color: #e9ecef;
-    color: var(--primary-color);
-}
-
-/* Footer de la tabla */
-.table-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 20px;
-    border-top: 1px solid var(--border-color);
-    margin-top: 20px;
-}
-
-.footer-info {
-    font-size: 0.9em;
-    color: var(--light-text-color);
-}
-
-/* ========================================
-   RESPONSIVE DESIGN
-   ======================================== */
-@media (max-width: 768px) {
-    .dashboard-container {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-        height: auto;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        padding: 10px 20px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .sidebar-header {
-        padding: 0;
-        border: none;
-        margin: 0;
-    }
-
-    .sidebar-header .sidebar-toggle-btn {
-        display: none;
-    }
-
-    .sidebar-header .logo {
-        overflow: visible;
-    }
-
-    .sidebar-nav {
-        display: flex;
-        gap: 15px;
-        overflow-x: auto;
-    }
-
-    .sidebar-nav ul {
-        display: flex;
-        gap: 10px;
-    }
-
-    .sidebar-nav .nav-item span,
-    .sidebar-nav .arrow-icon,
-    .sidebar-nav .submenu {
-        display: none;
-    }
-
-    .sidebar-nav .nav-item {
-        padding: 5px;
-        border: none !important;
-        flex-shrink: 0;
-    }
-
-    .sidebar-nav .nav-item:hover,
-    .sidebar-nav .nav-item.active {
-        background-color: transparent;
-        color: var(--primary-color);
-        padding: 5px;
-    }
-
-    .sidebar-nav .nav-item i {
-        margin-right: 0;
-        font-size: 1.2em;
-    }
-
-    .main-content {
-        padding: 0;
-    }
-
-    .content-body {
-        padding: 15px;
-    }
-
-    .main-navbar {
-        padding: 10px 15px;
-    }
-
-    .navbar-user-links a {
-        font-size: 0.8em;
-        margin-left: 10px;
-    }
-
-    .table-filters {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .filter-group input[type="text"] {
-        width: 100%;
-    }
-
-    .search-group {
-        margin-left: 0;
-        width: 100%;
-    }
-
-    .search-group input[type="search"] {
-        width: 100%;
-    }
-
-    .table-footer {
-        flex-direction: column;
-        gap: 15px;
-    }
-}
-
-    
-    
-    
-    
-    
-   
-
-    </style>
-   <aside class="sidebar" id="sidebar">
-  <div class="sidebar-header">
-    <div class="logo">
-      <i class="fas fa-desktop"></i>
-      <span>CABLE LATIN</span>
-    </div>
-    <i class="fas fa-bars sidebar-toggle-btn" id="sidebar-toggle-internal"></i>
-  </div>
-
-  <nav class="sidebar-nav">
-    <ul>
-      <!-- DASHBOARD -->
-      <li class="nav-item">
-        <a href="tablero.html">
-          <i class="fas fa-grip"></i>
-          <span>Dashboard</span>
-        </a>
-      </li>
-
-      <!-- ADMINISTRACIÓN -->
-      <li class="nav-item has-submenu">
-        <div class="submenu-header">
-          <i class="fas fa-gear"></i>
-          <span>Administración</span>
-          <i class="fas fa-chevron-right arrow-icon"></i>
+    <!-- === Sidebar === -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-desktop"></i>
+                <span>CABLE LATIN</span>
+            </div>
+            <i class="fas fa-bars sidebar-toggle-btn" id="sidebar-toggle-internal"></i>
         </div>
-        <ul class="submenu">
-          <li><a href="usuario.html">Usuarios</a></li>
-          <li><a href="planes.html">Planes y servicios</a></li>
-        </ul>
-      </li>
 
-      <!-- CLIENTES -->
-      <li class="nav-item has-submenu">
-        <div class="submenu-header">
-          <i class="fas fa-users"></i>
-          <span>Clientes</span>
-          <i class="fas fa-chevron-right arrow-icon"></i>
-        </div>
-        <ul class="submenu">
-          <li><a href="clientes.html">Clientes</a></li>
-          <li><a href="facturas.html">Facturas</a></li>
-          <li><a href="pagos.html">Pagos</a></li>
-        </ul>
-      </li>
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="nav-item">
+                    <a href="tablero.html">
+                        <i class="fas fa-grip"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
 
-      <!-- REPORTES -->
-      <li class="nav-item has-submenu">
-        <div class="submenu-header">
-          <i class="fas fa-list-check"></i>
-          <span>Reportes</span>
-          <i class="fas fa-chevron-right arrow-icon"></i>
-        </div>
-        <ul class="submenu">
-          <li><a href="reportes.html">Reportes</a></li>
-        </ul>
-      </li>
+                <li class="nav-item has-submenu">
+                    <div class="submenu-header">
+                        <i class="fas fa-gear"></i>
+                        <span>Administración</span>
+                        <i class="fas fa-chevron-right arrow-icon"></i>
+                    </div>
+                    <ul class="submenu">
+                        <li><a href="usuario.html">Usuarios</a></li>
+                        <li><a href="planes.html">Planes y servicios</a></li>
+                    </ul>
+                </li>
 
-      <!-- PERFIL -->
-      <li class="nav-item">
-        <a href="perfil.html">
-          <i class="fas fa-user-circle"></i>
-          <span>Mi Perfil</span>
-        </a>
-      </li>
+                <li class="nav-item has-submenu open">
+                    <div class="submenu-header">
+                        <i class="fas fa-users"></i>
+                        <span>Clientes</span>
+                        <i class="fas fa-chevron-right arrow-icon"></i>
+                    </div>
+                    <ul class="submenu">
+                        <li><a href="clientes.html">Clientes</a></li>
+                        <li><a href="facturas.html">Facturas</a></li>
+                        <li><a href="pagos.html" class="active">Pagos</a></li>
+                    </ul>
+                </li>
 
-      <!-- CERRAR SESIÓN -->
-      <li class="nav-item">
-        <a href="login.html">
-          <i class="fa-solid fa-door-open"></i>
-          <span>Cerrar Sesión</span>
-        </a>
-      </li>
-    </ul>
-  </nav>
-</aside>
+                <li class="nav-item has-submenu">
+                    <div class="submenu-header">
+                        <i class="fas fa-list-check"></i>
+                        <span>Reportes</span>
+                        <i class="fas fa-chevron-right arrow-icon"></i>
+                    </div>
+                    <ul class="submenu">
+                        <li><a href="reportes.html">Reportes</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a href="perfil.html">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Mi Perfil</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#" id="btn-logout">
+                        <i class="fa-solid fa-door-open"></i>
+                        <span>Cerrar Sesión</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
     <!-- === Contenido Principal === -->
     <main class="main-content">
-        
-        <!-- === Header (Placeholder) === -->
-        <header class="main-navbar bg-white shadow-sm p-4 flex justify-between items-center">
+
+        <header class="main-navbar">
             <h1 class="text-xl font-semibold text-gray-800">Pagos</h1>
-            <div class="flex items-center space-x-4">
-                <i class="fas fa-bell text-gray-600"></i>
+            <div class="navbar-user-links flex items-center space-x-4">
+                <span id="navbar-username" class="text-sm text-gray-600"></span>
                 <i class="fas fa-user-circle text-gray-600 text-2xl"></i>
             </div>
         </header>
 
-        <!-- === Cuerpo del Contenido === -->
-        <div class="content-body p-6 lg:p-10">
-            
-            <!-- Contenedor de la tabla y filtros -->
-            <div class="card-table-wrapper bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="content-body">
+
+            <div class="card-table-wrapper">
 
                 <!-- Filtros -->
-                <div class="table-filters p-6 border-b border-gray-200">
-                    <div class="flex flex-col md:flex-row flex-wrap gap-4">
-                        <!-- Grupo Desde -->
-                        <div class="filter-group flex-1 min-w-[200px]">
-                            <label for="date-from" class="block text-sm font-medium text-gray-700 mb-1">Desde</label>
-                            <div class="relative">
-                                <input type="text" id="date-from" placeholder="dd/mm/aaaa" class="w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                                <i class="fas fa-calendar-alt absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                            </div>
+                <div class="table-filters">
+                    <div class="filter-group">
+                        <label for="date-from">Desde</label>
+                        <div class="relative">
+                            <input type="date" id="date-from">
                         </div>
-                        <!-- Grupo Hasta -->
-                        <div class="filter-group flex-1 min-w-[200px]">
-                            <label for="date-to" class="block text-sm font-medium text-gray-700 mb-1">Hasta</label>
-                            <div class="relative">
-                                <input type="text" id="date-to" placeholder="dd/mm/aaaa" class="w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                                <i class="fas fa-calendar-alt absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                            </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="date-to">Hasta</label>
+                        <div class="relative">
+                            <input type="date" id="date-to">
                         </div>
-                         <!-- Botón -->
-                        <div class="flex-1 min-w-[200px] flex items-end">
-                            <button class="btn-primary-filter w-full md:w-auto bg-blue-600 text-white px-5 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-200">
-                                Mostrar Todo
-                            </button>
-                        </div>
-                        <!-- Búsqueda -->
-                        <div class="search-group flex-grow min-w-[250px] flex items-end">
-                             <label for="search-table-main" class="sr-only">Buscar</label>
-                            <input type="search" id="search-table-main" placeholder="Buscar por documento o ID" class="w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <button id="btn-filtrar" class="btn-primary-filter">
+                            <i class="fas fa-filter mr-1"></i> Filtrar
+                        </button>
+                        <button id="btn-mostrar-todo" class="btn-secondary-filter">
+                            Mostrar Todo
+                        </button>
+                    </div>
+
+                    <div class="search-group">
+                        <label for="search-table-main" class="sr-only">Buscar</label>
+                        <input type="search" id="search-table-main" placeholder="Buscar por documento o ID...">
                     </div>
                 </div>
 
                 <!-- Controles de la Tabla -->
-                <div class="table-controls p-6 flex justify-between items-center">
-                    <div>
-                        <label for="show-entries" class="text-sm text-gray-700">Mostrar</label>
-                        <select id="show-entries" name="show-entries" class="p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 ml-2">
-                            <option value="10">10</option>
-                            <option value="20" selected>20</option>
-                            <option value="50">50</option>
-                        </select>
-                        <span class="ml-2 text-sm text-gray-700">registros</span>
-                    </div>
+                <div class="table-controls">
+                    <label for="show-entries">Mostrar</label>
+                    <select id="show-entries">
+                        <option value="10">10</option>
+                        <option value="20" selected>20</option>
+                        <option value="50">50</option>
+                    </select>
+                    <span>registros</span>
                 </div>
-                
-                <!-- Contenedor de la Tabla -->
-                <div class="table-container overflow-x-auto">
-                    <table class="w-full min-w-[700px]">
-                        <!-- Cabecera de la Tabla -->
-                        <thead class="bg-gray-50 border-b border-gray-200">
+
+                <!-- Tabla -->
+                <div class="table-container">
+                    <table>
+                        <thead>
                             <tr>
-                                <th class="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Id</th>
-                                <th class="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Fecha de Pago</th>
-                                <th class="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nº Documento</th>
-                                <th class="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Plan</th>
-                                <th class="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Precio</th>
-                                <th class="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Estado</th>
-                                <th class="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Acción</th>
+                                <th>Id</th>
+                                <th>Fecha de Pago</th>
+                                <th>Nº Documento</th>
+                                <th>Plan</th>
+                                <th>Precio</th>
+                                <th>Estado</th>
+                                <th>Acción</th>
                             </tr>
                         </thead>
-                        
-                        <!-- Cuerpo de la Tabla (se llenará dinámicamente) -->
-                        <tbody id="pagos-table-body" class="bg-white divide-y divide-gray-200">
-                            <!-- Fila de carga inicial -->
+                        <tbody id="pagos-table-body">
                             <tr>
-                                <td colspan="7" class="p-6 text-center text-gray-500">
+                                <td colspan="7" class="text-center p-6 text-gray-500">
                                     <i class="fas fa-spinner fa-spin mr-2"></i>Cargando pagos...
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                
+
                 <!-- Footer de la Tabla -->
-                <div class="table-footer p-6 border-t border-gray-200">
-                    <span class="footer-info text-sm text-gray-700" id="table-footer-info">Mostrando 0 de 0 registros</span>
-                    <!-- Aquí iría la paginación si se implementara -->
+                <div class="table-footer">
+                    <span class="footer-info" id="table-footer-info">Mostrando 0 de 0 registros</span>
                 </div>
+
             </div>
         </div>
-        
+
     </main>
-        
-    <script>
-       // Submenús desplegables
-document.querySelectorAll(".has-submenu").forEach((item) => {
-  const header = item.querySelector(".submenu-header");
-  header.addEventListener("click", () => {
-    item.classList.toggle("open");
-  });
-});
 
-// Botón para colapsar/expandir sidebar
-const toggleBtn = document.getElementById("sidebar-toggle-internal");
-if (toggleBtn) {
-  toggleBtn.addEventListener("click", () => {
-    document.getElementById("sidebar").classList.toggle("collapsed");
-  });
-}
- 
-    </script>
-    <!-- ============================================== -->
-    <!--          SCRIPT DE FIREBASE Y LÓGICA           -->
-    <!-- ============================================== -->
-    <script type="module">
-        // --- Importaciones de Firebase ---
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { 
-            getFirestore, 
-            collection, 
-            doc, 
-            getDocs, 
-            addDoc, 
-            onSnapshot, 
-            query,
-            limit,
-            writeBatch,
-            setLogLevel // <-- AÑADIDO PARA DEPURACIÓN
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // --- Configuración Firebase (la que proporcionaste) ---
-        const firebaseConfig = {
-          apiKey: "AIzaSyDHrAEU4HI2onL1bRZpRfB5GAbsbD6_XBE",
-          authDomain: "cablelatin-prueba.firebaseapp.com",
-          projectId: "cablelatin-prueba",
-          storageBucket: "cablelatin-prueba.firebasestorage.app",
-          messagingSenderId: "370823325775",
-          appId: "1:370823325775:web:cbd9142e612bc0a979623a",
-          measurementId: "G-PV3NRMJBW2"
-        };
-        
-        // --- Variables Globales ---
-        const appId = firebaseConfig.projectId;
-        let app, auth, db;
-        let userId = null;
-        let pagosCollectionRef = null;
-        
-        // --- Referencias a Elementos DOM ---
-        const tableBody = document.getElementById('pagos-table-body');
-        const tableFooterInfo = document.getElementById('table-footer-info');
-
-        // --- Inicialización Firebase ---
-        try {
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-            setLogLevel('debug'); // <-- AÑADIDO PARA DEPURACIÓN
-            console.log("Firebase inicializado:", appId);
-            
-            // Iniciar autenticación
-            initAuth();
-
-        } catch (e) {
-            console.error("Error inicializando Firebase:", e);
-            if(tableBody) tableBody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-red-600">Error crítico al conectar con Firebase.</td></tr>`;
-        }
-
-        // --- Autenticación ---
-        function initAuth() {
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    userId = user.uid;
-                    console.log("Autenticado (Anónimo):", userId);
-                    
-                    // --- ¡CAMBIO IMPORTANTE! ---
-                    // Apuntamos a la colección PRIVADA del usuario, basándonos en tus otros archivos.
-                    // Ruta: artifacts/{appId}/users/{userId}/pagos
-                    pagosCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'pagos');
-                    
-                    console.log("Escuchando en la ruta:", pagosCollectionRef.path); // Log para verificar la ruta
-
-                    // Empezar a escuchar los pagos
-                    listenForPayments();
-
-                } else {
-                    console.log("No autenticado, intentando anónimo...");
-                    try {
-                        await signInAnonymously(auth);
-                    } catch (error) {
-                        console.error("Error auth anónima:", error);
-                        if(tableBody) tableBody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-red-600">Error de autenticación.</td></tr>`;
-                    }
-                }
-            });
-        }
-
-        // --- Escuchar y Renderizar Pagos ---
-        function listenForPayments() {
-            if (!pagosCollectionRef) {
-                 console.error("Referencia a 'pagos' no definida.");
-                 return;
-            }
-
-            // Escuchar cambios en tiempo real
-            onSnapshot(pagosCollectionRef, (snapshot) => {
-                const pagos = [];
-                snapshot.forEach(doc => {
-                    pagos.push({ id: doc.id, ...doc.data() });
-                });
-                
-                console.log(`Se encontraron ${pagos.length} pagos en la ruta.`); // Log de depuración
-                
-                renderTable(pagos); // Renderizar la tabla con los datos
-            }, (error) => {
-                console.error("Error al escuchar pagos (onSnapshot):", error);
-                if(tableBody) tableBody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-red-600">Error al cargar los datos. Revisa los permisos de la base de datos.</td></tr>`;
-            });
-        }
-
-        // --- Renderizar Tabla (SOLUCIÓN ROBUSTA) ---
-        function renderTable(pagos) {
-            if (!tableBody || !tableFooterInfo) return;
-
-            tableBody.innerHTML = ''; // Limpiar tabla
-
-            if (pagos.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-gray-500">No se encontraron pagos en esta colección.</td></tr>`;
-                tableFooterInfo.textContent = "Mostrando 0 de 0 registros";
-                return;
-            }
-
-            // (Opcional) Ordenar por fecha, más reciente primero
-            // Comprobamos que fecha_pago exista antes de ordenar
-            pagos.sort((a, b) => new Date(b.fecha_pago || 0) - new Date(a.fecha_pago || 0));
-
-            pagos.forEach(pago => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-gray-50";
-
-                const estadoClass = pago.estado === 'Pagado' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
-                
-                // Usamos innerHTML para las celdas simples
-                tr.innerHTML = `
-                    <td class="p-4 text-sm text-gray-700">${pago.id.substring(0, 6)}...</td>
-                    <td class="p-4 text-sm text-gray-700">${pago.fecha_pago || 'N/A'}</td>
-                    <td class="p-4 text-sm text-gray-700">${pago.n_documento || 'N/A'}</td>
-                    <td class="p-4 text-sm text-gray-700">${pago.plan_info?.nombre || 'N/A'}</td>
-                    <td class="p-4 text-sm text-gray-700">S/ ${parseFloat(pago.plan_info?.precio || 0).toFixed(2)}</td>
-                    <td class="p-4 text-sm">
-                        <span class="status-pill ${estadoClass} px-3 py-1 rounded-full text-xs font-medium">
-                            ${pago.estado || 'N/A'}
-                        </span>
-                    </td>
-                `;
-
-                // --- Creamos la celda de acción y el botón manualmente ---
-                const actionCell = document.createElement('td');
-                actionCell.className = "p-4 text-sm";
-                
-                const button = document.createElement('button');
-                button.className = "btn-icon text-blue-600 hover:text-blue-800";
-                button.title = "Ver Detalle y Generar PDF";
-                button.innerHTML = '<i class="fas fa-file-alt"></i>';
-                
-                // ¡LA MAGIA! Pasamos el objeto 'pago' directamente.
-                // Esto evita CUALQUIER error de 'stringify' o sintaxis.
-                button.addEventListener('click', () => {
-                    window.generarReporte(pago); // Pasamos el objeto, no un string
-                });
-                
-                actionCell.appendChild(button);
-                tr.appendChild(actionCell);
-                // --- Fin de la creación manual ---
-                
-                tableBody.appendChild(tr);
-            });
-
-            tableFooterInfo.textContent = `Mostrando ${pagos.length} de ${pagos.length} registros`;
-        }
-
-        // --- Generar Reporte PDF ---
-        // Modificado para aceptar un OBJETO, no un string JSON
-        window.generarReporte = (pago) => {
-            try {
-                // Ya no necesitamos JSON.parse, 'pago' es el objeto
-                
-                // Inicializar jsPDF
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-
-                console.log("Generando PDF para:", pago);
-
-                // --- Contenido del PDF ---
-                
-                // Título
-                doc.setFontSize(20);
-                doc.setFont("helvetica", "bold");
-                doc.text("Comprobante de Pago", 105, 20, { align: "center" });
-
-                // Logo (Placeholder)
-                doc.setFontSize(14);
-                doc.setFont("helvetica", "bold");
-                doc.text("Cablelatin", 14, 30);
-                doc.setFont("helvetica", "normal");
-                
-                // Línea divisoria
-                doc.setLineWidth(0.5);
-                doc.line(14, 35, 196, 35);
-
-                // Información del Pago
-                doc.setFontSize(11);
-                doc.text("ID de Pago:", 14, 45);
-                doc.text(pago.id, 50, 45);
-                
-                doc.text("Fecha de Pago:", 14, 52);
-                doc.text(pago.fecha_pago || 'N/A', 50, 52);
-                
-                doc.text("Nº Documento:", 14, 59);
-                doc.text(pago.n_documento || 'N/A', 50, 59);
-
-                doc.text("Estado:", 120, 45);
-                doc.setFont("helvetica", "bold");
-                doc.text(pago.estado || 'N/A', 140, 45);
-                doc.setFont("helvetica", "normal");
-                
-                // Tabla de Detalles
-                const planNombre = pago.plan_info?.nombre || "Plan no especificado";
-                const planPrecio = parseFloat(pago.plan_info?.precio || 0).toFixed(2);
-                
-                doc.autoTable({
-                    startY: 70,
-                    head: [['Concepto', 'Monto (S/)']],
-                    body: [
-                        [planNombre, planPrecio],
-                    ],
-                    theme: 'grid',
-                    headStyles: { fillColor: [31, 41, 55] } // Gris oscuro
-                });
-
-                // Total
-                const finalY = doc.lastAutoTable.finalY + 10;
-                doc.setFontSize(14);
-                doc.setFont("helvetica", "bold");
-                doc.text("TOTAL PAGADO:", 120, finalY);
-                doc.text(`S/ ${planPrecio}`, 196, finalY, { align: "right" });
-
-                // Footer
-                doc.setFontSize(10);
-                doc.setTextColor(150);
-                doc.text("Gracias por su preferencia.", 105, 280, { align: "center" });
-
-                // --- Fin Contenido del PDF ---
-
-                // Guardar el archivo
-                doc.save(`Comprobante-Pago-${pago.id.substring(0, 6)}.pdf`);
-
-            } catch (error) {
-                console.error("Error al generar el PDF:", error);
-                // Aquí podrías mostrar un modal de error
-            }
-        };
-
-           // ==============================================
-        //          LÓGICA DE SIDEBAR (Funciones)
-        // ==============================================
-
-        /**
-         * Función para alternar la visibilidad de los submenús
-         */
-        function toggleCollapse(menuId, iconId) {
-            // Evita el despliegue de submenús si el sidebar está colapsado 
-            if (document.getElementById('sidebar-container').classList.contains('collapsed')) {
-                return; 
-            }
-            
-            const menu = document.getElementById(menuId);
-            const icon = document.getElementById(iconId);
-
-            if (menu.classList.contains('open')) {
-                menu.classList.remove('open');
-                if (icon) icon.classList.remove('rotate-icon');
-            } else {
-                menu.classList.add('open');
-                if (icon) icon.classList.add('rotate-icon');
-            }
-        }
-        window.toggleCollapse = toggleCollapse; 
-
-        /**
-         * Función para alternar el estado colapsado/expandido del sidebar
-         */
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar-container');
-            const mainContent = document.querySelector('.main-content');
-            const icon = document.getElementById('toggle-icon');
-            
-            sidebar.classList.toggle('collapsed');
-            mainContent.classList.toggle('expanded');
-            
-            if (sidebar.classList.contains('collapsed')) {
-                // Colapsado: Gira el ícono y cierra todos los submenús
-                icon.classList.remove('fa-chevron-left');
-                icon.classList.add('fa-chevron-right');
-                
-                document.querySelectorAll('.sidebar-submenu.open').forEach(menu => {
-                     menu.classList.remove('open');
-                     const iconId = menu.id.replace('-menu', '-icon');
-                     const iconToRotate = document.getElementById(iconId);
-                     if(iconToRotate) iconToRotate.classList.remove('rotate-icon');
-                });
-
-            } else {
-                // Expandido: Gira el ícono y vuelve a abrir el menú de Administración (por ser la página actual)
-                icon.classList.remove('fa-chevron-right');
-                icon.classList.add('fa-chevron-left');
-                
-                document.getElementById('admin-menu').classList.add('open');
-                document.getElementById('admin-icon').classList.add('rotate-icon');
-            }
-        }
-        window.toggleSidebar = toggleSidebar; 
-
-        // --- Configuración inicial al cargar la página ---
-        document.addEventListener('DOMContentLoaded', () => {
-             // Asegura que el menú de Administración esté abierto por defecto
-             document.getElementById('admin-menu').classList.add('open');
-             document.getElementById('admin-icon').classList.add('rotate-icon');
-        });
-
-    </script>
+    <!-- === Scripts === -->
+    <!-- api.js debe cargarse antes que pagos.js -->
+    <script src="js/api.js"></script>
+    <script src="js/sidebar.js"></script>
+    <script src="js/pagos.js"></script>
 
 </body>
 </html>

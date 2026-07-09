@@ -1,141 +1,185 @@
-/* Estilos base (los que proporcionaste) */
-body { font-family: 'Roboto', sans-serif; background-color: #f4f7f9; display: flex; margin: 0; }
-#sidebar-container { width: 250px; flex-shrink: 0; }
-.main-content { padding: 20px; flex-grow: 1; }
-.status-pill { display: inline-block; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 500; text-transform: uppercase; }
-.status-pill.active { background-color: #d4edda; color: #155724; }
-.status-pill.inactive { background-color: #f8d7da; color: #721c24; }
-.btn-primary-add { background-color: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-size: 16px; transition: background-color 0.2s; }
-.btn-primary-add:hover { background-color: #0056b3; }
-.table-actions .btn-icon { background: none; border: none; cursor: pointer; font-size: 16px; margin: 0 5px; padding: 5px; border-radius: 5px; transition: background-color 0.2s; }
-.table-actions .edit { color: #007bff; }
-.table-actions .delete { color: #dc3545; }
-.card-table-wrapper { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); }
-.content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-.table-controls { display: flex; justify-content: space-between; margin-bottom: 20px; }
-.table-container { overflow-x: auto; }
-#planes-table { width: 100%; border-collapse: collapse; }
-#planes-table th, #planes-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #f0f0f0; }
-#planes-table th { background-color: #f8f9fa; font-weight: 700; color: #333; }
-.table-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+/* =====================================================
+   planes.css — Estilos específicos de la página de Planes
+   Cable Latín — Frontend
+   ===================================================== */
 
-/* Estilos para Modales de Formulario */
-.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: none; justify-content: center; align-items: center; z-index: 1000; opacity: 0; transition: opacity 0.3s ease; }
-.modal-overlay.open { display: flex; opacity: 1; }
-.modal-content { background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); width: 90%; max-width: 600px; position: relative; transform: translateY(-20px); transition: transform 0.3s ease; }
-.modal-overlay.open .modal-content { transform: translateY(0); }
-.modal-content h2 { margin-top: 0; color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
-.modal-close { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 28px; cursor: pointer; color: #999; transition: color 0.2s; }
-.modal-close:hover { color: #333; }
-.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.form-group { display: flex; flex-direction: column; }
-.form-group label { margin-bottom: 5px; font-weight: 500; color: #555; }
-.form-group input, .form-group select, .form-group textarea { padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; box-sizing: border-box; width: 100%; }
-.form-group textarea { grid-column: 1 / -1; resize: vertical; }
-.form-grid .full-width { grid-column: 1 / -1; }
-.modal-buttons { grid-column: 1 / -1; display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-.btn-guardar, .btn-cancelar, .btn-confirm-delete, .btn-cancel-delete { padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: 500; border: none; }
-.btn-guardar { background-color: #28a745; color: white; }
-.btn-cancelar, .btn-cancel-delete { background-color: #6c757d; color: white; }
-.btn-confirm-delete { background-color: #dc3545; color: white; }
-
-/* Estilos del Modal de Éxito */
-#success-modal { background-color: transparent; pointer-events: none; transition: opacity 0.3s ease, visibility 0.3s ease; }
-#success-modal.open { pointer-events: auto; }
-.success-content { background-color: #f0fff4; color: #0c6; padding: 20px 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 204, 102, 0.3); display: flex; align-items: center; font-weight: 500; font-size: 16px; border: 1px solid #0c6; animation: fadeInDown 0.4s; }
-.success-content i { font-size: 24px; margin-right: 15px; }
-@keyframes fadeInDown { 0% { opacity: 0; transform: translateY(-50px); } 100% { opacity: 1; transform: translateY(0); } }
-#success-modal.hide { opacity: 0; }
-
-/* Estilos del Modal de Confirmación (NUEVO) */
-#confirm-modal .modal-content { max-width: 450px; text-align: center; }
-#confirm-modal-message { font-size: 1.1rem; color: #333; margin-bottom: 25px; }
-#confirm-modal-buttons { display: flex; justify-content: center; gap: 15px; }
-
-@media (max-width: 500px) {
-    .form-grid { grid-template-columns: 1fr; }
-    .table-controls { flex-direction: column; gap: 10px; }
+/* --- Tabla de Planes --- */
+#planes-table tbody tr {
+    transition: background-color 0.15s ease;
 }
 
-/*
----------------------------------
-NUEVOS ESTILOS PARA:
-1. Input de Búsqueda
-2. Paginación (Anterior 1 Siguiente)
----------------------------------
-*/
-
-/* --- 1. Estilos para el input de "Buscar" --- */
-
-/* Contenedor del input de búsqueda */
-.table-controls div:last-child {
-    display: flex;
-    align-items: center;
-    gap: 8px; /* Espacio entre "Buscar:" y el input */
+#planes-table tbody tr:hover {
+    background-color: #f9fafb;
 }
 
-.table-controls label[for="search-table"] {
-    font-size: 14px;
-    font-weight: 500;
-    color: #555;
-}
-
-.table-controls input[type="search"] {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 14px;
-    min-width: 220px; /* Dale un tamaño mínimo */
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-/* Efecto de "focus" (cuando haces clic) */
-.table-controls input[type="search"]:focus {
-    outline: none;
-    border-color: #007bff; /* Borde azul */
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2); /* Sombra suave */
-}
-
-
-/* --- 2. Estilos para la Paginación --- */
-
-.pagination {
-    display: flex;
-    gap: 6px; /* Espacio entre los botones */
-}
-
-.pagination a {
+/* --- Pills de Estado --- */
+.status-pill {
     display: inline-block;
-    padding: 8px 14px;
-    font-size: 14px;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.status-pill.activo {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #6ee7b7;
+}
+
+.status-pill.inactivo {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+}
+
+.status-pill.obsoleto {
+    background-color: #f3f4f6;
+    color: #4b5563;
+    border: 1px solid #d1d5db;
+}
+
+/* --- Botones de Acción --- */
+.btn-accion {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-accion:active {
+    transform: scale(0.93);
+}
+
+.btn-accion.edit {
+    background-color: #eff6ff;
+    color: #2563eb;
+}
+
+.btn-accion.edit:hover {
+    background-color: #dbeafe;
+}
+
+.btn-accion.delete {
+    background-color: #fff1f2;
+    color: #dc2626;
+}
+
+.btn-accion.delete:hover {
+    background-color: #fee2e2;
+}
+
+/* --- Modales --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.55);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    backdrop-filter: blur(2px);
+}
+
+.modal-overlay.open {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    transform: translateY(-16px) scale(0.97);
+    transition: transform 0.25s ease, opacity 0.25s ease;
+    opacity: 0;
+    width: 90%;
+}
+
+.modal-overlay.open .modal-content {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+/* --- Notificación de Éxito --- */
+#success-modal {
+    background-color: transparent;
+    pointer-events: none;
+}
+
+#success-modal.open {
+    pointer-events: auto;
+}
+
+.success-content {
+    animation: slideInDown 0.35s ease;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- Paginación --- */
+.pagination a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+    font-size: 0.85rem;
     font-weight: 500;
-    color: #007bff;
+    color: #2563eb;
     background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
     text-decoration: none;
     transition: all 0.2s ease;
 }
 
-/* Botón "activo" (el número actual) */
 .pagination a.active {
-    background-color: #007bff;
+    background-color: #2563eb;
     color: #ffffff;
-    border-color: #007bff;
+    border-color: #2563eb;
     font-weight: 700;
 }
 
-/* Botones deshabilitados (Anterior/Siguiente) */
 .pagination a.disabled {
-    color: #999;
-    background-color: #f8f9fa;
-    border-color: #eee;
+    color: #9ca3af;
+    background-color: #f9fafb;
+    border-color: #e5e7eb;
     cursor: not-allowed;
     pointer-events: none;
 }
 
-/* Efecto hover (solo para botones no deshabilitados) */
-.pagination a:not(.disabled):hover {
-    background-color: #f4f7f9;
-    border-color: #007bff;
+.pagination a:not(.disabled):not(.active):hover {
+    background-color: #eff6ff;
+    border-color: #2563eb;
+}
+
+/* --- ID truncado en tabla --- */
+.id-badge {
+    font-family: 'Courier New', monospace;
+    font-size: 0.72rem;
+    color: #6b7280;
+    background: #f3f4f6;
+    padding: 2px 6px;
+    border-radius: 4px;
 }

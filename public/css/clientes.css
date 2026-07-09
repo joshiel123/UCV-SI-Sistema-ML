@@ -111,6 +111,8 @@
         .btn-primary:hover { background-color: #0069d9; border-color: #0062cc; }
         .btn-secondary { background-color: var(--secondary-color); color: white; border-color: var(--secondary-color); }
         .btn-secondary:hover { background-color: #5a6268; border-color: #545b62; }
+        .btn-success { background-color: var(--success-color); color: white; border-color: var(--success-color); }
+        .btn-success:hover { background-color: #157347; border-color: #146c43; }
         .btn-danger { background-color: var(--danger-color); color: white; border-color: var(--danger-color); }
         .btn-danger:hover { background-color: #c82333; border-color: #bd2130; }
         .btn-icon { background: none; border: none; cursor: pointer; font-size: 1rem; margin: 0 4px; padding: 6px; border-radius: 50%; line-height: 1; transition: background-color 0.2s; color: #6c757d; } /* Círculo y color base */

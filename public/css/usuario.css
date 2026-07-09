@@ -1,421 +1,137 @@
-:root {
-    --primary-color: #007bff; /* Azul */
-    --secondary-color: #6c757d; /* Gris */
-    --success-color: #28a745; /* Verde */
-    --light-bg: #f8f9fa; /* Fondo claro */
-    --card-bg: #ffffff;
-    --text-color: #333333;
-    --light-text-color: #666666;
-    --border-color: #e9ecef;
-    --sidebar-width: 250px;
+/* =====================================================
+   usuario.css — Estilos específicos de la página de Usuarios
+   Cable Latín — Frontend
+   ===================================================== */
+
+/* --- Pills de Estado --- */
+.status-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
-body {
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: var(--light-bg);
-    color: var(--text-color);
-    display: flex;
-    min-height: 100vh;
+.status-pill.active {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #6ee7b7;
 }
 
-.dashboard-container {
-    display: flex;
-    width: 100%;
+.status-pill.inactive {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
 }
 
-/*
----------------------------------
-SIDEBAR (CABLE LATIN)
-Estilos para el sidebar.html cargado dinámicamente
----------------------------------
-*/
-.sidebar {
-    width: var(--sidebar-width);
-    background-color: var(--card-bg);
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    padding: 20px 0;
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid var(--border-color);
-    flex-shrink: 0;
-    transition: width 0.3s ease, transform 0.3s ease; /* Añadida transform */
-    z-index: 100;
-    position: fixed; /* Fijado */
-    left: 0;
-    top: 0;
-    height: 100vh; /* Ocupa toda la altura */
+/* --- Pills de Rol --- */
+.role-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    letter-spacing: 0.03em;
 }
 
-.sidebar-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px 20px;
-    border-bottom: 1px solid var(--border-color);
-    margin-bottom: 20px;
-    flex-shrink: 0;
+.role-pill.administrador {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
 }
 
-.sidebar-header .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 700;
-    font-size: 1.2em;
-    color: var(--primary-color);
-    white-space: nowrap;
-    overflow: hidden;
-}
-.sidebar-header .logo i { font-size: 1.5em; }
-.sidebar-header .sidebar-toggle-btn {
-    color: var(--secondary-color);
-    cursor: pointer;
-    font-size: 1.2em;
-    transition: transform 0.3s ease;
-}
-/* Rotar flecha cuando está colapsado */
-.sidebar[style*="width: 80px"] .sidebar-toggle-btn {
-    transform: rotate(180deg);
+.role-pill.supervisor {
+    background-color: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #93c5fd;
 }
 
-
-.sidebar-nav {
-    overflow-y: auto;
-    flex-grow: 1;
+.role-pill.vendedor {
+    background-color: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
 }
 
-.sidebar-nav ul { list-style: none; padding: 0; margin: 0; width: 100%; }
-.sidebar-nav .nav-item {
-    display: flex; align-items: center; flex-wrap: nowrap; /* Cambio a nowrap */
-    padding: 14px 20px; color: var(--light-text-color);
-    cursor: pointer; position: relative; transition: all 0.3s ease;
-    white-space: nowrap; overflow: hidden; font-size: 0.95em;
-    text-decoration: none; /* Asegurar no subrayado */
-}
-.sidebar-nav .submenu-header { /* DIV Clickeable */
-    display: flex;
-    align-items: center;
-    width: 100%;
-}
-
-.sidebar-nav .nav-item.active {
-    background-color: rgba(0, 123, 255, 0.1);
-    color: var(--primary-color);
-    border-left: 3px solid var(--primary-color);
-    padding-left: 17px; font-weight: 500;
-}
-.sidebar-nav .nav-item:not(.active):hover { background-color: rgba(0, 0, 0, 0.03); }
-.sidebar-nav .nav-item > i:first-child,
-.sidebar-nav .submenu-header > i:first-child { 
-    margin-right: 12px; 
-    width: 20px; 
-    font-size: 1.1em; 
-    text-align: center;
-}
-.sidebar-nav .nav-item > span,
-.sidebar-nav .submenu-header > span { 
-    flex-grow: 1; 
-}
-.sidebar-nav .nav-item.has-submenu .arrow-icon { 
-    margin-left: auto; 
-    transition: transform 0.3s ease; 
-    font-size: 0.8em; 
-}
-.sidebar-nav .submenu {
-    list-style: none; padding: 0; margin: 0; /* Cambio padding */
-    width: 100%;
-    background-color: #fdfdfd; box-sizing: border-box;
-    max-height: 0; /* Para animación */
-    overflow: hidden;
-    transition: max-height 0.3s ease-out, padding 0.3s ease-out; /* Animación */
-}
-.sidebar-nav .submenu li {
-    padding: 10px 20px 10px 52px; color: var(--light-text-color);
-    font-size: 0.9em; white-space: nowrap; overflow: hidden;
-    transition: all 0.2s ease;
-}
-.sidebar-nav .submenu li a { /* Estilos enlace submenú */
-    color: inherit;
-    text-decoration: none;
-    display: block;
-}
-.sidebar-nav .submenu li:hover, .sidebar-nav .submenu li a:hover { 
-    color: var(--primary-color); 
-    background-color: rgba(0, 123, 255, 0.05); 
-}
-
-.sidebar-nav .nav-item.open > .submenu { 
-    max-height: 500px; /* Altura suficiente */
-    padding: 5px 0 5px 0; /* Padding al abrir */
-}
-.sidebar-nav .nav-item.open > .submenu-header .arrow-icon { transform: rotate(90deg); }
-
-
-/*
----------------------------------
-NUEVO CONTENIDO PRINCIPAL (TABLA)
----------------------------------
-*/
-.main-content {
-    flex-grow: 1;
-    padding: 20px;
-    background-color: var(--light-bg);
-    overflow-x: auto;
-    margin-left: var(--sidebar-width); /* Espacio para sidebar fijo */
-    width: calc(100% - var(--sidebar-width));
-    transition: margin-left 0.3s ease, width 0.3s ease; /* Transición */
-}
-/* Ajuste cuando sidebar colapsado */
-body:has(.sidebar[style*="width: 80px"]) .main-content {
-    margin-left: 80px;
-    width: calc(100% - 80px);
-}
-
-
-/* Barra de navegación superior (simple) */
-.main-navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: var(--card-bg);
-    padding: 15px 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    margin-bottom: 25px;
-}
-#sidebar-toggle-main { /* Estilo botón hamburguesa */
-    display: none; /* Oculto en escritorio */
-    background: none;
-    border: none;
-    font-size: 1.2em;
-    color: var(--secondary-color);
-    cursor: pointer;
-    padding: 5px;
-}
-.main-navbar .user-links a i { /* Estilo icono logout */
-    font-size: 1.2em;
-    color: var(--secondary-color);
-}
-.main-navbar .user-links a:hover i {
-    color: var(--primary-color);
-}
-
-/* Cabecera de contenido (Título y botón) */
-.content-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start; 
-    margin-bottom: 20px;
-}
-.breadcrumb {
-    font-size: 0.9em;
-    color: var(--light-text-color);
-    margin: 0 0 5px 0;
-    font-weight: 400;
-}
-.content-header h1 {
-    margin: 0;
-    font-size: 1.8em;
-    font-weight: 500;
-}
-.btn-primary {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 50%; 
-    width: 45px;
-    height: 45px;
-    font-size: 1.2em;
-    cursor: pointer;
-    display: flex;
+/* --- Botones de Acción --- */
+.btn-accion-usr {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
-    transition: background-color 0.3s ease;
-    flex-shrink: 0; /* Evita que se encoja */
-}
-.btn-primary:hover {
-    background-color: #0056b3;
-}
-
-/* Contenedor de la tabla */
-.card {
-    background-color: var(--card-bg);
+    width: 34px;
+    height: 34px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    overflow: hidden; /* Para que bordes redondeados afecten tabla */
+    border: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background-color 0.2s, transform 0.1s;
+    text-decoration: none;
 }
 
-.table-container {
-    padding: 0; 
-    overflow-x: auto; 
-}
+.btn-accion-usr:active { transform: scale(0.93); }
 
-table {
+.btn-accion-usr.edit {
+    background-color: #eff6ff;
+    color: #2563eb;
+}
+.btn-accion-usr.edit:hover { background-color: #dbeafe; }
+
+.btn-accion-usr.delete {
+    background-color: #fff1f2;
+    color: #dc2626;
+}
+.btn-accion-usr.delete:hover { background-color: #fee2e2; }
+
+/* --- Modal de Confirmación --- */
+.usr-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    border-collapse: collapse; 
-}
-
-/* Cabecera de la tabla */
-thead th {
-    padding: 15px 20px;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
-    color: var(--light-text-color);
-    font-size: 0.8em;
-    text-transform: uppercase;
-    font-weight: 500;
-    white-space: nowrap;
-    background-color: var(--card-bg); /* Fondo blanco */
-}
-
-/* Cuerpo de la tabla */
-tbody td {
-    padding: 15px 20px;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
-    color: var(--text-color);
-    font-size: 0.9em;
-    white-space: nowrap;
-    vertical-align: middle; /* Centrar verticalmente */
-}
-tbody tr:last-child td {
-    border-bottom: none; 
-}
-tbody tr:hover {
-    background-color: var(--light-bg);
-}
-
-/* Píldora de estado */
-.status-pill {
-    border-radius: 12px;
-    padding: 4px 12px;
-    font-size: 0.8em;
-    font-weight: 500;
-    display: inline-block; /* Para que no ocupe todo el ancho */
-}
-.status-pill.active { /* Asume 'active' es la única clase */
-    background-color: #e0f5e9; 
-    color: var(--success-color); 
-}
-/* Podrías añadir .inactive si es necesario */
-.status-pill.inactive {
-    background-color: #ffebee;
-    color: #dc3545;
-}
-
-
-/* Acciones de la tabla */
-.table-actions a {
-    color: var(--secondary-color);
-    margin: 0 8px;
-    text-decoration: none;
-    font-size: 1.1em;
-    transition: color 0.2s ease;
-}
-.table-actions a:hover {
-    color: var(--primary-color);
-}
-.table-actions a .fa-trash-alt:hover {
-    color: #dc3545; /* Rojo para eliminar */
-}
-
-/* Footer de la tabla (Paginación) */
-.table-footer {
-    display: flex;
-    justify-content: space-between;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.55);
+    display: none;
+    justify-content: center;
     align-items: center;
-    padding: 15px 20px;
-    border-top: 1px solid var(--border-color);
-    background-color: var(--card-bg); /* Fondo blanco */
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    backdrop-filter: blur(2px);
 }
-.footer-info {
-    font-size: 0.9em;
-    color: var(--light-text-color);
-}
-.pagination {
+
+.usr-modal-overlay.open {
     display: flex;
-    gap: 5px;
+    opacity: 1;
 }
-.pagination a {
-    text-decoration: none;
-    padding: 8px 12px;
-    border: 1px solid var(--border-color);
+
+.usr-modal-content {
+    transform: translateY(-16px) scale(0.97);
+    transition: transform 0.25s ease, opacity 0.25s ease;
+    opacity: 0;
+}
+
+.usr-modal-overlay.open .usr-modal-content {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+/* --- ID Badge truncado --- */
+.id-badge {
+    font-family: 'Courier New', monospace;
+    font-size: 0.72rem;
+    color: #6b7280;
+    background: #f3f4f6;
+    padding: 2px 6px;
     border-radius: 4px;
-    color: var(--primary-color);
-    font-size: 0.9em;
-    transition: all 0.2s ease;
-}
-.pagination a.active {
-    background-color: var(--primary-color);
-    color: white;
-    border-color: var(--primary-color);
-}
-.pagination a.disabled {
-    color: var(--secondary-color);
-    background-color: var(--light-bg);
-    pointer-events: none;
-    border-color: var(--border-color);
-}
-.pagination a:not(.active):not(.disabled):hover {
-    background-color: #f4f7fa;
 }
 
-/* Ajustes responsivos */
-@media (max-width: 768px) {
-    body { display: block; } /* Quitar flex en móvil */
-    .sidebar {
-        transform: translateX(-100%);
-        /* Reestablecer estilos columna */
-        width: var(--sidebar-width);
-        height: 100vh;
-        flex-direction: column;
-        justify-content: flex-start;
-        padding: 20px 0;
-    }
-    .sidebar.open {
-        transform: translateX(0);
-        box-shadow: 2px 0 10px rgba(0,0,0,0.2);
-    }
-    
-    .sidebar-header {
-        /* Reestablecer */
-        padding: 0 20px 20px;
-        border-bottom: 1px solid var(--border-color);
-        margin-bottom: 20px;
-    }
-    .sidebar-header .sidebar-toggle-btn { display: block; } /* Mostrar botón interno */
+/* --- Hover filas tabla --- */
+#usuarios-table-body tr {
+    transition: background-color 0.15s ease;
+}
 
-    .sidebar-nav {
-         /* Reestablecer */
-        display: block;
-        overflow-y: auto;
-    }
-    .sidebar-nav ul { display: block; }
-    .sidebar-nav .nav-item span, .sidebar-nav .arrow-icon { display: inline-block; } /* Mostrar texto/flecha */
-    .sidebar-nav .submenu { display: none; max-height: 0; }
-    .sidebar-nav .nav-item.open > .submenu { display: block; max-height: 500px; padding: 5px 0; }
-    .sidebar-nav .nav-item { padding: 14px 20px; }
-    .sidebar-nav .nav-item i { margin-right: 12px; }
-    .sidebar-nav .nav-item:hover, .sidebar-nav .nav-item.active {
-        /* Reestablecer */
-        background-color: rgba(0, 123, 255, 0.1);
-        color: var(--primary-color);
-        padding-left: 17px;
-    }
-    
-    .main-content { 
-        margin-left: 0; 
-        width: 100%; 
-        padding: 15px; 
-    }
-    #sidebar-toggle-main { display: block; } /* Mostrar botón hamburguesa */
-    .main-navbar { margin-bottom: 20px; }
-    .content-header { flex-direction: column; align-items: flex-start; gap: 15px; }
-    .btn-primary {
-        width: 40px; height: 40px; font-size: 1.1em; align-self: flex-end; /* Alinear botón a la derecha */
-    }
-    .table-footer { flex-direction: column; gap: 15px; }
+#usuarios-table-body tr:hover {
+    background-color: #f9fafb;
 }
