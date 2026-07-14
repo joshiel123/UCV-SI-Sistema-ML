@@ -5,7 +5,6 @@
 [![Firebase Service](https://img.shields.io/badge/Firebase-Firestore-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
 [![JavaScript ES6](https://img.shields.io/badge/JavaScript-ES6-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![HTML5 Markup](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Glossary/HTML5)
-[![CSS3 Styling](https://img.shapes.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
 
 ## 📋 Tabla de Contenidos
 - [Descripción](#-descripción)
@@ -23,6 +22,7 @@
 - [Posibles Mejoras Futuras](#-posibles-mejoras-futuras)
 - [Licencia](#-licencia)
 - [Créditos](#-créditos)
+- [Agradecimiento](#-agradecimientos)
 
 ---
 
@@ -328,15 +328,23 @@ La API REST del servidor backend expone los siguientes endpoints estructurados p
 
 ## 📸 Capturas del Sistema
 *(En esta sección se integrarán posteriormente las capturas de pantalla de la interfaz gráfica en formato de imagen una vez sea desplegada la interfaz final)*
-- **Captura 1**: Formulario de Inicio de Sesión y Seguridad contra Fuerza Bruta.
+- **Captura 1**: Formulario de Inicio de Sesión y Seguridad contra Fuerza Bruta
+<img width="969" height="436" alt="image" src="https://github.com/user-attachments/assets/0f4ee716-145d-44a1-88f2-de4d269b81ab" />.
 - **Captura 2**: Dashboard Principal con Gráficos Estadísticos de Facturación y Clientes.
+<img width="1366" height="688" alt="image" src="https://github.com/user-attachments/assets/57ab9adb-5c93-4395-8b03-6466a92c5ab2" />
+<img width="1366" height="687" alt="image" src="https://github.com/user-attachments/assets/a8bd61eb-6472-4655-b1f9-0311bc386fb1" />
 - **Captura 3**: Interfaz de Importación de Clientes y Modal de Resultados ML/Calidad de Datos.
+<img width="1366" height="686" alt="image" src="https://github.com/user-attachments/assets/99fbfe14-3420-4231-b06e-c92700d86a98" />
+<img width="331" height="181" alt="image" src="https://github.com/user-attachments/assets/086f20bd-819b-4e8c-bc47-d287af69b443" />
 - **Captura 4**: Historial de Facturas y Registro de Transacciones por Ventanilla.
+<img width="1366" height="658" alt="image" src="https://github.com/user-attachments/assets/654b63f0-6774-45e3-acd7-662f9e320d8b" />
+<img width="1366" height="670" alt="image" src="https://github.com/user-attachments/assets/e5ee86b3-001f-45c4-bcbd-07a640fbdd5d" />
+<img width="1366" height="501" alt="image" src="https://github.com/user-attachments/assets/324e2e01-9f26-4276-bec3-b934b8172096" />
 
 ---
 
 ## 🎓 Contexto de Investigación
-Este software y sus algoritmos integrados fueron desarrollados para respaldar la parte práctica y metodológica del trabajo de investigación del curso de vv titulada:
+Este software y sus algoritmos integrados fueron desarrollados para respaldar la parte práctica y metodológica del trabajo de investigación del curso de Sistemas Inteligentes titulada:
 > **"Aplicación de Machine Learning en la Validación de Datos de Clientes de la Empresa Cable Latín"**
 
 El proyecto demuestra empíricamente cómo el uso de algoritmos de procesamiento de texto y reglas automatizadas disminuyen considerablemente el volumen de datos basura persistidos en bases de datos empresariales, mejorando los indicadores clave de calidad de datos corporativa.
@@ -357,8 +365,6 @@ Este proyecto es software de carácter académico y está sujeto a los términos
 
 ## 👥 Créditos
 Desarrollado en su totalidad por el equipo de investigación para el curso de Sistemas Inteligentes y como evidencia práctica de trabajo de investigacion en Ingeniería de Sistemas e Informática.
-
----
 
 ---
 
