@@ -1,4 +1,4 @@
-<img width="963" height="373" alt="image" src="https://github.com/user-attachments/assets/be4f412d-6c37-48ad-a4c6-0961dc543570" /># Aplicación de Machine Learning en la Validación de Datos de Clientes en una empresa de Telecomunicaciones
+# Aplicación de Machine Learning en la Validación de Datos de Clientes en una empresa de Telecomunicaciones
 
 [![Python Version](https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![Flask Framework](https://img.shields.io/badge/Flask-2.3.3-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
