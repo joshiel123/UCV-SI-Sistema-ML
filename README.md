@@ -327,19 +327,72 @@ La API REST del servidor backend expone los siguientes endpoints estructurados p
 ---
 
 ## 📸 Capturas del Sistema
-*(En esta sección se integrarán posteriormente las capturas de pantalla de la interfaz gráfica en formato de imagen una vez sea desplegada la interfaz final)*
-- **Captura 1**: Formulario de Inicio de Sesión y Seguridad contra Fuerza Bruta
-<img width="969" height="436" alt="image" src="https://github.com/user-attachments/assets/0f4ee716-145d-44a1-88f2-de4d269b81ab" />.
-- **Captura 2**: Dashboard Principal con Gráficos Estadísticos de Facturación y Clientes.
-<img width="1366" height="688" alt="image" src="https://github.com/user-attachments/assets/57ab9adb-5c93-4395-8b03-6466a92c5ab2" />
-<img width="1366" height="687" alt="image" src="https://github.com/user-attachments/assets/a8bd61eb-6472-4655-b1f9-0311bc386fb1" />
-- **Captura 3**: Interfaz de Importación de Clientes y Modal de Resultados ML/Calidad de Datos.
-<img width="1366" height="686" alt="image" src="https://github.com/user-attachments/assets/99fbfe14-3420-4231-b06e-c92700d86a98" />
-<img width="331" height="181" alt="image" src="https://github.com/user-attachments/assets/086f20bd-819b-4e8c-bc47-d287af69b443" />
-- **Captura 4**: Historial de Facturas y Registro de Transacciones por Ventanilla.
-<img width="1366" height="658" alt="image" src="https://github.com/user-attachments/assets/654b63f0-6774-45e3-acd7-662f9e320d8b" />
-<img width="1366" height="670" alt="image" src="https://github.com/user-attachments/assets/e5ee86b3-001f-45c4-bcbd-07a640fbdd5d" />
-<img width="1366" height="501" alt="image" src="https://github.com/user-attachments/assets/324e2e01-9f26-4276-bec3-b934b8172096" />
+
+A continuación se presentan algunas capturas de las principales funcionalidades desarrolladas en el sistema.
+
+### 🔐 Captura 1. Inicio de Sesión y Seguridad
+
+Interfaz de autenticación de usuarios con validación de credenciales y protección contra intentos consecutivos de acceso no autorizado.
+
+<p align="center">
+  <img width="969" alt="Inicio de Sesión" src="https://github.com/user-attachments/assets/0f4ee716-145d-44a1-88f2-de4d269b81ab" />
+</p>
+
+---
+
+### 📊 Captura 2. Dashboard Principal
+
+Panel principal del sistema que muestra indicadores estadísticos, métricas de clientes y gráficos para el monitoreo general de la plataforma.
+
+<p align="center">
+  <img width="900" alt="Dashboard Principal" src="https://github.com/user-attachments/assets/57ab9adb-5c93-4395-8b03-6466a92c5ab2" />
+</p>
+
+<p align="center">
+  <img width="900" alt="Dashboard - Indicadores" src="https://github.com/user-attachments/assets/a8bd61eb-6472-4655-b1f9-0311bc386fb1" />
+</p>
+
+---
+
+### 🤖 Captura 3. Importación Inteligente de Clientes
+
+Módulo para la carga masiva de clientes mediante archivos Excel, incorporando algoritmos de validación y limpieza automática de datos.
+
+**Interfaz de importación**
+
+<p align="center">
+  <img width="900" alt="Importación de Clientes" src="https://github.com/user-attachments/assets/99fbfe14-3420-4231-b06e-c92700d86a98" />
+</p>
+
+**Resultado del procesamiento del modelo de Machine Learning**
+
+<p align="center">
+  <img width="500" alt="Resultados del Modelo ML" src="https://github.com/user-attachments/assets/086f20bd-819b-4e8c-bc47-d287af69b443" />
+</p>
+
+---
+
+### 💳 Captura 4. Gestión de Facturas y Registro de Pagos
+
+Módulo encargado de la administración de facturas, búsqueda de servicios y registro de pagos realizados por los clientes.
+
+**Listado y búsqueda de facturas**
+
+<p align="center">
+  <img width="900" alt="Listado de Facturas" src="https://github.com/user-attachments/assets/654b63f0-6774-45e3-acd7-662f9e320d8b" />
+</p>
+
+**Registro de pagos**
+
+<p align="center">
+  <img width="900" alt="Registro de Pagos" src="https://github.com/user-attachments/assets/e5ee86b3-001f-45c4-bcbd-07a640fbdd5d" />
+</p>
+
+**Historial de transacciones**
+
+<p align="center">
+  <img width="900" alt="Historial de Transacciones" src="https://github.com/user-attachments/assets/324e2e01-9f26-4276-bec3-b934b8172096" />
+</p>
 
 ---
 
