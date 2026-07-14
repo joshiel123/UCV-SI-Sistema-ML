@@ -1,4 +1,4 @@
-# Aplicación de Machine Learning en la Validación de Datos de Clientes en una empresa de Telecomunicaciones
+<img width="963" height="373" alt="image" src="https://github.com/user-attachments/assets/be4f412d-6c37-48ad-a4c6-0961dc543570" /># Aplicación de Machine Learning en la Validación de Datos de Clientes en una empresa de Telecomunicaciones
 
 [![Python Version](https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![Flask Framework](https://img.shields.io/badge/Flask-2.3.3-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
@@ -336,7 +336,7 @@ La API REST del servidor backend expone los siguientes endpoints estructurados p
 ---
 
 ## 🎓 Contexto de Investigación
-Este software y sus algoritmos integrados fueron desarrollados para respaldar la parte práctica y metodológica de la tesis de investigación titulada:
+Este software y sus algoritmos integrados fueron desarrollados para respaldar la parte práctica y metodológica del trabajo de investigación del curso de vv titulada:
 > **"Aplicación de Machine Learning en la Validación de Datos de Clientes de la Empresa Cable Latín"**
 
 El proyecto demuestra empíricamente cómo el uso de algoritmos de procesamiento de texto y reglas automatizadas disminuyen considerablemente el volumen de datos basura persistidos en bases de datos empresariales, mejorando los indicadores clave de calidad de datos corporativa.
@@ -356,5 +356,13 @@ Este proyecto es software de carácter académico y está sujeto a los términos
 ---
 
 ## 👥 Créditos
-Desarrollado en su totalidad por el equipo de investigación para el curso de Calidad de Software y como evidencia práctica de tesis doctoral/maestría en Ingeniería de Sistemas e Informática.
+Desarrollado en su totalidad por el equipo de investigación para el curso de Sistemas Inteligentes y como evidencia práctica de trabajo de investigacion en Ingeniería de Sistemas e Informática.
+
+---
+
+---
+
+## 🙏 Agradecimientos
+
+Expresamos nuestro sincero agradecimiento al **Ing. Luis Enrique Paraguay Arzapalo**, docente del curso **Sistemas Inteligentes**, por compartir sus conocimientos, orientación y experiencia durante el desarrollo de este proyecto. Sus enseñanzas en el área de Machine Learning, entre otras; que fueron fundamentales para comprender y aplicar técnicas de validación inteligente dentro de un contexto empresarial, contribuyendo significativamente al desarrollo de esta investigación y de la solución implementada.
 
